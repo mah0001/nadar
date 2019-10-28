@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1570156687019.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "52C6B418",
+    "lastKnownWriteTime" : 1572277389,
+    "last_content_update" : 1572277389,
+    "path" : "~/Documents/r_projects:nadar/nadar/man/import_ddi.Rd",
+    "project_path" : "man/import_ddi.Rd",
+    "properties" : {
+        "cursorPosition" : "2,13",
+        "scrollLine" : "0",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_doc"
+}

@@ -1,0 +1,145 @@
+# Hello, world!
+#
+# This is an example function named 'hello'
+# which prints 'Hello, world!'.
+#
+# You can learn more about package authoring with RStudio at:
+#
+#   http://r-pkgs.had.co.nz/
+#
+# Some useful keyboard shortcuts for package authoring:
+#
+#   Build and Reload Package:  'Cmd + Shift + B'
+#   Check Package:             'Cmd + Shift + E'
+#   Test Package:              'Cmd + Shift + T'
+
+hello <- function() {
+  print("Hello, world!")
+}
+
+#' ImportDDI
+#'
+#' This function loads a file as a matrix. It assumes that the first column
+#' contains the rownames and the subsequent columns are the sample identifiers.
+#' Any rows with duplicated row names will be dropped with the first one being
+#' kepted.
+#'
+#' @param ddifile Path to the input file
+#' @return A matrix of the infile
+#' @export
+import_ddi <- function(ddifile){
+  print ("import ddi")
+  print(ddifile)
+}
+
+
+#' Demo function
+#'
+#' This function loads a file as a matrix. It assumes that the first column
+#' contains the rownames and the subsequent columns are the sample identifiers.
+#' Any rows with duplicated row names will be dropped with the first one being
+#' kepted.
+#'
+#' @param infile Path to the input file
+#' @return A matrix of the infile
+#' @export
+demo <-function(infile)
+{
+  return ('none')
+}
+
+
+pkg.globals <- new.env()
+
+pkg.globals$data_path <- "data"
+
+pkg.globals$api_key <- ""
+pkg.globals$api_base_url <- ""
+
+
+#' SetDataPath
+#'
+#' This function loads a file as a matrix. It assumes that the first column
+#' contains the rownames and the subsequent columns are the sample identifiers.
+#' Any rows with duplicated row names will be dropped with the first one being
+#' kepted.
+#'
+#' @param path Path to the input file
+#' @return A matrix of the infile
+#' @export
+set_data_path <- function(path) {
+  pkg.globals$data_path <- path
+}
+
+#' GETDATAPATH
+#'
+#' This function loads a file as a matrix. It assumes that the first column
+#' contains the rownames and the subsequent columns are the sample identifiers.
+#' Any rows with duplicated row names will be dropped with the first one being
+#' kepted.
+#'
+#' @param infile Path to the input file
+#' @return A matrix of the infile
+#' @export
+get_data_path <- function()
+{
+  return (pkg.globals$data_path)
+}
+
+
+
+#' SetApiKey
+#'
+#' This function loads a file as a matrix. It assumes that the first column
+#' contains the rownames and the subsequent columns are the sample identifiers.
+#' Any rows with duplicated row names will be dropped with the first one being
+#' kepted.
+#'
+#' @param api_key API Key
+#' @return A matrix of the infile
+#' @export
+set_api_key <- function(api_key) {
+  pkg.globals$api_key <- api_key
+}
+
+#' GetApiKey
+#'
+#' Get API key from global Environment variable
+#'
+#' @return API Key
+#' @export
+get_api_key <- function()
+{
+  return (pkg.globals$api_key)
+}
+
+
+
+#' set_api_url
+#'
+#' Set API Base URL
+#'
+#' @param api_url API base endpoint
+#' @export
+set_api_url <- function(api_url) {
+  pkg.globals$api_base_url <- api_url
+}
+
+#' get_api_url
+#'
+#' Get API base endpoint
+#'
+#' @return API base url
+#' @export
+get_api_url <- function(endpoint=NULL)
+{
+  url=pkg.globals$api_base_url
+
+  if(!is.null(endpoint)){
+    print("endpoint found")
+    url=paste0(url,"/",endpoint)
+  }
+
+  return (url)
+}
+

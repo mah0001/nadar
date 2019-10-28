@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1572213418653.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "6EF48E04",
+    "lastKnownWriteTime" : 1551993862,
+    "last_content_update" : 1551993862,
+    "path" : "~/Downloads/nada_api_usage.R",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "216,11",
+        "scrollLine" : "206"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

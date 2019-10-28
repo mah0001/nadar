@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1570156539185.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "C395401",
+    "lastKnownWriteTime" : 1572277837,
+    "last_content_update" : 1572277837973,
+    "path" : "~/Documents/r_projects:nadar/nadar/R/globals.R",
+    "project_path" : "R/globals.R",
+    "properties" : {
+        "cursorPosition" : "97,0",
+        "scrollLine" : "78"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

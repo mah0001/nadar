@@ -1,0 +1,252 @@
+library(curl)
+library(httr)
+library(jsonlite)
+
+
+# =================================================
+#  NADA API examples
+# =================================================
+
+# set api key
+API_KEY = "your-api-key-here"
+
+# API base URL, ending slash is required
+API_BASE_URL ="http://dev.ihsn.org/nada/index.php/api/" 
+
+
+
+
+# -------------------------------------------------
+# [GET] Generate API key (use only if you don't have an API key)
+# -------------------------------------------------
+url = paste0(API_BASE_URL,"auth/create_api_key")
+request_body=list(
+  "email"="email-address",
+  "password"="password"
+)
+
+httpResponse <- POST(url, add_headers("X-API-KEY" = API_KEY), body=request_body)
+output=NULL
+
+if(httpResponse$status_code!=200){
+  warning(paste0(" Failed - ", content(httpResponse, "text")))
+}else{
+  print(paste0(i," Success "))
+  output=fromJSON(content(httpResponse,"text")) 
+}
+
+
+
+
+# -------------------------------------------------
+# [GET] Get a list of all datasets
+# -------------------------------------------------
+url = paste0(API_BASE_URL,"datasets")
+httpResponse <- GET(url, add_headers("X-API-KEY" = API_KEY), accept_json())
+output=NULL
+
+if(httpResponse$status_code!=200){
+  warning(paste0(" Failed - ", content(httpResponse, "text")))
+}else{
+  print(paste0(i," Success "))
+  output=fromJSON(content(httpResponse,"text")) 
+}
+
+
+
+# -------------------------------------------------
+# [GET] Get study level metadata for a survey
+# -------------------------------------------------
+
+#dataset IDNO
+dataset_idno='AFR_2005_AFB-18_v01_M'
+
+url = paste0(API_BASE_URL,"datasets/",dataset_idno)
+httpResponse <- GET(url, add_headers("X-API-KEY" = API_KEY), accept_json())
+output=NULL
+
+if(httpResponse$status_code!=200){
+  warning(paste0(" Failed - ", content(httpResponse, "text")))
+}else{
+  print(paste0(i," Success "))
+  output=fromJSON(content(httpResponse,"text")) 
+}
+
+
+
+# -------------------------------------------------
+# [GET] Get data files list for a survey
+# -------------------------------------------------
+
+#dataset IDNO
+dataset_idno='AFR_2005_AFB-18_v01_M'
+
+url = paste0(API_BASE_URL,"datasets/datafiles/",dataset_idno)
+httpResponse <- GET(url, add_headers("X-API-KEY" = API_KEY), accept_json())
+output=NULL
+
+if(httpResponse$status_code!=200){
+  warning(paste0(" Failed - ", content(httpResponse, "text")))
+}else{
+  print(paste0(i," Success "))
+  output=fromJSON(content(httpResponse,"text")) 
+}
+
+
+# -------------------------------------------------
+# [GET] Get a list of survey variables
+# -------------------------------------------------
+
+#dataset IDNO
+dataset_idno='AFR_2005_AFB-18_v01_M'
+
+url = paste0(API_BASE_URL,"datasets/variables/",dataset_idno)
+httpResponse <- GET(url, add_headers("X-API-KEY" = API_KEY), accept_json())
+output=NULL
+
+if(httpResponse$status_code!=200){
+  warning(paste0(" Failed - ", content(httpResponse, "text")))
+}else{
+  print(paste0(i," Success "))
+  output=fromJSON(content(httpResponse,"text")) 
+}
+
+
+
+# -------------------------------------------------
+# [GET] Get metadata for a single variable
+# -------------------------------------------------
+
+#dataset IDNO
+dataset_idno='AFR_2005_AFB-18_v01_M'
+
+#variable ID
+variable_vid='V10' 
+
+url = paste0(API_BASE_URL,"datasets/variable/",dataset_idno,'/', variable_vid)
+httpResponse <- GET(url, add_headers("X-API-KEY" = API_KEY), accept_json())
+output=NULL
+
+if(httpResponse$status_code!=200){
+  warning(paste0(" Failed - ", content(httpResponse, "text")))
+}else{
+  print(paste0(i," Success "))
+  output=fromJSON(content(httpResponse,"text")) 
+}
+
+
+
+
+# -------------------------------------------------
+# [DELETE] Delete dataset/survey
+# -------------------------------------------------
+
+#dataset IDNO
+dataset_idno='AFR_2005_AFB-18_v01_M'
+
+url = paste0(API_BASE_URL,"datasets/",dataset_idno)
+httpResponse <- DELETE(url, add_headers("X-API-KEY" = API_KEY), accept_json())
+output=NULL
+
+if(httpResponse$status_code!=200){
+  warning(paste0(" Failed - ", content(httpResponse, "text")))
+}else{
+  print(paste0(i," Success "))
+  output=fromJSON(content(httpResponse,"text")) 
+}
+
+
+
+
+# -------------------------------------------------
+# [POST] Create a new survey
+# -------------------------------------------------
+
+#dataset IDNO
+dataset_idno='AFR_2005_AFB-18_v01_M'
+
+#metadata - see API documentation for create survey to see all metadata fields for survey 
+dataset_metadata=list(
+  "overwrite"="no",
+  "published"="yes",
+  "doc_desc"=list(
+    "idno"="doc-idno",
+    "producers"=list(
+      list(
+          "name"="name here",
+          "abbr"="abbreviation"
+      )
+    )
+  )
+)
+
+url = paste0(API_BASE_URL,"datasets/create/survey/",dataset_idno)
+httpResponse <- POST(url, add_headers("X-API-KEY" = API_KEY), body=dataset_metadata, accept_json(), verbose())
+output=NULL
+
+if(httpResponse$status_code!=200){
+  warning(paste0(" Failed - ", content(httpResponse, "text")))
+}else{
+  print(paste0(i," Success "))
+  output=fromJSON(content(httpResponse,"text")) 
+}
+
+
+
+
+# -------------------------------------------------
+# [POST] Import a DDI
+# -------------------------------------------------
+
+#dataset IDNO
+dataset_idno='AFR_2005_AFB-18_v01_M'
+
+#options
+options=list(
+  "file"=upload_file("path/to/ddi/xml/file"),
+  "overwrite"="no",
+  "published"=1,
+  "repositoryid"="central",
+  "access_policy"="open",
+  "rdf"=upload_file("path/to/rdf/file")
+)
+
+
+url = paste0(API_BASE_URL,"datasets/import_ddi")
+httpResponse <- POST(url, add_headers("X-API-KEY" = API_KEY),body=options, accept_json(), verbose())
+output=NULL
+
+if(httpResponse$status_code!=200){
+  warning(paste0(" Failed - ", content(httpResponse, "text")))
+}else{
+  print(paste0(i," Success "))
+  output=fromJSON(content(httpResponse,"text")) 
+}
+
+
+
+
+# -------------------------------------------------
+# [POST] Set thumbnail for survey
+# -------------------------------------------------
+
+#dataset IDNO
+dataset_idno='AFR_2005_AFB-18_v01_M'
+
+#options
+options=list(
+  "file"=upload_file("path/to/image/file")
+)
+
+
+url = paste0(API_BASE_URL,"datasets/thumbnail/",dataset_idno)
+httpResponse <- POST(url, add_headers("X-API-KEY" = API_KEY),body=options, accept_json(), verbose())
+output=NULL
+
+if(httpResponse$status_code!=200){
+  warning(paste0(" Failed - ", content(httpResponse, "text")))
+}else{
+  print(paste0(i," Success "))
+  output=fromJSON(content(httpResponse,"text")) 
+}
+
