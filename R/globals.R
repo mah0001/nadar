@@ -59,7 +59,6 @@ get_api_url <- function(endpoint=NULL)
   url=pkg.globals$api_base_url
 
   if(!is.null(endpoint)){
-    print("endpoint found")
     url=paste0(url,"/",endpoint)
   }
 
