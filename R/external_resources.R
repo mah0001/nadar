@@ -1,6 +1,6 @@
-library(curl)
-library(httr)
-library(jsonlite)
+#library(curl)
+#library(httr)
+#library(jsonlite)
 
 
 #' List External Resources
@@ -8,15 +8,15 @@ library(jsonlite)
 #' List external resources for a study
 #'
 #' @return List of external resources
-#' @param idno Study IDNo
+#' @param dataset_idno Study IDNo
 #' @export
-datasetExternalResources <- function(api_key=NULL, api_base_url=NULL, idno){
+resources <- function(api_key=NULL, api_base_url=NULL, dataset_idno){
 
   if(is.null(api_key)){
     api_key=get_api_key();
   }
 
-  endpoint=paste0('datasets/',idno,'/resources')
+  endpoint=paste0('datasets/',dataset_idno,'/resources')
   url=get_api_url(endpoint)
 
   httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json(), verbose(get_verbose()))
@@ -40,7 +40,7 @@ datasetExternalResources <- function(api_key=NULL, api_base_url=NULL, idno){
 #' @param dataset_idno Study IDNo
 #' @param rdf_file RDF file path
 #' @export
-importRDF <- function(api_key=NULL,
+import_rdf <- function(api_key=NULL,
                       api_base_url=NULL,
                       dataset_idno,
                       rdf_file
@@ -82,7 +82,7 @@ importRDF <- function(api_key=NULL,
 #' @param resource_id (Optional) External resource ID
 #' @param file External resource file to be uploaded
 #' @export
-uploadFile <- function(api_key=NULL,
+resource_upload <- function(api_key=NULL,
                       api_base_url=NULL,
                       dataset_idno,
                       resource_id=NULL,
@@ -111,4 +111,46 @@ uploadFile <- function(api_key=NULL,
   }
 
   return (output)
+}
+
+
+
+#' Download resource file
+#'
+#' Download resource file
+#'
+#' @return file
+#' @param dataset_idno Study IDNo
+#' @param resource_id Resource ID
+#' @export
+resource_download <- function(api_key=NULL, api_base_url=NULL, dataset_idno, resource_id){
+
+  if(is.null(api_key)){
+    api_key=get_api_key();
+  }
+
+  endpoint=paste0('datasets/',dataset_idno,'/resources/download/',resource_id)
+  url=get_api_url(endpoint)
+
+  httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json(), verbose(get_verbose()))
+  output=NULL
+
+  if(httpResponse$status_code!=200){
+    warning(content(httpResponse, "text"))
+
+    return (httpResponse)
+  }
+
+  #get downloaded file name
+  file_name=get_disposition_filename(httpResponse)
+
+  #save downloaded file
+  #writeBin(resource$content, resource$file_name)
+
+  return (
+    list(
+      "file_name"=file_name,
+      "content" = content(httpResponse,"raw")
+      )
+    )
 }

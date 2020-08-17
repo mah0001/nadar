@@ -94,3 +94,11 @@ get_verbose <- function()
   return (pkg.globals$verbose)
 }
 
+
+get_disposition_filename <- function(httpResponse) {
+  filename=sub(".*filename=", "", headers(httpResponse)$`content-disposition`)
+  filename=gsub('"','',filename)
+  return (noquote(filename))
+}
+
+
