@@ -649,22 +649,22 @@ create_geospatial <- function(api_key=NULL,
 #'   idno="document-idno",
 #'   published = 1,
 #'   overwrite = "yes",
-#'   metadata = metadata
+#'   metadata = metadata,
+#'   thumbnail ="images/thumbnail.jpg"
 #' )
 #'
 #'
 #'
 #'
 #' @export
-create_document <- function(api_key=NULL,
-                              api_base_url=NULL,
-                              idno,
-                              repositoryid=NULL,
-                              access_policy=NULL,
-                              data_remote_url=NULL,
-                              published=NULL,
-                              overwrite=NULL,
-                              metadata=NULL){
+create_document <- function(idno,
+                            repositoryid="central",
+                            access_policy=NULL,
+                            data_remote_url=NULL,
+                            published=0,
+                            overwrite="no",
+                            metadata=NULL,
+                            thumbnail=NULL){
 
   if(is.null(api_key)){
     api_key=get_api_key();
@@ -680,5 +680,104 @@ create_document <- function(api_key=NULL,
                   metadata=metadata
   )
 
+  #upload thumbnail
+  upload_thumbnail(idno=idno,thumbnail = thumbnail)
+
   return (result)
+}
+
+
+
+
+#' Upload thumbnail for a study
+#'
+#' Upload thumbnail for a study
+#'
+#' @return NULL
+#' @param idno (required) Study unique identifier
+#' @param thumbnail \strong{(required)} Path to the thumbnail file
+#'
+#' @examples
+#'
+#' upload_thumbnail (
+#'   idno="survey-idno-test",
+#'   thumbnail = "/thumbnails/thumbnail-idno-test.png"
+#' )
+#'
+#' @export
+upload_thumbnail <- function(
+                   idno,
+                   thumbnail,
+                   api_key=NULL,
+                   api_base_url=NULL){
+
+  if(is.null(api_key)){
+    api_key=get_api_key();
+  }
+
+  options=list(
+    file=upload_file(thumbnail)
+  )
+
+  url=get_api_url(paste0('datasets/thumbnail/',idno))
+  httpResponse <- POST(url, add_headers("X-API-KEY" = api_key), body=options)
+
+  output=NULL
+
+  if(httpResponse$status_code!=200){
+    warning(content(httpResponse, "text"))
+  }
+
+  output=list(
+    "status_code"=httpResponse$status_code,
+    "response"=fromJSON(content(httpResponse,"text"))
+  )
+
+  return (output)
+}
+
+
+
+
+
+
+
+#' Find a project by IDNO
+#'
+#' Find a project by IDNO
+#'
+#' @return NULL
+#' @param idno (required) Study unique identifier
+#'
+#' @examples
+#'
+#' find_by_idno (
+#'   idno="survey-idno-test"
+#' )
+#'
+#' @export
+find_by_idno <- function(
+                    idno,
+                    api_key=NULL,
+                    api_base_url=NULL){
+
+  if(is.null(api_key)){
+    api_key=get_api_key();
+  }
+
+  url=get_api_url(paste0('datasets/',idno))
+  httpResponse <- GET(url, add_headers("X-API-KEY" = api_key))
+
+  output=NULL
+
+  if(httpResponse$status_code!=200){
+    warning(content(httpResponse, "text"))
+  }
+
+  output=list(
+    "status_code"=httpResponse$status_code,
+    "response"=fromJSON(content(httpResponse,"text"))
+  )
+
+  return (output)
 }
