@@ -4,9 +4,16 @@
 \alias{create_document}
 \title{Create new document}
 \usage{
-create_document(idno, repositoryid = "central", access_policy = NULL,
-  data_remote_url = NULL, published = 0, overwrite = "no",
-  metadata = NULL, thumbnail = NULL)
+create_document(
+  idno,
+  repositoryid = "central",
+  access_policy = NULL,
+  data_remote_url = NULL,
+  published = 0,
+  overwrite = "no",
+  metadata = NULL,
+  thumbnail = NULL
+)
 }
 \arguments{
 \item{idno}{(required) Study unique identifier}

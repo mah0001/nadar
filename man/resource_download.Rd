@@ -4,8 +4,12 @@
 \alias{resource_download}
 \title{Download resource file}
 \usage{
-resource_download(api_key = NULL, api_base_url = NULL, dataset_idno,
-  resource_id)
+resource_download(
+  api_key = NULL,
+  api_base_url = NULL,
+  dataset_idno,
+  resource_id
+)
 }
 \arguments{
 \item{dataset_idno}{Study IDNo}

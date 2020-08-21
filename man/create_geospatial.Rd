@@ -4,9 +4,17 @@
 \alias{create_geospatial}
 \title{Create new geospatial study}
 \usage{
-create_geospatial(api_key = NULL, api_base_url = NULL, idno,
-  repositoryid = NULL, access_policy = NULL, data_remote_url = NULL,
-  published = NULL, overwrite = NULL, metadata = NULL)
+create_geospatial(
+  api_key = NULL,
+  api_base_url = NULL,
+  idno,
+  repositoryid = NULL,
+  access_policy = NULL,
+  data_remote_url = NULL,
+  published = NULL,
+  overwrite = NULL,
+  metadata = NULL
+)
 }
 \arguments{
 \item{idno}{(required) Study unique identifier}

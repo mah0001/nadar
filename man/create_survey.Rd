@@ -4,11 +4,22 @@
 \alias{create_survey}
 \title{Create Survey}
 \usage{
-create_survey(api_key = NULL, api_base_url = NULL, idno,
-  repositoryid = NULL, access_policy = NULL, data_remote_url = NULL,
-  published = NULL, overwrite = NULL, doc_desc, study_desc,
-  data_files = NULL, variables = NULL, variable_groups = NULL,
-  additional = NULL)
+create_survey(
+  api_key = NULL,
+  api_base_url = NULL,
+  idno,
+  repositoryid = NULL,
+  access_policy = NULL,
+  data_remote_url = NULL,
+  published = NULL,
+  overwrite = NULL,
+  doc_desc,
+  study_desc,
+  data_files = NULL,
+  variables = NULL,
+  variable_groups = NULL,
+  additional = NULL
+)
 }
 \arguments{
 \item{idno}{(required) Survey unique identifier}
