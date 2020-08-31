@@ -11,12 +11,9 @@ pkg.globals$api_base_url <- ""
 pkg.globals$verbose <- FALSE
 
 
-#' SetApiKey
+#' Set API Key
 #'
-#' This function loads a file as a matrix. It assumes that the first column
-#' contains the rownames and the subsequent columns are the sample identifiers.
-#' Any rows with duplicated row names will be dropped with the first one being
-#' kepted.
+#' Set API key
 #'
 #' @param api_key API Key
 #' @return A matrix of the infile
@@ -101,4 +98,30 @@ get_disposition_filename <- function(httpResponse) {
   return (noquote(filename))
 }
 
+dctypes <- function() {
+  list(
+    'Document, Administrative'= '[doc/adm]',
+    "Document, Analytical" ="[doc/anl]",
+    "Document, Other" = "[doc/oth]",
+    "Document, Questionnaire"= "[doc/qst]",
+    "Document, Reference"="[doc/ref]",
+    "Document, Report"= "[doc/rep]",
+    "Document, Technical"= "[doc/tec]",
+    "Database" ="[dat]",
+    "Microdata File"= "[dat/micro]",
+    "Table" ="[tbl]"
+  )
+}
 
+
+dcformats <-function() {
+  list(
+  "ZIP"= "application/zip",
+  "Text" = "text",
+  "HTML document" ="text/html",
+  "PDF document" = "application/pdf",
+  "GIF" = "image/gif",
+  "JPEG" = "image/jpeg",
+  "PNG" = "image/png"
+  )
+}

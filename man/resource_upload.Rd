@@ -4,13 +4,8 @@
 \alias{resource_upload}
 \title{Upload external resources}
 \usage{
-resource_upload(
-  api_key = NULL,
-  api_base_url = NULL,
-  dataset_idno,
-  resource_id = NULL,
-  file
-)
+resource_upload(dataset_idno, resource_id = NULL, file, api_key = NULL,
+  api_base_url = NULL)
 }
 \arguments{
 \item{dataset_idno}{Study IDNo}

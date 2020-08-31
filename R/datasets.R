@@ -283,16 +283,18 @@ create_survey <- function(api_key=NULL,
 #'
 #'
 #' @export
-create <- function(api_key=NULL,
-                         api_base_url=NULL,
-                         type,
-                         idno,
-                         repositoryid=NULL,
-                         access_policy=NULL,
-                         data_remote_url=NULL,
-                         published=NULL,
-                         overwrite=NULL,
-                         metadata){
+create <- function(
+                   type,
+                   idno,
+                   metadata,
+                   repositoryid=NULL,
+                   access_policy=NULL,
+                   data_remote_url=NULL,
+                   published=NULL,
+                   overwrite=NULL,
+                   thumbnail=NULL,
+                   api_key=NULL,
+                   api_base_url=NULL){
 
   if(is.null(api_key)){
     api_key=get_api_key();
@@ -310,7 +312,13 @@ create <- function(api_key=NULL,
   options= c(options,metadata)
 
   url=get_api_url(paste0('datasets/create/',type,'/',idno))
-  httpResponse <- POST(url, add_headers("X-API-KEY" = api_key), body=options, content_type_json(), encode="json", accept_json(), verbose(get_verbose()))
+  httpResponse <- POST(url,
+                       add_headers("X-API-KEY" = api_key),
+                       body=options,
+                       content_type_json(),
+                       encode="json",
+                       accept_json(),
+                       verbose(get_verbose()))
 
   output=NULL
 
@@ -318,10 +326,17 @@ create <- function(api_key=NULL,
     warning(content(httpResponse, "text"))
   }
 
+  thumbnail_result=NULL
+
+  #upload thumbnail
+  if(!is.null(thumbnail) && file.exists(thumbnail)) {
+    thumbnail_result=upload_thumbnail(idno=idno,thumbnail = thumbnail)
+  }
 
   output=list(
     "status_code"=httpResponse$status_code,
-    "response"=fromJSON(content(httpResponse,"text"))
+    "response"=fromJSON(content(httpResponse,"text")),
+    "thumbnail"=thumbnail_result
   )
 
   return (output)
@@ -384,15 +399,18 @@ create <- function(api_key=NULL,
 #'
 #'
 #' @export
-create_geospatial <- function(api_key=NULL,
-                   api_base_url=NULL,
+create_geospatial <- function(
                    idno,
+                   metadata,
                    repositoryid=NULL,
                    access_policy=NULL,
                    data_remote_url=NULL,
-                   published=NULL,
-                   overwrite=NULL,
-                   metadata=NULL){
+                   published=0,
+                   overwrite="no",
+                   thumbnail=NULL,
+                   api_key=NULL,
+                   api_base_url=NULL
+                   ){
 
   if(is.null(api_key)){
     api_key=get_api_key();
@@ -405,7 +423,8 @@ create_geospatial <- function(api_key=NULL,
                   data_remote_url = data_remote_url,
                   published = published,
                   overwrite= overwrite,
-                  metadata=metadata
+                  metadata=metadata,
+                  thumbnail=thumbnail
                   )
 
   return (result)
@@ -658,13 +677,16 @@ create_geospatial <- function(api_key=NULL,
 #'
 #' @export
 create_document <- function(idno,
-                            repositoryid="central",
+                            metadata,
+                            repositoryid=NULL,
                             access_policy=NULL,
                             data_remote_url=NULL,
                             published=0,
                             overwrite="no",
-                            metadata=NULL,
-                            thumbnail=NULL){
+                            thumbnail=NULL,
+                            api_key=NULL,
+                            api_base_url=NULL
+                            ){
 
   if(is.null(api_key)){
     api_key=get_api_key();
@@ -679,9 +701,6 @@ create_document <- function(idno,
                   overwrite= overwrite,
                   metadata=metadata
   )
-
-  #upload thumbnail
-  upload_thumbnail(idno=idno,thumbnail = thumbnail)
 
   return (result)
 }

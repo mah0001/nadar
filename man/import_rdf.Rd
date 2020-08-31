@@ -4,7 +4,7 @@
 \alias{import_rdf}
 \title{ImportRDF}
 \usage{
-import_rdf(api_key = NULL, api_base_url = NULL, dataset_idno, rdf_file)
+import_rdf(dataset_idno, rdf_file, api_key = NULL, api_base_url = NULL)
 }
 \arguments{
 \item{dataset_idno}{Study IDNo}

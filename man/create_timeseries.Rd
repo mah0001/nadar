@@ -4,16 +4,10 @@
 \alias{create_timeseries}
 \title{Create timeseries indicator}
 \usage{
-create_timeseries(
-  idno,
-  repositoryid = "central",
-  access_policy = NULL,
-  data_remote_url = NULL,
-  published = 0,
-  overwrite = "no",
-  metadata = NULL,
-  thumbnail = NULL
-)
+create_timeseries(idno, repositoryid = "central", access_policy = NULL,
+  data_remote_url = NULL, published = 0, overwrite = "no",
+  metadata = NULL, thumbnail = NULL, api_key = NULL,
+  api_base_url = NULL)
 }
 \arguments{
 \item{idno}{(required) Study unique identifier}
@@ -36,190 +30,190 @@ Create a new timeseries indicator
 \examples{
 
 metadata=list(
-  "metadata_creation": list(
-    "producers": list(
+  "metadata_creation"= list(
+    "producers"= list(
       list(
-        "name": "string",
-        "abbr": "string",
-        "affiliation": "string",
-        "role": "string"
+        "name"= "string",
+        "abbr"= "string",
+        "affiliation"= "string",
+        "role"= "string"
       )
     ),
-    "prod_date": "string",
-    "version": "string"
+    "prod_date"= "string",
+    "version"= "string"
   ),
-  "series_description": list(
-    "idno": "string",
-    "name": "string",
-    "database_id": "string",
-    "aliases": list(
+  "series_description"= list(
+    "idno"= "unique=series-idno",
+    "name"= "Series name",
+    "database_id"= "db-idno",
+    "aliases"= list(
       list(
-        "alias": "string"
+        "alias"= "string"
       )
     ),
-    "measurement_unit": "string",
-    "periodicity": "string",
-    "base_period": "string",
-    "definition_short": "string",
-    "definition_long": "string",
-    "definition_references": list(
+    "measurement_unit"= "string",
+    "periodicity"= "string",
+    "base_period"= "string",
+    "definition_short"= "string",
+    "definition_long"= "string",
+    "definition_references"= list(
       list(
-        "source": "string",
-        "uri": "string",
-        "note": "string"
+        "source"= "string",
+        "uri"= "string",
+        "note"= "string"
       )
     ),
-    "statistical_concept": "string",
-    "concepts": list(
+    "statistical_concept"= "string",
+    "concepts"= list(
       list(
-        "name": "string",
-        "definition": "string",
-        "uri": "string"
+        "name"= "string",
+        "definition"= "string",
+        "uri"= "string"
       )
     ),
-    "methodology": "string",
-    "imputation": "string",
-    "quality_checks": "string",
-    "quality_note": "string",
-    "series_break": "string",
-    "limitation": "string",
-    "themes": list(
+    "methodology"= "string",
+    "imputation"= "string",
+    "quality_checks"= "string",
+    "quality_note"= "string",
+    "series_break"= "string",
+    "limitation"= "string",
+    "themes"= list(
       list(
-        "name": "string",
-        "vocabulary": "string",
-        "uri": "string"
+        "name"= "string",
+        "vocabulary"= "string",
+        "uri"= "string"
       )
     ),
-    "topics": list(
+    "topics"= list(
       list(
-        "id": "string",
-        "name": "string",
-        "parent_id": "string",
-        "vocabulary": "string",
-        "uri": "string"
+        "id"= "string",
+        "name"= "string",
+        "parent_id"= "string",
+        "vocabulary"= "string",
+        "uri"= "string"
       )
     ),
-    "disciplines": list(
+    "disciplines"= list(
       list(
-        "name": "string",
-        "vocabulary": "string",
-        "uri": "string"
+        "name"= "string",
+        "vocabulary"= "string",
+        "uri"= "string"
       )
     ),
-    "relevance": "string",
-    "time_periods": list(
+    "relevance"= "string",
+    "time_periods"= list(
       list(
-        "start": "string",
-        "end": "string"
+        "start"= "string",
+        "end"= "string"
       )
     ),
-    "geographic_units": list(
+    "geographic_units"= list(
       list(
-        "name": "string",
-        "code": "string",
-        "type": "string"
+        "name"= "string",
+        "code"= "string",
+        "type"= "string"
       )
     ),
-    "aggregation_method": "string",
-    "license": list(
-      "name": "string",
-      "uri": "string"
+    "aggregation_method"= "string",
+    "license"= list(
+      "name"= "string",
+      "uri"= "string"
     ),
-    "confidentiality": "string",
-    "confidentiality_status": "string",
-    "confidentiality_note": "string",
-    "links": list(
+    "confidentiality"= "string",
+    "confidentiality_status"= "string",
+    "confidentiality_note"= "string",
+    "links"= list(
       list(
-        "type": "string",
-        "description": "string",
-        "uri": "string"
+        "type"= "string",
+        "description"= "string",
+        "uri"= "string"
       )
     ),
-    "api_documentation": list(
-      "description": "string",
-      "uri": "string"
+    "api_documentation"= list(
+      "description"= "string",
+      "uri"= "string"
     ),
-    "source": "string",
-    "source_note": "string",
-    "keywords": list(
+    "source"= "string",
+    "source_note"= "string",
+    "keywords"= list(
       list(
-        "name": "string",
-        "vocabulary": "string",
-        "uri": "string"
+        "name"= "string",
+        "vocabulary"= "string",
+        "uri"= "string"
       )
     ),
-    "acronyms": list(
+    "acronyms"= list(
       list(
-        "acronym": "string",
-        "expansion": "string",
-        "occurrence": 0
+        "acronym"= "string",
+        "expansion"= "string",
+        "occurrence"= 0
       )
     ),
-    "notes": list(
+    "notes"= list(
       list(
-        "note": "string"
+        "note"= "string"
       )
     ),
-    "related_indicators": list(
+    "related_indicators"= list(
       list(
-        "code": "string",
-        "label": "string",
-        "uri": "string"
+        "code"= "string",
+        "label"= "string",
+        "uri"= "string"
       )
     ),
-    "compliance": list(
+    "compliance"= list(
       list(
-        "standard": "string",
-        "organization": "string",
-        "uri": "string"
+        "standard"= "string",
+        "organization"= "string",
+        "uri"= "string"
       )
     ),
-    "lda_topics": list(
+    "lda_topics"= list(
       list(
-        "model_info": list(
+        "model_info"= list(
           list(
-            "source": "string",
-            "author": "string",
-            "version": "string",
-            "model_id": "string",
-            "nb_topics": 0,
-            "description": "string",
-            "corpus": "string",
-            "uri": "string"
+            "source"= "string",
+            "author"= "string",
+            "version"= "string",
+            "model_id"= "string",
+            "nb_topics"= 0,
+            "description"= "string",
+            "corpus"= "string",
+            "uri"= "string"
           )
         ),
-        "topic_description": list(
+        "topic_description"= list(
           list(
-            "topic_id": 1,
-            "topic_score": 0.0002,
-            "topic_label": "string",
-            "topic_words": list(
+            "topic_id"= 1,
+            "topic_score"= 0.0002,
+            "topic_label"= "string",
+            "topic_words"= list(
               list(
-                "word": "string",
-                "word_weight": 0
+                "word"= "string",
+                "word_weight"= 0
               )
             )
           )
         )
       )
     ),
-    "word_vectors": list(
+    "word_vectors"= list(
       list(
-        "id": "string",
-        "description": "string",
-        "date": "string",
-        "vector": list(0.526272732298821,0.587750827893615)
+        "id"= "string",
+        "description"= "string",
+        "date"= "string",
+        "vector"= list(0.526272732298821,0.587750827893615)
       )
     ),
-    "series_groups": list(
+    "series_groups"= list(
       list(
-        "name": "string",
-        "version": "string",
-        "uri": "string"
+        "name"= "string",
+        "version"= "string",
+        "uri"= "string"
       )
     )
   ),
-  "additional": list()
+  "additional"= list()
 )
 
 create_timeseries (

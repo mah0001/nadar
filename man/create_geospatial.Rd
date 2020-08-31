@@ -4,20 +4,15 @@
 \alias{create_geospatial}
 \title{Create new geospatial study}
 \usage{
-create_geospatial(
-  api_key = NULL,
-  api_base_url = NULL,
-  idno,
-  repositoryid = NULL,
-  access_policy = NULL,
-  data_remote_url = NULL,
-  published = NULL,
-  overwrite = NULL,
-  metadata = NULL
-)
+create_geospatial(idno, metadata, repositoryid = NULL,
+  access_policy = NULL, data_remote_url = NULL, published = 0,
+  overwrite = "no", thumbnail = NULL, api_key = NULL,
+  api_base_url = NULL)
 }
 \arguments{
 \item{idno}{(required) Study unique identifier}
+
+\item{metadata}{\strong{(required)} Metadata list depending on the type of study}
 
 \item{repositoryid}{Collection ID that owns the study}
 
@@ -28,8 +23,6 @@ create_geospatial(
 \item{published}{Set status for study - 0 = Draft, 1 = Published}
 
 \item{overwrite}{Overwrite if a study with the same ID already exists? Valid values "yes", "no"}
-
-\item{metadata}{\strong{(required)} Metadata list depending on the type of study}
 }
 \description{
 Create a new geospatial study
