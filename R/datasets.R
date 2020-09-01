@@ -5,7 +5,7 @@
 #' @return List of studies or a single study info
 #' @param idno (Optional) Dataset IDNo
 #' @export
-datasets <- function(api_key=NULL, api_base_url=NULL, idno=NULL){
+datasets <- function(idno=NULL, api_key=NULL, api_base_url=NULL){
 
   if(is.null(api_key)){
     api_key=get_api_key();
@@ -55,15 +55,16 @@ datasets <- function(api_key=NULL, api_base_url=NULL, idno=NULL){
 #' @param published Set status for study - 0 = Draft, 1 = Published
 #' @param verbose Show verbose output - True, False
 #' @export
-import_ddi <- function(api_key=NULL,
-                      api_base_url=NULL,
+import_ddi <- function(
                       xml_file=NULL,
                       rdf_file=NULL,
                       repositoryid=NULL,
                       overwrite='no',
                       access_policy=NULL,
                       data_remote_url=NULL,
-                      published=NULL){
+                      published=NULL,
+                      api_key=NULL,
+                      api_base_url=NULL){
 
   endpoint='datasets/import_ddi'
 
@@ -87,13 +88,17 @@ import_ddi <- function(api_key=NULL,
   }
 
   httpResponse <- POST(url, add_headers("X-API-KEY" = api_key),body=options, accept_json(), verbose(get_verbose()))
+
   output=NULL
 
   if(httpResponse$status_code!=200){
     warning(content(httpResponse, "text"))
-  }else{
-    output=fromJSON(content(httpResponse,"text"))
   }
+
+  output=list(
+    "status_code"=httpResponse$status_code,
+    "response"=fromJSON(content(httpResponse,"text"))
+  )
 
   return (output)
 }
@@ -166,8 +171,7 @@ import_ddi <- function(api_key=NULL,
 #'
 #'
 #' @export
-create_survey <- function(api_key=NULL,
-                      api_base_url=NULL,
+create_survey <- function(
                       idno,
                       repositoryid=NULL,
                       access_policy=NULL,
@@ -179,7 +183,9 @@ create_survey <- function(api_key=NULL,
                       data_files=NULL,
                       variables=NULL,
                       variable_groups=NULL,
-                      additional=NULL){
+                      additional=NULL,
+                      api_key=NULL,
+                      api_base_url=NULL){
 
   endpoint=paste0('datasets/create/survey/',idno)
 
@@ -400,17 +406,16 @@ create <- function(
 #'
 #' @export
 create_geospatial <- function(
-                   idno,
-                   metadata,
-                   repositoryid=NULL,
-                   access_policy=NULL,
-                   data_remote_url=NULL,
-                   published=0,
-                   overwrite="no",
-                   thumbnail=NULL,
-                   api_key=NULL,
-                   api_base_url=NULL
-                   ){
+                           idno,
+                           metadata,
+                           repositoryid=NULL,
+                           access_policy=NULL,
+                           data_remote_url=NULL,
+                           published=0,
+                           overwrite="no",
+                           thumbnail=NULL,
+                           api_key=NULL,
+                           api_base_url=NULL){
 
   if(is.null(api_key)){
     api_key=get_api_key();
@@ -704,7 +709,6 @@ create_document <- function(idno,
 
   return (result)
 }
-
 
 
 

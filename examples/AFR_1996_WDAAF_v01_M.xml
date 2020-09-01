@@ -1,0 +1,1862 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<codeBook version="1.2.2" ID="AFR_1996_WDAAF_v01_M" xml-lang="en" xmlns="http://www.icpsr.umich.edu/DDI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.icpsr.umich.edu/DDI http://www.icpsr.umich.edu/DDI/Version1-2-2.xsd">
+  <docDscr>
+    <citation>
+      <titlStmt>
+        <titl>
+          What Does Aid to Africa Finance?
+        </titl>
+        <IDNo>
+          DDI_AFR_1996_WDAAF_v01_M
+        </IDNo>
+      </titlStmt>
+      <rspStmt>
+        <othId>
+          <p>
+            World Bank, Development Economics Research Group (DECRG)
+          </p>
+        </othId>
+      </rspStmt>
+      <prodStmt>
+        <prodDate date="2010-09-15">
+          2010-09-15
+        </prodDate>
+        <software version="1.1" date="2009-03-19">
+          Metadata Editor
+        </software>
+      </prodStmt>
+    </citation>
+  </docDscr>
+  <stdyDscr>
+    <citation>
+      <titlStmt>
+        <titl>
+          What Does Aid to Africa Finance ? 1970-1996
+        </titl>
+        <altTitl>
+          WDAAF 1996
+        </altTitl>
+        <IDNo>
+          AFR_1996_WDAAF_v01_M
+        </IDNo>
+      </titlStmt>
+      <rspStmt>
+        <AuthEnty affiliation="World Bank">
+          Shantayanan Devarajan, Andrew Sunil Rajkumar and Vinaya Swaroop
+        </AuthEnty>
+      </rspStmt>
+      <prodStmt>
+        <prodDate date="2010-09-15">
+          2010-09-15
+        </prodDate>
+        <software version="1.1" date="2009-03-19">
+          Metadata Editor
+        </software>
+      </prodStmt>
+    </citation>
+    <stdyInfo>
+      <abstract>
+        <![CDATA[If a donor gives aid for a project that the recipient government would have undertaken anyway, then the aid is financing some expenditure other than the intended project. The notion that aid in this sense may be "fungible," while long recognized, has recently been receiving some empirical support. The paper "What Does Aid to Africa Finance?"  focuses on Sub-Saharan Africa—the region with the largest GDP share of aid—and presents results that indicate that aid may be partially fungible, and suggests some reasons why. 
+
+This database contains data used for the analysis.]]>
+      </abstract>
+      <sumDscr>
+        <timePrd date="1970" event="start"/>
+        <timePrd date="1996" event="end"/>
+        <collDate date="1970" event="start"/>
+        <collDate date="1996" event="end"/>
+        <nation abbr="AFR">
+          Africa
+        </nation>
+        <geogCover>
+          The database includes data from Botswana, Burkina Faso, Cameroon, Ethiopia, The Gambia, Ghana, Kenya, Lesotho, Liberia, Madagascar, Malawi, Mauritius, Nigeria, Sudan, Swaziland, Zaire, Zambia, and Zimbabwe.
+        </geogCover>
+      </sumDscr>
+    </stdyInfo>
+    <method>
+      <dataColl>
+        <collMode>
+          Other [oth]
+        </collMode>
+        <sources/>
+      </dataColl>
+    </method>
+    <dataAccs>
+      <useStmt>
+        <citReq>
+          <![CDATA[Use of the dataset must be acknowledged using a citation which would include:
+- the Identification of the Primary Investigator
+- the title of the survey (including acronym and year of implementation)
+- the survey reference number
+- the source and date of download
+
+Example:
+
+Shantayanan Devarajan et al., World Bank.What Does Aid to Africa Finance? (WDAAF) 1970-1996. Ref. AFR_1996_WDAAF_v01_M. Dataset downloaded from www.microdata.worldbank.org on [date].]]>
+        </citReq>
+        <disclaimer>
+          The user of the data acknowledges that the original collector of the data, the authorized distributor of the data, and the relevant funding agency bear no responsibility for use of the data or for interpretations or inferences based upon such uses.
+        </disclaimer>
+      </useStmt>
+    </dataAccs>
+  </stdyDscr>
+  <fileDscr ID="F1" URI="AFR_1996_WDAAF_v01_M.Nesstar?Index=0&amp;Name=What_does_aid_to_Africa_finance">
+    <fileTxt>
+      <fileName>
+        What_does_aid_to_Africa_finance.NSDstat
+      </fileName>
+      <dimensns>
+        <caseQnty>
+          471
+        </caseQnty>
+        <varQnty>
+          50
+        </varQnty>
+      </dimensns>
+      <fileType>
+        Nesstar 200801
+      </fileType>
+    </fileTxt>
+  </fileDscr>
+  <dataDscr>
+    <var ID="V1" name="countryc" files="F1" intrvl="discrete">
+      <location StartPos="1" EndPos="12" width="12" RecSegNo="1"/>
+      <labl>
+        Country Code
+      </labl>
+      <sumStat type="vald">
+        471
+      </sumStat>
+      <sumStat type="invd">
+        0
+      </sumStat>
+      <catgry>
+        <catValu>
+          Botswana
+        </catValu>
+        <catStat type="freq">
+          26
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          Burkina Faso
+        </catValu>
+        <catStat type="freq">
+          26
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          Cameroon
+        </catValu>
+        <catStat type="freq">
+          26
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          Ethiopia
+        </catValu>
+        <catStat type="freq">
+          26
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          Gambia, The
+        </catValu>
+        <catStat type="freq">
+          26
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          Ghana
+        </catValu>
+        <catStat type="freq">
+          26
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          Kenya
+        </catValu>
+        <catStat type="freq">
+          26
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          Lesotho
+        </catValu>
+        <catStat type="freq">
+          26
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          Liberia
+        </catValu>
+        <catStat type="freq">
+          26
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          Madagascar
+        </catValu>
+        <catStat type="freq">
+          27
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          Malawi
+        </catValu>
+        <catStat type="freq">
+          26
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          Mauritius
+        </catValu>
+        <catStat type="freq">
+          27
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          Nigeria
+        </catValu>
+        <catStat type="freq">
+          26
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          Sudan
+        </catValu>
+        <catStat type="freq">
+          26
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          Swaziland
+        </catValu>
+        <catStat type="freq">
+          26
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          Zaire
+        </catValu>
+        <catStat type="freq">
+          26
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          Zambia
+        </catValu>
+        <catStat type="freq">
+          27
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          Zimbabwe
+        </catValu>
+        <catStat type="freq">
+          26
+        </catStat>
+      </catgry>
+      <varFormat type="character" schema="other"/>
+    </var>
+    <var ID="V2" name="year" files="F1" dcml="0" intrvl="discrete">
+      <location StartPos="13" EndPos="16" width="4" RecSegNo="1"/>
+      <labl>
+        Year
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="1970" max="1996"/>
+      </valrng>
+      <sumStat type="vald">
+        471
+      </sumStat>
+      <sumStat type="invd">
+        0
+      </sumStat>
+      <sumStat type="min">
+        1970
+      </sumStat>
+      <sumStat type="max">
+        1996
+      </sumStat>
+      <catgry>
+        <catValu>
+          1970
+        </catValu>
+        <catStat type="freq">
+          18
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          1971
+        </catValu>
+        <catStat type="freq">
+          18
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          1972
+        </catValu>
+        <catStat type="freq">
+          18
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          1973
+        </catValu>
+        <catStat type="freq">
+          18
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          1974
+        </catValu>
+        <catStat type="freq">
+          18
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          1975
+        </catValu>
+        <catStat type="freq">
+          18
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          1976
+        </catValu>
+        <catStat type="freq">
+          18
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          1977
+        </catValu>
+        <catStat type="freq">
+          18
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          1978
+        </catValu>
+        <catStat type="freq">
+          18
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          1979
+        </catValu>
+        <catStat type="freq">
+          18
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          1980
+        </catValu>
+        <catStat type="freq">
+          18
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          1981
+        </catValu>
+        <catStat type="freq">
+          18
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          1982
+        </catValu>
+        <catStat type="freq">
+          18
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          1983
+        </catValu>
+        <catStat type="freq">
+          18
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          1984
+        </catValu>
+        <catStat type="freq">
+          18
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          1985
+        </catValu>
+        <catStat type="freq">
+          18
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          1986
+        </catValu>
+        <catStat type="freq">
+          18
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          1987
+        </catValu>
+        <catStat type="freq">
+          18
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          1988
+        </catValu>
+        <catStat type="freq">
+          18
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          1989
+        </catValu>
+        <catStat type="freq">
+          18
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          1990
+        </catValu>
+        <catStat type="freq">
+          18
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          1991
+        </catValu>
+        <catStat type="freq">
+          18
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          1992
+        </catValu>
+        <catStat type="freq">
+          18
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          1993
+        </catValu>
+        <catStat type="freq">
+          18
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          1994
+        </catValu>
+        <catStat type="freq">
+          18
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          1995
+        </catValu>
+        <catStat type="freq">
+          18
+        </catStat>
+      </catgry>
+      <catgry>
+        <catValu>
+          1996
+        </catValu>
+        <catStat type="freq">
+          3
+        </catStat>
+      </catgry>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V3" name="agrgdp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="17" EndPos="27" width="11" RecSegNo="1"/>
+      <labl>
+        agriculture as share of GDP
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="5.088135593" max="64.4192191"/>
+      </valrng>
+      <sumStat type="vald">
+        452
+      </sumStat>
+      <sumStat type="invd">
+        19
+      </sumStat>
+      <sumStat type="min">
+        5.088
+      </sumStat>
+      <sumStat type="max">
+        64.419
+      </sumStat>
+      <sumStat type="mean">
+        30.046
+      </sumStat>
+      <sumStat type="stdev">
+        12.509
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V4" name="popn" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="28" EndPos="36" width="9" RecSegNo="1"/>
+      <labl>
+        population
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="419000" max="111273000"/>
+      </valrng>
+      <sumStat type="vald">
+        468
+      </sumStat>
+      <sumStat type="invd">
+        3
+      </sumStat>
+      <sumStat type="min">
+        419000
+      </sumStat>
+      <sumStat type="max">
+        111273000
+      </sumStat>
+      <sumStat type="mean">
+        14231716.607
+      </sumStat>
+      <sumStat type="stdev">
+        19741536.395
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V5" name="infmort" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="37" EndPos="47" width="11" RecSegNo="1"/>
+      <labl>
+        infant mortality rate
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="16.07999992" max="200"/>
+      </valrng>
+      <sumStat type="vald">
+        468
+      </sumStat>
+      <sumStat type="invd">
+        3
+      </sumStat>
+      <sumStat type="min">
+        16.08
+      </sumStat>
+      <sumStat type="max">
+        200
+      </sumStat>
+      <sumStat type="mean">
+        106.199
+      </sumStat>
+      <sumStat type="stdev">
+        37.733
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V6" name="schprim" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="48" EndPos="50" width="3" RecSegNo="1"/>
+      <labl>
+        primary school enrolment rate
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="13" max="136"/>
+      </valrng>
+      <sumStat type="vald">
+        441
+      </sumStat>
+      <sumStat type="invd">
+        30
+      </sumStat>
+      <sumStat type="min">
+        13
+      </sumStat>
+      <sumStat type="max">
+        136
+      </sumStat>
+      <sumStat type="mean">
+        77.077
+      </sumStat>
+      <sumStat type="stdev">
+        28.541
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V7" name="schsec" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="51" EndPos="52" width="2" RecSegNo="1"/>
+      <labl>
+        secondary school enrolment rate
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="1" max="59"/>
+      </valrng>
+      <sumStat type="vald">
+        436
+      </sumStat>
+      <sumStat type="invd">
+        35
+      </sumStat>
+      <sumStat type="min">
+        1
+      </sumStat>
+      <sumStat type="max">
+        59
+      </sumStat>
+      <sumStat type="mean">
+        20.765
+      </sumStat>
+      <sumStat type="stdev">
+        13.313
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V8" name="grtdsbp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="53" EndPos="69" width="17" RecSegNo="1"/>
+      <labl>
+        total grant disbursement, in 1995 US$ and per capita
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="0.452252089977264" max="245.164505004883"/>
+      </valrng>
+      <sumStat type="vald">
+        468
+      </sumStat>
+      <sumStat type="invd">
+        3
+      </sumStat>
+      <sumStat type="min">
+        0.452
+      </sumStat>
+      <sumStat type="max">
+        245.165
+      </sumStat>
+      <sumStat type="mean">
+        36.064
+      </sumStat>
+      <sumStat type="stdev">
+        32.687
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V9" name="grlndsbp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="70" EndPos="88" width="19" RecSegNo="1"/>
+      <labl>
+        total concessional loan disbursement, in 1995 US$ and per capita
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="-0.0424727015197277" max="174.476501464844"/>
+      </valrng>
+      <sumStat type="vald">
+        468
+      </sumStat>
+      <sumStat type="invd">
+        3
+      </sumStat>
+      <sumStat type="min">
+        -0.0425
+      </sumStat>
+      <sumStat type="max">
+        174.477
+      </sumStat>
+      <sumStat type="mean">
+        17.773
+      </sumStat>
+      <sumStat type="stdev">
+        18.136
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V10" name="aiddsbp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="89" EndPos="105" width="17" RecSegNo="1"/>
+      <labl>
+        total foreign aid disbursement, in 1995 US$ and per capita (=grtdsbp+grlndsbp)
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="0.452252089977264" max="269.789306640625"/>
+      </valrng>
+      <sumStat type="vald">
+        468
+      </sumStat>
+      <sumStat type="invd">
+        3
+      </sumStat>
+      <sumStat type="min">
+        0.452
+      </sumStat>
+      <sumStat type="max">
+        269.789
+      </sumStat>
+      <sumStat type="mean">
+        53.837
+      </sumStat>
+      <sumStat type="stdev">
+        43.401
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V11" name="totexpp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="106" EndPos="121" width="16" RecSegNo="1"/>
+      <labl>
+        total government expenditure, in 1995 US$ and per capita
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="7.17049789428711" max="1341.14794921875"/>
+      </valrng>
+      <sumStat type="vald">
+        309
+      </sumStat>
+      <sumStat type="invd">
+        162
+      </sumStat>
+      <sumStat type="min">
+        7.17
+      </sumStat>
+      <sumStat type="max">
+        1341.148
+      </sumStat>
+      <sumStat type="mean">
+        235.169
+      </sumStat>
+      <sumStat type="stdev">
+        226.659
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V12" name="agexpp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="122" EndPos="138" width="17" RecSegNo="1"/>
+      <labl>
+        government expenditure on agriculture, in 1995 US$ and per capita
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="0.335119992494583" max="104.603302001953"/>
+      </valrng>
+      <sumStat type="vald">
+        299
+      </sumStat>
+      <sumStat type="invd">
+        172
+      </sumStat>
+      <sumStat type="min">
+        0.335
+      </sumStat>
+      <sumStat type="max">
+        104.603
+      </sumStat>
+      <sumStat type="mean">
+        19.615
+      </sumStat>
+      <sumStat type="stdev">
+        19.427
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V13" name="enexpp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="139" EndPos="154" width="16" RecSegNo="1"/>
+      <labl>
+        government expenditure on energy, in 1995 US$ and per capita
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="0" max="53.7656402587891"/>
+      </valrng>
+      <sumStat type="vald">
+        299
+      </sumStat>
+      <sumStat type="invd">
+        172
+      </sumStat>
+      <sumStat type="min">
+        0
+      </sumStat>
+      <sumStat type="max">
+        53.766
+      </sumStat>
+      <sumStat type="mean">
+        3.132
+      </sumStat>
+      <sumStat type="stdev">
+        5.975
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V14" name="indexpp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="155" EndPos="170" width="16" RecSegNo="1"/>
+      <labl>
+        government expenditure on industry, in 1995 US$ and per capita
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="0" max="58.3393096923828"/>
+      </valrng>
+      <sumStat type="vald">
+        298
+      </sumStat>
+      <sumStat type="invd">
+        173
+      </sumStat>
+      <sumStat type="min">
+        0
+      </sumStat>
+      <sumStat type="max">
+        58.339
+      </sumStat>
+      <sumStat type="mean">
+        4.426
+      </sumStat>
+      <sumStat type="stdev">
+        6.094
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V15" name="tacexpp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="171" EndPos="186" width="16" RecSegNo="1"/>
+      <labl>
+        government expenditure on transport &amp; communications, in 1995 US$ and per capita
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="0" max="172.427307128906"/>
+      </valrng>
+      <sumStat type="vald">
+        298
+      </sumStat>
+      <sumStat type="invd">
+        173
+      </sumStat>
+      <sumStat type="min">
+        0
+      </sumStat>
+      <sumStat type="max">
+        172.427
+      </sumStat>
+      <sumStat type="mean">
+        21.453
+      </sumStat>
+      <sumStat type="stdev">
+        23.883
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V16" name="eduexpp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="187" EndPos="203" width="17" RecSegNo="1"/>
+      <labl>
+        government expenditure on education, in 1995 US$ and per capita
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="0.037982601672411" max="294.426086425781"/>
+      </valrng>
+      <sumStat type="vald">
+        304
+      </sumStat>
+      <sumStat type="invd">
+        167
+      </sumStat>
+      <sumStat type="min">
+        0.038
+      </sumStat>
+      <sumStat type="max">
+        294.426
+      </sumStat>
+      <sumStat type="mean">
+        40.054
+      </sumStat>
+      <sumStat type="stdev">
+        45.954
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V17" name="hthexpp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="204" EndPos="221" width="18" RecSegNo="1"/>
+      <labl>
+        government expenditure on health, in 1995 US$ and per capita
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="0.0167052000761032" max="68.4545593261719"/>
+      </valrng>
+      <sumStat type="vald">
+        304
+      </sumStat>
+      <sumStat type="invd">
+        167
+      </sumStat>
+      <sumStat type="min">
+        0.0167
+      </sumStat>
+      <sumStat type="max">
+        68.455
+      </sumStat>
+      <sumStat type="mean">
+        14.903
+      </sumStat>
+      <sumStat type="stdev">
+        14.952
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V18" name="prirepp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="222" EndPos="238" width="17" RecSegNo="1"/>
+      <labl>
+        principal repayments, in 1995 US$ and per capita
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="-53.1045188903809" max="95.8780364990234"/>
+      </valrng>
+      <sumStat type="vald">
+        468
+      </sumStat>
+      <sumStat type="invd">
+        3
+      </sumStat>
+      <sumStat type="min">
+        -53.105
+      </sumStat>
+      <sumStat type="max">
+        95.878
+      </sumStat>
+      <sumStat type="mean">
+        4.248
+      </sumStat>
+      <sumStat type="stdev">
+        8.572
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V19" name="curexpp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="239" EndPos="253" width="15" RecSegNo="1"/>
+      <labl>
+        current government expenditure, in 1995 US$ and per capita
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="-2417.08203125" max="1105.4990234375"/>
+      </valrng>
+      <sumStat type="vald">
+        309
+      </sumStat>
+      <sumStat type="invd">
+        162
+      </sumStat>
+      <sumStat type="min">
+        -2417.082
+      </sumStat>
+      <sumStat type="max">
+        1105.499
+      </sumStat>
+      <sumStat type="mean">
+        155.068
+      </sumStat>
+      <sumStat type="stdev">
+        269.432
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V20" name="capexpp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="254" EndPos="270" width="17" RecSegNo="1"/>
+      <labl>
+        capital government expenditure, in 1995 US$ and per capita
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="0.340921998023987" max="2604.65991210938"/>
+      </valrng>
+      <sumStat type="vald">
+        315
+      </sumStat>
+      <sumStat type="invd">
+        156
+      </sumStat>
+      <sumStat type="min">
+        0.341
+      </sumStat>
+      <sumStat type="max">
+        2604.66
+      </sumStat>
+      <sumStat type="mean">
+        90.915
+      </sumStat>
+      <sumStat type="stdev">
+        282.687
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V21" name="gdnpp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="271" EndPos="286" width="16" RecSegNo="1"/>
+      <labl>
+        GDP per capita, in 1995 US$
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="19.0974292755127" max="3059.44409179688"/>
+      </valrng>
+      <sumStat type="vald">
+        446
+      </sumStat>
+      <sumStat type="invd">
+        25
+      </sumStat>
+      <sumStat type="min">
+        19.097
+      </sumStat>
+      <sumStat type="max">
+        3059.444
+      </sumStat>
+      <sumStat type="mean">
+        747.375
+      </sumStat>
+      <sumStat type="stdev">
+        566.649
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V22" name="d0" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="287" EndPos="288" width="2" RecSegNo="1"/>
+      <labl>
+        number of donors
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="4" max="27"/>
+      </valrng>
+      <sumStat type="vald">
+        446
+      </sumStat>
+      <sumStat type="invd">
+        25
+      </sumStat>
+      <sumStat type="min">
+        4
+      </sumStat>
+      <sumStat type="max">
+        27
+      </sumStat>
+      <sumStat type="mean">
+        18.72
+      </sumStat>
+      <sumStat type="stdev">
+        4.301
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V23" name="cnlnagp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="289" EndPos="304" width="16" RecSegNo="1"/>
+      <labl>
+        concessionary loans to agriculture sector, in 1995 US$ and per capita
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="0" max="72.2686767578125"/>
+      </valrng>
+      <sumStat type="vald">
+        468
+      </sumStat>
+      <sumStat type="invd">
+        3
+      </sumStat>
+      <sumStat type="min">
+        0
+      </sumStat>
+      <sumStat type="max">
+        72.269
+      </sumStat>
+      <sumStat type="mean">
+        2.274
+      </sumStat>
+      <sumStat type="stdev">
+        4.82
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V24" name="cnlnenp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="305" EndPos="320" width="16" RecSegNo="1"/>
+      <labl>
+        concessionary loans to energy sector, in 1995 US$ and per capita
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="0" max="43.7564888000488"/>
+      </valrng>
+      <sumStat type="vald">
+        468
+      </sumStat>
+      <sumStat type="invd">
+        3
+      </sumStat>
+      <sumStat type="min">
+        0
+      </sumStat>
+      <sumStat type="max">
+        43.756
+      </sumStat>
+      <sumStat type="mean">
+        1.551
+      </sumStat>
+      <sumStat type="stdev">
+        3.415
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V25" name="cnlninp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="321" EndPos="336" width="16" RecSegNo="1"/>
+      <labl>
+        concessionary loans to industry sector, in 1995 US$ and per capita
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="0" max="61.7258415222168"/>
+      </valrng>
+      <sumStat type="vald">
+        468
+      </sumStat>
+      <sumStat type="invd">
+        3
+      </sumStat>
+      <sumStat type="min">
+        0
+      </sumStat>
+      <sumStat type="max">
+        61.726
+      </sumStat>
+      <sumStat type="mean">
+        1.337
+      </sumStat>
+      <sumStat type="stdev">
+        3.977
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V26" name="cnlntacp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="337" EndPos="352" width="16" RecSegNo="1"/>
+      <labl>
+        concessionary loans to transport &amp; communications sector, in 1995 US$ and per ca
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="0" max="133.754501342773"/>
+      </valrng>
+      <sumStat type="vald">
+        468
+      </sumStat>
+      <sumStat type="invd">
+        3
+      </sumStat>
+      <sumStat type="min">
+        0
+      </sumStat>
+      <sumStat type="max">
+        133.755
+      </sumStat>
+      <sumStat type="mean">
+        4.757
+      </sumStat>
+      <sumStat type="stdev">
+        9.067
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V27" name="cnlnedup" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="353" EndPos="368" width="16" RecSegNo="1"/>
+      <labl>
+        concessionary loans to education sector, in 1995 US$ and per capita
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="0" max="14.3110599517822"/>
+      </valrng>
+      <sumStat type="vald">
+        468
+      </sumStat>
+      <sumStat type="invd">
+        3
+      </sumStat>
+      <sumStat type="min">
+        0
+      </sumStat>
+      <sumStat type="max">
+        14.311
+      </sumStat>
+      <sumStat type="mean">
+        0.698
+      </sumStat>
+      <sumStat type="stdev">
+        1.368
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V28" name="cnlnhthp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="369" EndPos="384" width="16" RecSegNo="1"/>
+      <labl>
+        concessionary loans to health sector, in 1995 US$ and per capita
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="0" max="6.56008100509644"/>
+      </valrng>
+      <sumStat type="vald">
+        468
+      </sumStat>
+      <sumStat type="invd">
+        3
+      </sumStat>
+      <sumStat type="min">
+        0
+      </sumStat>
+      <sumStat type="max">
+        6.56
+      </sumStat>
+      <sumStat type="mean">
+        0.228
+      </sumStat>
+      <sumStat type="stdev">
+        0.638
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V29" name="cnlnothp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="385" EndPos="400" width="16" RecSegNo="1"/>
+      <labl>
+        concessionary loans to other sectors, in 1995 US$ and per capita
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="0" max="97.6399002075195"/>
+      </valrng>
+      <sumStat type="vald">
+        468
+      </sumStat>
+      <sumStat type="invd">
+        3
+      </sumStat>
+      <sumStat type="min">
+        0
+      </sumStat>
+      <sumStat type="max">
+        97.64
+      </sumStat>
+      <sumStat type="mean">
+        7.973
+      </sumStat>
+      <sumStat type="stdev">
+        11.114
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V30" name="dgrtdsbp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="401" EndPos="417" width="17" RecSegNo="1"/>
+      <labl>
+        first difference of variable grtdsbp
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="-41.6885986328125" max="135.78889465332"/>
+      </valrng>
+      <sumStat type="vald">
+        280
+      </sumStat>
+      <sumStat type="invd">
+        191
+      </sumStat>
+      <sumStat type="min">
+        -41.689
+      </sumStat>
+      <sumStat type="max">
+        135.789
+      </sumStat>
+      <sumStat type="mean">
+        0.926
+      </sumStat>
+      <sumStat type="stdev">
+        15.126
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V31" name="dgrlndsbp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="418" EndPos="434" width="17" RecSegNo="1"/>
+      <labl>
+        first difference of variable grlndsbp
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="-49.6169013977051" max="77.2393798828125"/>
+      </valrng>
+      <sumStat type="vald">
+        280
+      </sumStat>
+      <sumStat type="invd">
+        191
+      </sumStat>
+      <sumStat type="min">
+        -49.617
+      </sumStat>
+      <sumStat type="max">
+        77.239
+      </sumStat>
+      <sumStat type="mean">
+        0.398
+      </sumStat>
+      <sumStat type="stdev">
+        13.035
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V32" name="daiddsbp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="435" EndPos="451" width="17" RecSegNo="1"/>
+      <labl>
+        first difference of variable aiddsbp
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="-60.1181983947754" max="136.039596557617"/>
+      </valrng>
+      <sumStat type="vald">
+        280
+      </sumStat>
+      <sumStat type="invd">
+        191
+      </sumStat>
+      <sumStat type="min">
+        -60.118
+      </sumStat>
+      <sumStat type="max">
+        136.04
+      </sumStat>
+      <sumStat type="mean">
+        1.325
+      </sumStat>
+      <sumStat type="stdev">
+        19.765
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V33" name="dtotexpp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="452" EndPos="468" width="17" RecSegNo="1"/>
+      <labl>
+        first difference of variable totexpp
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="-202.416595458984" max="207.451431274414"/>
+      </valrng>
+      <sumStat type="vald">
+        281
+      </sumStat>
+      <sumStat type="invd">
+        190
+      </sumStat>
+      <sumStat type="min">
+        -202.417
+      </sumStat>
+      <sumStat type="max">
+        207.451
+      </sumStat>
+      <sumStat type="mean">
+        2.938
+      </sumStat>
+      <sumStat type="stdev">
+        52.356
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V34" name="dagexpp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="469" EndPos="485" width="17" RecSegNo="1"/>
+      <labl>
+        first difference of variable agexpp
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="-52.5415992736816" max="38.6336097717285"/>
+      </valrng>
+      <sumStat type="vald">
+        252
+      </sumStat>
+      <sumStat type="invd">
+        219
+      </sumStat>
+      <sumStat type="min">
+        -52.542
+      </sumStat>
+      <sumStat type="max">
+        38.634
+      </sumStat>
+      <sumStat type="mean">
+        0.173
+      </sumStat>
+      <sumStat type="stdev">
+        9.226
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V35" name="denexpp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="486" EndPos="502" width="17" RecSegNo="1"/>
+      <labl>
+        first difference of variable enexpp
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="-22.2586002349854" max="23.6943302154541"/>
+      </valrng>
+      <sumStat type="vald">
+        252
+      </sumStat>
+      <sumStat type="invd">
+        219
+      </sumStat>
+      <sumStat type="min">
+        -22.259
+      </sumStat>
+      <sumStat type="max">
+        23.694
+      </sumStat>
+      <sumStat type="mean">
+        0.0279
+      </sumStat>
+      <sumStat type="stdev">
+        4.437
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V36" name="dindexpp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="503" EndPos="519" width="17" RecSegNo="1"/>
+      <labl>
+        first difference of variable indexpp
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="-48.3217010498047" max="34.4217987060547"/>
+      </valrng>
+      <sumStat type="vald">
+        252
+      </sumStat>
+      <sumStat type="invd">
+        219
+      </sumStat>
+      <sumStat type="min">
+        -48.322
+      </sumStat>
+      <sumStat type="max">
+        34.422
+      </sumStat>
+      <sumStat type="mean">
+        -0.201
+      </sumStat>
+      <sumStat type="stdev">
+        5.368
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V37" name="dtacexpp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="520" EndPos="536" width="17" RecSegNo="1"/>
+      <labl>
+        first difference of variable tacexpp
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="-96.3691024780273" max="124.765296936035"/>
+      </valrng>
+      <sumStat type="vald">
+        251
+      </sumStat>
+      <sumStat type="invd">
+        220
+      </sumStat>
+      <sumStat type="min">
+        -96.369
+      </sumStat>
+      <sumStat type="max">
+        124.765
+      </sumStat>
+      <sumStat type="mean">
+        -0.0811
+      </sumStat>
+      <sumStat type="stdev">
+        15.076
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V38" name="deduexpp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="537" EndPos="552" width="16" RecSegNo="1"/>
+      <labl>
+        first difference of variable eduexpp
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="-35.7958984375" max="51.4605293273926"/>
+      </valrng>
+      <sumStat type="vald">
+        253
+      </sumStat>
+      <sumStat type="invd">
+        218
+      </sumStat>
+      <sumStat type="min">
+        -35.796
+      </sumStat>
+      <sumStat type="max">
+        51.461
+      </sumStat>
+      <sumStat type="mean">
+        1.162
+      </sumStat>
+      <sumStat type="stdev">
+        10.936
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V39" name="dhthexpp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="553" EndPos="569" width="17" RecSegNo="1"/>
+      <labl>
+        first difference of variable hthexpp
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="-15.2704000473022" max="20.0925407409668"/>
+      </valrng>
+      <sumStat type="vald">
+        253
+      </sumStat>
+      <sumStat type="invd">
+        218
+      </sumStat>
+      <sumStat type="min">
+        -15.27
+      </sumStat>
+      <sumStat type="max">
+        20.093
+      </sumStat>
+      <sumStat type="mean">
+        0.263
+      </sumStat>
+      <sumStat type="stdev">
+        3.523
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V40" name="dothexpp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="570" EndPos="586" width="17" RecSegNo="1"/>
+      <labl>
+        first difference of variable othexpp
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="-147.811996459961" max="135.371704101562"/>
+      </valrng>
+      <sumStat type="vald">
+        249
+      </sumStat>
+      <sumStat type="invd">
+        222
+      </sumStat>
+      <sumStat type="min">
+        -147.812
+      </sumStat>
+      <sumStat type="max">
+        135.372
+      </sumStat>
+      <sumStat type="mean">
+        2.057
+      </sumStat>
+      <sumStat type="stdev">
+        34.677
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V41" name="dcurexpp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="587" EndPos="602" width="16" RecSegNo="1"/>
+      <labl>
+        first difference of variable curexpp
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="-187.5" max="160.910507202148"/>
+      </valrng>
+      <sumStat type="vald">
+        257
+      </sumStat>
+      <sumStat type="invd">
+        214
+      </sumStat>
+      <sumStat type="min">
+        -187.5
+      </sumStat>
+      <sumStat type="max">
+        160.911
+      </sumStat>
+      <sumStat type="mean">
+        2.534
+      </sumStat>
+      <sumStat type="stdev">
+        43.4
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V42" name="dcapexpp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="603" EndPos="619" width="17" RecSegNo="1"/>
+      <labl>
+        first difference of variable capexpp
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="-134.315002441406" max="156.541000366211"/>
+      </valrng>
+      <sumStat type="vald">
+        258
+      </sumStat>
+      <sumStat type="invd">
+        213
+      </sumStat>
+      <sumStat type="min">
+        -134.315
+      </sumStat>
+      <sumStat type="max">
+        156.541
+      </sumStat>
+      <sumStat type="mean">
+        1.28
+      </sumStat>
+      <sumStat type="stdev">
+        26.171
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V43" name="dprirepp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="620" EndPos="636" width="17" RecSegNo="1"/>
+      <labl>
+        first difference of variable prirepp
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="-78.8619003295898" max="95.1776275634766"/>
+      </valrng>
+      <sumStat type="vald">
+        280
+      </sumStat>
+      <sumStat type="invd">
+        191
+      </sumStat>
+      <sumStat type="min">
+        -78.862
+      </sumStat>
+      <sumStat type="max">
+        95.178
+      </sumStat>
+      <sumStat type="mean">
+        0.232
+      </sumStat>
+      <sumStat type="stdev">
+        11.61
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V44" name="dcnlnagp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="637" EndPos="653" width="17" RecSegNo="1"/>
+      <labl>
+        first difference of variable cnlnagp
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="-41.0242004394531" max="72.2686767578125"/>
+      </valrng>
+      <sumStat type="vald">
+        280
+      </sumStat>
+      <sumStat type="invd">
+        191
+      </sumStat>
+      <sumStat type="min">
+        -41.024
+      </sumStat>
+      <sumStat type="max">
+        72.269
+      </sumStat>
+      <sumStat type="mean">
+        0.0676
+      </sumStat>
+      <sumStat type="stdev">
+        5.739
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V45" name="dcnlnenp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="654" EndPos="670" width="17" RecSegNo="1"/>
+      <labl>
+        first difference of variable cnlnenp
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="-19.9955005645752" max="22.1762199401855"/>
+      </valrng>
+      <sumStat type="vald">
+        280
+      </sumStat>
+      <sumStat type="invd">
+        191
+      </sumStat>
+      <sumStat type="min">
+        -19.996
+      </sumStat>
+      <sumStat type="max">
+        22.176
+      </sumStat>
+      <sumStat type="mean">
+        0.0216
+      </sumStat>
+      <sumStat type="stdev">
+        3.464
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V46" name="dcnlninp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="671" EndPos="687" width="17" RecSegNo="1"/>
+      <labl>
+        first difference of variable cnlninp
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="-36.2482986450195" max="34.3683815002441"/>
+      </valrng>
+      <sumStat type="vald">
+        280
+      </sumStat>
+      <sumStat type="invd">
+        191
+      </sumStat>
+      <sumStat type="min">
+        -36.248
+      </sumStat>
+      <sumStat type="max">
+        34.368
+      </sumStat>
+      <sumStat type="mean">
+        0.0235
+      </sumStat>
+      <sumStat type="stdev">
+        4.603
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V47" name="dcnlntacp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="688" EndPos="703" width="16" RecSegNo="1"/>
+      <labl>
+        first difference of variable cnlntacp
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="-28.972900390625" max="31.8583793640137"/>
+      </valrng>
+      <sumStat type="vald">
+        280
+      </sumStat>
+      <sumStat type="invd">
+        191
+      </sumStat>
+      <sumStat type="min">
+        -28.973
+      </sumStat>
+      <sumStat type="max">
+        31.858
+      </sumStat>
+      <sumStat type="mean">
+        0.14
+      </sumStat>
+      <sumStat type="stdev">
+        5.979
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V48" name="dcnlnedup" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="704" EndPos="720" width="17" RecSegNo="1"/>
+      <labl>
+        first difference of variable cnlnedup
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="-11.6063995361328" max="14.1005401611328"/>
+      </valrng>
+      <sumStat type="vald">
+        280
+      </sumStat>
+      <sumStat type="invd">
+        191
+      </sumStat>
+      <sumStat type="min">
+        -11.606
+      </sumStat>
+      <sumStat type="max">
+        14.101
+      </sumStat>
+      <sumStat type="mean">
+        0.0427
+      </sumStat>
+      <sumStat type="stdev">
+        1.753
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V49" name="dcnlnhthp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="721" EndPos="737" width="17" RecSegNo="1"/>
+      <labl>
+        first difference of variable cnlnhthp
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="-2.11718010902405" max="3.59055495262146"/>
+      </valrng>
+      <sumStat type="vald">
+        280
+      </sumStat>
+      <sumStat type="invd">
+        191
+      </sumStat>
+      <sumStat type="min">
+        -2.117
+      </sumStat>
+      <sumStat type="max">
+        3.591
+      </sumStat>
+      <sumStat type="mean">
+        0.0237
+      </sumStat>
+      <sumStat type="stdev">
+        0.453
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+    <var ID="V50" name="dcnlnothp" files="F1" dcml="0" intrvl="contin">
+      <location StartPos="738" EndPos="754" width="17" RecSegNo="1"/>
+      <labl>
+        first difference of variable cnlnothp
+      </labl>
+      <valrng>
+        <range UNITS="REAL" min="-55.1534996032715" max="70.8167724609375"/>
+      </valrng>
+      <sumStat type="vald">
+        280
+      </sumStat>
+      <sumStat type="invd">
+        191
+      </sumStat>
+      <sumStat type="min">
+        -55.153
+      </sumStat>
+      <sumStat type="max">
+        70.817
+      </sumStat>
+      <sumStat type="mean">
+        0.0381
+      </sumStat>
+      <sumStat type="stdev">
+        11.793
+      </sumStat>
+      <varFormat type="numeric" schema="other"/>
+    </var>
+  </dataDscr>
+</codeBook>

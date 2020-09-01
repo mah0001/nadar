@@ -9,7 +9,7 @@
 #' @return List of external resources
 #' @param dataset_idno Study IDNo
 #' @export
-resources <- function(dataset_idno, api_key=NULL, api_base_url=NULL){
+list_resources <- function(dataset_idno, api_key=NULL, api_base_url=NULL){
 
   if(is.null(api_key)){
     api_key=get_api_key();
@@ -31,7 +31,7 @@ resources <- function(dataset_idno, api_key=NULL, api_base_url=NULL){
 }
 
 
-#' ImportRDF
+#' import_rdf
 #'
 #' Import an RDF file
 #'
@@ -82,7 +82,7 @@ import_rdf <- function(
 #' @param resource_id (Optional) External resource ID
 #' @param file External resource file to be uploaded
 #' @export
-resource_upload <- function(
+upload_resource <- function(
                       dataset_idno,
                       resource_id=NULL,
                       file,
@@ -123,7 +123,7 @@ resource_upload <- function(
 #' @param dataset_idno Study IDNo
 #' @param resource_id Resource ID
 #' @export
-resource_download <- function(dataset_idno, resource_id,api_key=NULL, api_base_url=NULL){
+download_resource <- function(dataset_idno, resource_id,api_key=NULL, api_base_url=NULL){
 
   if(is.null(api_key)){
     api_key=get_api_key();
@@ -159,68 +159,32 @@ resource_download <- function(dataset_idno, resource_id,api_key=NULL, api_base_u
 
 
 
-#' Create new study
+#' Create new resource
 #'
-#' Create a new study
+#' Create a new resource
 #'
 #' @return NULL
-#' @param type (required) Type of study - survey, geospatial, table, document, timeseries
-#' @param idno (required) Study unique identifier
-#' @param repositoryid Collection ID that owns the study
-#' @param access_policy Select the access policy suitable for your data. Valid values - "open" "direct" "public" "licensed" "enclave" "remote" "other"
-#' @param data_remote_url Link to the website where the data is available. Required if access_policy is set to 'remote'.
-#' @param published Set status for study - 0 = Draft, 1 = Published
-#' @param overwrite Overwrite if a study with the same ID already exists? Valid values "yes", "no"
-#' @param metadata \strong{(required)} Metadata list depending on the type of study
-#'
-#' @examples
-#'
-#'
-#' doc_desc=list(
-#' "idno"="doc-idno",
-#' "producers"=list(
-#' list(
-#'     "name"="name here",
-#'     "abbr"="abbreviation"
-#'   )
-#' )
-#' )
-#'
-#' study_desc=list(
-#'   "title_statement"= list(
-#'     "idno"= "survey-idno-test",
-#'     "title"= "string",
-#'     "sub_title"= "string",
-#'     "alternate_title"= "string",
-#'     "translated_title"= "string"
-#'   ),
-#'   "study_info"=list(
-#'     "nation"=list(
-#'       list(
-#'         "name"="Test",
-#'         "abbreviation"="tst")
-#'     )
-#'   )
-#' )
-#'
-#' create (
-#'   idno="survey-idno-test",
-#'   type="survey",
-#'   published = 1,
-#'   overwrite = "yes",
-#'   doc_desc = doc_desc,
-#'   study_desc = study_desc,
-#'   data_files=NULL,
-#'   variables=NULL,
-#'   variable_groups = NULL,
-#'   additional = NULL
-#' )
+#' @param idno \strong{(required)} Study IDNO
+#' @param dctype Resource document type
+#' @param title Resource title
+#' @param dcformat Resource file format
+#' @param author Author name
+#' @param dcdate Date using YYYY-MM-DD format
+#' @param country Country name
+#' @param language Language or Language code
+#' @param contributor Contributor name
+#' @param publisher Publisher name
+#' @param rights Rights
+#' @param description Resource detailed description
+#' @param abstract  Resource abstract
+#' @param toc Table of contents
+#' @param file_path File path for uploading
 #'
 #'
 #'
 #'
 #' @export
-resource_create <- function(
+create_resource <- function(
                       idno,
                       dctype,
                       title,

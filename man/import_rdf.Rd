@@ -2,7 +2,7 @@
 % Please edit documentation in R/external_resources.R
 \name{import_rdf}
 \alias{import_rdf}
-\title{ImportRDF}
+\title{import_rdf}
 \usage{
 import_rdf(dataset_idno, rdf_file, api_key = NULL, api_base_url = NULL)
 }
