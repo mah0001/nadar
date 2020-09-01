@@ -11,7 +11,7 @@ create_image(idno, metadata, repositoryid = NULL, access_policy = NULL,
 \arguments{
 \item{idno}{(required) Unique identifier}
 
-\item{metadata}{\stronglist((required)) Metadata using the IPTC Image Schema}
+\item{metadata}{\strong{(required)} Metadata using the IPTC Image Schema}
 
 \item{repositoryid}{Owner Collection ID}
 

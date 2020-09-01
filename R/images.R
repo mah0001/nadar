@@ -9,7 +9,7 @@
 #' @param data_remote_url Link to the website where the data is available. Required if access_policy is set to 'remote'.
 #' @param published Set status for study - 0 = Draft, 1 = Published
 #' @param overwrite Overwrite if a study with the same ID already exists? Valid values "yes", "no"
-#' @param metadata \stronglist((required)) Metadata using the IPTC Image Schema
+#' @param metadata \strong{(required)} Metadata using the IPTC Image Schema
 #'
 #' @examples
 #'
