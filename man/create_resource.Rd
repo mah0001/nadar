@@ -8,7 +8,8 @@ create_resource(idno, dctype, title, dcformat = NULL, author = NULL,
   dcdate = NULL, country = NULL, language = NULL,
   contributor = NULL, publisher = NULL, rights = NULL,
   description = NULL, abstract = NULL, toc = NULL,
-  file_path = NULL, api_key = NULL, api_base_url = NULL)
+  file_path = NULL, overwrite = "no", api_key = NULL,
+  api_base_url = NULL)
 }
 \arguments{
 \item{idno}{\strong{(required)} Study IDNO}
@@ -40,6 +41,8 @@ create_resource(idno, dctype, title, dcformat = NULL, author = NULL,
 \item{toc}{Table of contents}
 
 \item{file_path}{File path for uploading}
+
+\item{overwrite}{Overwrite if resource already exists? Accepted values "yes", "no"}
 }
 \description{
 Create a new resource

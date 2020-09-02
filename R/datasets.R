@@ -708,6 +708,21 @@ create_document <- function(idno,
                   thumbnail=thumbnail
   )
 
+  if(result$status_code==200){
+      if(!is.null(metadata$files)){
+        for(f in metadata$files){
+          if(file.exists(f$file_uri)){
+            create_resource(idno=idno,
+                            dctype="Document [doc/oth]",
+                            title=basename(f$file_uri),
+                            file_path=f$file_uri,
+                            overwrite="yes"
+                            )
+          }
+        }
+      }
+  }
+
   return (result)
 }
 

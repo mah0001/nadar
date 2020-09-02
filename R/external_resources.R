@@ -179,6 +179,7 @@ download_resource <- function(dataset_idno, resource_id,api_key=NULL, api_base_u
 #' @param abstract  Resource abstract
 #' @param toc Table of contents
 #' @param file_path File path for uploading
+#' @param overwrite Overwrite if resource already exists? Accepted values "yes", "no"
 #'
 #'
 #'
@@ -200,6 +201,7 @@ create_resource <- function(
                       abstract=NULL,
                       toc=NULL,
                       file_path=NULL,
+                      overwrite="no",
                       api_key=NULL,
                       api_base_url=NULL){
 
@@ -221,7 +223,8 @@ create_resource <- function(
     rights=rights,
     description=description,
     abstract=abstract,
-    toc=toc
+    toc=toc,
+    overwrite=overwrite
   )
 
   if (file.exists(file_path)){
