@@ -673,6 +673,14 @@ create_document <- function(idno,
     api_key=get_api_key();
   }
 
+  #change file_uri value to file basename
+  if(!is.null(metadata$files)){
+    for(i in seq_along(metadata$files)){
+      print(metadata$files[[i]]$file_uri)
+      metadata$files[[i]]$file_uri=basename(metadata$files[[i]]$file_uri)
+    }
+  }
+
   result = create(type="document",
                   idno=idno,
                   repositoryid=repositoryid,
@@ -691,7 +699,7 @@ create_document <- function(idno,
             create_resource(idno=idno,
                             dctype="Document [doc/oth]",
                             title=basename(f$file_uri),
-                            file_path=basename(f$file_uri),
+                            file_path=f$file_uri,
                             overwrite="yes"
                             )
           }
