@@ -75,6 +75,14 @@ create_table <- function(idno,
     api_key=get_api_key();
   }
 
+  #change file_uri value to file basename
+  if(!is.null(metadata$files)){
+    for(i in seq_along(metadata$files)){
+      print(metadata$files[[i]]$file_uri)
+      metadata$files[[i]]$file_uri=basename(metadata$files[[i]]$file_uri)
+    }
+  }
+
   result = create(type= "table",
                   idno= idno,
                   repositoryid= repositoryid,
@@ -84,6 +92,21 @@ create_table <- function(idno,
                   overwrite= overwrite,
                   metadata= metadata
   )
+
+  if(result$status_code==200){
+    if(!is.null(metadata$files)){
+      for(f in metadata$files){
+        if(file.exists(f$file_uri)){
+          create_resource(idno=idno,
+                          dctype="Document [doc/oth]",
+                          title=basename(f$file_uri),
+                          file_path=f$file_uri,
+                          overwrite="yes"
+          )
+        }
+      }
+    }
+  }
 
   return (result)
 }
