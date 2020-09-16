@@ -4,10 +4,9 @@
 \alias{create_survey}
 \title{Create Survey}
 \usage{
-create_survey(idno, repositoryid = NULL, access_policy = NULL,
-  data_remote_url = NULL, published = NULL, overwrite = NULL,
-  doc_desc, study_desc, data_files = NULL, variables = NULL,
-  variable_groups = NULL, additional = NULL, api_key = NULL,
+create_survey(idno, repositoryid = "central", access_policy = NULL,
+  data_remote_url = NULL, published = 1, overwrite = "no",
+  metadata = NULL, thumbnail = NULL, api_key = NULL,
   api_base_url = NULL)
 }
 \arguments{
@@ -23,6 +22,8 @@ create_survey(idno, repositoryid = NULL, access_policy = NULL,
 
 \item{overwrite}{Overwrite if a study with the same ID already exists? Valid values "yes", "no"}
 
+\item{type}{(required) DDI/XML file path}
+
 \item{doc_desc}{Document description}
 
 \item{study_desc}{(Required) Study description}
@@ -34,8 +35,6 @@ create_survey(idno, repositoryid = NULL, access_policy = NULL,
 \item{variable_groups}{List of variable groups}
 
 \item{additional}{Additional metadata}
-
-\item{type}{(required) DDI/XML file path}
 }
 \description{
 Create a new survey

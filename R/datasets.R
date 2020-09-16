@@ -173,54 +173,30 @@ import_ddi <- function(
 #' @export
 create_survey <- function(
                       idno,
-                      repositoryid=NULL,
+                      repositoryid="central",
                       access_policy=NULL,
                       data_remote_url=NULL,
-                      published=NULL,
-                      overwrite=NULL,
-                      doc_desc,
-                      study_desc,
-                      data_files=NULL,
-                      variables=NULL,
-                      variable_groups=NULL,
-                      additional=NULL,
+                      published=1,
+                      overwrite="no",
+                      metadata=NULL,
+                      thumbnail=NULL,
                       api_key=NULL,
                       api_base_url=NULL){
-
-  endpoint=paste0('datasets/create/survey/',idno)
 
   if(is.null(api_key)){
     api_key=get_api_key();
   }
 
-  url=get_api_url(endpoint)
-
-  metadata=list(
-    "idno"=idno,
-    "published"=published,
-    "access_policy"=access_policy,
-    "data_remote_url"=data_remote_url,
-    "overwrite"=overwrite,
-    "doc_desc"=doc_desc,
-    "study_desc"=study_desc,
-    "data_files"=data_files,
-    "variables"=variables,
-    "variable_groups"=variable_groups,
-    "additional"=additional
-  )
-
-  httpResponse <- POST(url, add_headers("X-API-KEY" = api_key), body=metadata, content_type_json(), encode="json", accept_json(), verbose(get_verbose()))
-
-  output=NULL
-
-  if(httpResponse$status_code!=200){
-    #warning(content(httpResponse, "text"))
-    stop(content(httpResponse, "text"), call. = FALSE)
-  }else{
-    output=fromJSON(content(httpResponse,"text"))
-  }
-
-  return (output)
+  result = create(type="survey",
+                  idno=idno,
+                  repositoryid=repositoryid,
+                  access_policy=access_policy,
+                  data_remote_url = data_remote_url,
+                  published = published,
+                  overwrite= overwrite,
+                  metadata=metadata,
+                  thumbnail=thumbnail)
+  return (result)
 }
 
 
@@ -715,7 +691,7 @@ create_document <- function(idno,
             create_resource(idno=idno,
                             dctype="Document [doc/oth]",
                             title=basename(f$file_uri),
-                            file_path=f$file_uri,
+                            file_path=basename(f$file_uri),
                             overwrite="yes"
                             )
           }
