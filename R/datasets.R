@@ -645,7 +645,7 @@ create_geospatial <- function(
 #' )
 #' )
 #'
-#' create_document (
+#' document_add (
 #'   idno="document-idno",
 #'   published = 1,
 #'   overwrite = "yes",
@@ -657,7 +657,7 @@ create_geospatial <- function(
 #'
 #'
 #' @export
-create_document <- function(idno,
+document_add <- function(idno,
                             metadata,
                             repositoryid=NULL,
                             access_policy=NULL,
@@ -673,10 +673,12 @@ create_document <- function(idno,
     api_key=get_api_key();
   }
 
-  #change file_uri value to file basename
+  files=list()
+
+  #change file_uri value to keep only file basename
   if(!is.null(metadata$files)){
+    files=metadata$files
     for(i in seq_along(metadata$files)){
-      print(metadata$files[[i]]$file_uri)
       metadata$files[[i]]$file_uri=basename(metadata$files[[i]]$file_uri)
     }
   }
@@ -693,15 +695,18 @@ create_document <- function(idno,
   )
 
   if(result$status_code==200){
-      if(!is.null(metadata$files)){
-        for(f in metadata$files){
+      if(!is.null(files)){
+        for(f in files){
           if(file.exists(f$file_uri)){
-            create_resource(idno=idno,
-                            dctype="Document [doc/oth]",
-                            title=basename(f$file_uri),
-                            file_path=f$file_uri,
-                            overwrite="yes"
+            resource_result=create_resource(idno=idno,
+                              dctype="Document [doc/oth]",
+                              title=basename(f$file_uri),
+                              file_path=f$file_uri,
+                              overwrite="yes"
                             )
+            result$resources[[basename(f$file_uri)]]=resource_result
+          } else{
+            warning(paste("File not found:",f$file_uri))
           }
         }
       }
