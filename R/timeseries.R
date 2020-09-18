@@ -201,7 +201,7 @@
 #'   "additional"= list()
 #' )
 #'
-#' create_timeseries (
+#' timeseries_add (
 #'   idno="document-idno",
 #'   published = 1,
 #'   overwrite = "yes",
@@ -213,7 +213,7 @@
 #'
 #'
 #' @export
-create_timeseries <- function(idno,
+timeseries_add <- function(idno,
                             repositoryid="central",
                             access_policy=NULL,
                             data_remote_url=NULL,

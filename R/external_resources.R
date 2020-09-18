@@ -9,7 +9,7 @@
 #' @return List of external resources
 #' @param dataset_idno Study IDNo
 #' @export
-list_resources <- function(dataset_idno, api_key=NULL, api_base_url=NULL){
+external_resources_list <- function(dataset_idno, api_key=NULL, api_base_url=NULL){
 
   if(is.null(api_key)){
     api_key=get_api_key();
@@ -39,7 +39,7 @@ list_resources <- function(dataset_idno, api_key=NULL, api_base_url=NULL){
 #' @param dataset_idno Study IDNo
 #' @param rdf_file RDF file path
 #' @export
-import_rdf <- function(
+external_resources_import <- function(
                       dataset_idno,
                       rdf_file,
                       api_key=NULL,
@@ -82,7 +82,7 @@ import_rdf <- function(
 #' @param resource_id (Optional) External resource ID
 #' @param file External resource file to be uploaded
 #' @export
-upload_resource <- function(
+external_resources_upload <- function(
                       dataset_idno,
                       resource_id=NULL,
                       file,
@@ -123,7 +123,7 @@ upload_resource <- function(
 #' @param dataset_idno Study IDNo
 #' @param resource_id Resource ID
 #' @export
-download_resource <- function(dataset_idno, resource_id,api_key=NULL, api_base_url=NULL){
+external_resources_download <- function(dataset_idno, resource_id,api_key=NULL, api_base_url=NULL){
 
   if(is.null(api_key)){
     api_key=get_api_key();
@@ -185,7 +185,7 @@ download_resource <- function(dataset_idno, resource_id,api_key=NULL, api_base_u
 #'
 #'
 #' @export
-create_resource <- function(
+external_resources_add <- function(
                       idno,
                       dctype,
                       title,

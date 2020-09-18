@@ -172,7 +172,7 @@
 #' "additional"= list()
 #' )
 #'
-#' create_timeseries_db (
+#' timeseries_database_add (
 #'   idno="document-idno",
 #'   published = 1,
 #'   overwrite = "yes",
@@ -183,7 +183,7 @@
 #'
 #'
 #' @export
-create_timeseries_db <- function(idno,
+timeseries_database_add <- function(idno,
                             published=0,
                             overwrite="no",
                             metadata=NULL,

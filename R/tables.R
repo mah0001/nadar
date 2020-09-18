@@ -99,7 +99,7 @@ table_add <- function(idno,
     if(!is.null(files)){
       for(f in files){
         if(file.exists(f$file_uri)){
-          resource_result=create_resource(idno=idno,
+          resource_result=external_resources_add(idno=idno,
                                           dctype="Document [doc/oth]",
                                           title=basename(f$file_uri),
                                           file_path=f$file_uri,

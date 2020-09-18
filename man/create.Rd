@@ -30,7 +30,7 @@ Create a new study
 }
 \examples{
 
-
+metadata=list(
 doc_desc=list(
 "idno"="doc-idno",
 "producers"=list(
@@ -39,7 +39,7 @@ list(
     "abbr"="abbreviation"
   )
 )
-)
+),
 
 study_desc=list(
   "title_statement"= list(
@@ -57,17 +57,14 @@ study_desc=list(
     )
   )
 )
+)
 
 create (
   idno="survey-idno-test",
   type="survey",
   published = 1,
   overwrite = "yes",
-  doc_desc = doc_desc,
-  study_desc = study_desc,
-  data_files=NULL,
-  variables=NULL,
-  variable_groups = NULL,
+  metadata = metadata,
   additional = NULL
 )
 

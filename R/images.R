@@ -272,7 +272,7 @@
 #'
 #'
 #'
-#'  create_image (
+#'  image_add (
 #'   idno="image-idno",
 #'   published = 1,
 #'   overwrite = "yes",
@@ -284,7 +284,7 @@
 #'
 #'
 #' @export
-create_image <- function(idno,
+image_add <- function(idno,
                          metadata,
                          repositoryid=NULL,
                          access_policy=NULL,
