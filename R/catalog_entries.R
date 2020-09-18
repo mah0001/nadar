@@ -66,17 +66,32 @@ catalog_delete <- function(idno, api_key=NULL, api_base_url=NULL){
 }
 
 
-
+#' Search catalog
+#'
+#' Search catalog
+#'
+#' @return list
+#'
+#' @export
 catalog_search <- function(options=list()){
   return ("TODO")
 }
 
 
+#' Find a study by IDNO
+#'
+#' Find study by IDNO
+#'
+#' @return list
+#'
+#' @export
 catalog_find_by_idno <- function(idno){
   return ("TODO")
 }
 
-
+#' @export
 catalog_find_by_id <- function(id){
   return ("TODO")
 }
+
+
