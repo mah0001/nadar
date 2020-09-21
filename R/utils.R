@@ -1,12 +1,12 @@
-#' Generate PDF cover page thumbnail
+#' Capture cover page of a PDF
 #'
-#' Generate PDF cover page thumbnail
+#' Capture cover page of a PDF file
 #'
 #' @return image file
 #' @param file_path \strong{(required)} PDF file path
 #' @param dpi set image DPI, default is 72 dpi
 #' @export
-generate_pdf_coverpage <- function(file_path, dpi=72) {
+capture_pdf_cover <- function(file_path, dpi=72) {
 
   if (!file.exists(file_path)){
     warning(paste("file not found:: ", file_path))

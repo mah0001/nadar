@@ -210,7 +210,11 @@ create <- function(
 
   #upload thumbnail
   if(!is.null(thumbnail) && file.exists(thumbnail)) {
-    thumbnail_result=upload_thumbnail(idno=idno,thumbnail = thumbnail)
+    thumbnail_result=thumbnail_upload(idno=idno,thumbnail = thumbnail)
+  }
+
+  if(thumbnail=='default'){
+    thumbnail_result= thumbnail_delete(idno=idno)
   }
 
   output=list(
@@ -243,7 +247,7 @@ create <- function(
 #' )
 #'
 #' @export
-upload_thumbnail <- function(
+thumbnail_upload <- function(
                    idno,
                    thumbnail,
                    api_key=NULL,
@@ -276,6 +280,52 @@ upload_thumbnail <- function(
 
 
 
+#' Delete thumbnail for a study
+#'
+#' Delete thumbnail for a study
+#'
+#' @return NULL
+#' @param idno (required) Study unique identifier
+#'
+#' @examples
+#'
+#' delete_thumbnail (
+#'   idno="survey-idno-test"
+#' )
+#'
+#' @export
+thumbnail_delete <- function(idno, api_key=NULL,api_base_url=NULL){
+
+  if(is.null(api_key)){
+    api_key=get_api_key();
+  }
+
+  options=list(
+    thumbnail=''
+  )
+
+  url=get_api_url(paste0('datasets/',idno))
+  httpResponse <- PUT(url,
+                      add_headers("X-API-KEY" = api_key),
+                      body=options,
+                      content_type_json(),
+                      encode="json",
+                      accept_json(),
+                      verbose(get_verbose()))
+
+  output=NULL
+
+  if(httpResponse$status_code!=200){
+    warning(content(httpResponse, "text"))
+  }
+
+  output=list(
+    "status_code"=httpResponse$status_code,
+    "response"=fromJSON(content(httpResponse,"text"))
+  )
+
+  return (output)
+}
 
 
 
