@@ -213,7 +213,8 @@ create <- function(
     thumbnail_result=thumbnail_upload(idno=idno,thumbnail = thumbnail)
   }
 
-  if(thumbnail=='default'){
+  #set default thumbnail
+  if(!is.null(thumbnail) && thumbnail == 'default'){
     thumbnail_result= thumbnail_delete(idno=idno)
   }
 
