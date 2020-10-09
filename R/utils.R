@@ -22,3 +22,25 @@ capture_pdf_cover <- function(file_path, dpi=72) {
   return (jpg)
 }
 
+
+
+
+#' Check string is a URL
+#'
+#' @param url
+#'
+#' @return TRUE or FALSE
+#'
+#' @export
+is_valid_url <- function(url){
+
+  if(startsWith(url, 'http://')  ||
+     startsWith(url, 'https://') ||
+     startsWith(url, 'ftp://')   ||
+     startsWith(url, 'sftp://')
+  ){
+      return (TRUE)
+  }
+
+    return (FALSE)
+}
