@@ -230,6 +230,9 @@ external_resources_add <- function(
   if (file.exists(file_path)){
     options$file=upload_file(file_path)
   }
+  else if(is_valid_url(file_path)){
+    options$filename=file_path
+  }
 
   url=get_api_url(paste0('datasets/',idno,'/resources'))
   httpResponse <- POST(url,
