@@ -263,7 +263,7 @@ thumbnail_upload <- function(
   )
 
   url=get_api_url(paste0('datasets/thumbnail/',idno))
-  httpResponse <- POST(url, add_headers("X-API-KEY" = api_key), body=options)
+  httpResponse <- POST(url, add_headers("X-API-KEY" = api_key), body=options, verbose(get_verbose()))
 
   output=NULL
 
