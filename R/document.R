@@ -262,7 +262,9 @@ document_add <- function(idno,
   if(!is.null(metadata$files)){
     files=metadata$files
     for(i in seq_along(metadata$files)){
-      metadata$files[[i]]$file_uri=basename(metadata$files[[i]]$file_uri)
+      if (file.exists(metadata$files[[i]]$file_uri)){
+        metadata$files[[i]]$file_uri=basename(metadata$files[[i]]$file_uri)
+      }
     }
   }
 
@@ -280,7 +282,7 @@ document_add <- function(idno,
   if(result$status_code==200){
     if(!is.null(files)){
       for(f in files){
-        if(file.exists(f$file_uri)){
+        if(file.exists(f$file_uri) || is_valid_url(f$file_uri) ){
           resource_result=external_resources_add(idno=idno,
                                           dctype="Document [doc/oth]",
                                           title=basename(f$file_uri),
@@ -294,6 +296,8 @@ document_add <- function(idno,
       }
     }
   }
+
+
 
   return (result)
 }

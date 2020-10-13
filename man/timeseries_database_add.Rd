@@ -15,12 +15,6 @@ timeseries_database_add(idno, published = 0, overwrite = "no",
 \item{overwrite}{Overwrite if a study with the same ID already exists? Valid values "yes", "no"}
 
 \item{metadata}{\strong{(required)} Metadata list}
-
-\item{repositoryid}{Collection ID that owns the study}
-
-\item{access_policy}{Select the access policy suitable for your data. Valid values - "open" "direct" "public" "licensed" "enclave" "remote" "other"}
-
-\item{data_remote_url}{Link to the website where the data is available. Required if access_policy is set to 'remote'.}
 }
 \description{
 Create a new timeseries database
@@ -43,8 +37,8 @@ metadata=list(
       "name"= "string",
       "role"= "string",
       "affiliation"= "string",
-      "abbreviation"= null,
-      "email"= null
+      "abbreviation"= "string",
+      "email"= "string"
     )
     ),
   "abstract"= "string",
