@@ -95,3 +95,42 @@ catalog_find_by_id <- function(id){
 }
 
 
+#' Replace study IDNO
+#'
+#' Replace Study IDNO
+#'
+#' @return list
+#'
+#' @export
+replace_idno <- function(old_idno,new_idno,api_key=NULL,api_base_url=NULL){
+
+  if(is.null(api_key)){
+    api_key=get_api_key();
+  }
+
+  options=list(
+    old_idno=old_idno,
+    new_idno=new_idno
+  )
+
+  url=get_api_url('datasets/replace_idno')
+  httpResponse <- POST(url,
+                       add_headers("X-API-KEY" = api_key),
+                       body=options,
+                       content_type_json(),
+                       encode="json",
+                       verbose(get_verbose()))
+
+  output=NULL
+
+  if(httpResponse$status_code!=200){
+    warning(content(httpResponse, "text"))
+  }
+
+  output=list(
+    "status_code"=httpResponse$status_code,
+    "response"=fromJSON(content(httpResponse,"text"))
+  )
+
+  return (output)
+}

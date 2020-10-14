@@ -44,3 +44,38 @@ is_valid_url <- function(url){
 
     return (FALSE)
 }
+
+
+#' Make an http GET request
+#'
+#' @param url
+#'
+#' @return http request output
+#'
+#' @export
+nada_http_get <- function(
+  url,
+  options=list(),
+  api_key=NULL,
+  api_base_url=NULL){
+
+  if(is.null(api_key)){
+    api_key=get_api_key();
+  }
+
+  url=get_api_url(paste0(url))
+  httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), body=options)
+
+  output=NULL
+
+  if(httpResponse$status_code!=200){
+    warning(content(httpResponse, "text"))
+  }
+
+  output=list(
+    "status_code"=httpResponse$status_code,
+    "response"=fromJSON(content(httpResponse,"text"))
+  )
+
+  return (output)
+}
