@@ -259,7 +259,7 @@ thumbnail_upload <- function(
   }
 
   options=list(
-    file=upload_file(thumbnail)
+    file=upload_file(system.file(thumbnail))
   )
 
   url=get_api_url(paste0('datasets/thumbnail/',idno))

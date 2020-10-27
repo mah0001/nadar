@@ -4,9 +4,17 @@
 \alias{import_ddi}
 \title{ImportDDI}
 \usage{
-import_ddi(xml_file = NULL, rdf_file = NULL, repositoryid = NULL,
-  overwrite = "no", access_policy = NULL, data_remote_url = NULL,
-  published = NULL, api_key = NULL, api_base_url = NULL)
+import_ddi(
+  xml_file = NULL,
+  rdf_file = NULL,
+  repositoryid = NULL,
+  overwrite = "no",
+  access_policy = NULL,
+  data_remote_url = NULL,
+  published = NULL,
+  api_key = NULL,
+  api_base_url = NULL
+)
 }
 \arguments{
 \item{xml_file}{(Required) DDI/XML file path}
