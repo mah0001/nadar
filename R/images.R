@@ -307,7 +307,8 @@ image_add <- function(idno,
                   data_remote_url= data_remote_url,
                   published= published,
                   overwrite= overwrite,
-                  metadata= metadata
+                  metadata= metadata,
+                  thumbnail=thumbnail
   )
 
   return (result)
