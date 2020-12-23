@@ -300,6 +300,16 @@ image_add <- function(idno,
     api_key=get_api_key();
   }
 
+  files=list()
+
+  #change file_name value to file basename
+  if(!is.null(metadata$image_description$files)){
+    files=metadata$image_description$files
+    for(i in seq_along(metadata$image_description$files)){
+      metadata$image_description$files[[i]]$file_uri=basename(metadata$image_description$files[[i]]$file_uri)
+    }
+  }
+
   result = create(type= "image",
                   idno= idno,
                   repositoryid= repositoryid,
@@ -307,8 +317,29 @@ image_add <- function(idno,
                   data_remote_url= data_remote_url,
                   published= published,
                   overwrite= overwrite,
-                  metadata= metadata
+                  metadata= metadata,
+                  thumbnail=thumbnail
   )
+
+
+if(result$status_code==200){
+    if(!is.null(files)){
+      print ("images found, processing....")
+      for(f in files){
+        if(file.exists(f$file_uri)){
+          resource_result=external_resources_add(idno=idno,
+                                                 dctype="Image [...]",
+                                                 title=basename(f$file_uri),
+                                                 file_path=f$file_uri,
+                                                 overwrite="yes"
+          )
+          result$resources[[basename(f$file_uri)]]=resource_result
+        } else{
+          warning(paste("File not found:",f$file_uri))
+        }
+      }
+    }
+  }
 
   return (result)
 }
