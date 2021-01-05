@@ -321,14 +321,13 @@ image_add <- function(idno,
                   thumbnail=thumbnail
   )
 
-
-if(result$status_code==200){
+  if(result$status_code==200){
     if(!is.null(files)){
       print ("images found, processing....")
       for(f in files){
         if(file.exists(f$file_uri)){
           resource_result=external_resources_add(idno=idno,
-                                                 dctype="Image [...]",
+                                                 dctype="Document [doc/oth]", #"Photo [pic]",
                                                  title=basename(f$file_uri),
                                                  file_path=f$file_uri,
                                                  overwrite="yes"
