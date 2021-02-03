@@ -84,10 +84,7 @@ import_ddi <- function(
   )
 
   if (!is.null(rdf_file) && file.exists(rdf_file)){
-    rdf_options=list(
-      'rdf'=upload_file(rdf_file)
-    )
-    options= c(options,rdf_options)
+    options[["rdf"]]=upload_file(rdf_file)
   }
 
   httpResponse <- POST(url, add_headers("X-API-KEY" = api_key),body=options, accept_json(), verbose(get_verbose()))
