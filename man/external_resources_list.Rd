@@ -4,8 +4,7 @@
 \alias{external_resources_list}
 \title{List External Resources}
 \usage{
-external_resources_list(dataset_idno, api_key = NULL,
-  api_base_url = NULL)
+external_resources_list(dataset_idno, api_key = NULL, api_base_url = NULL)
 }
 \arguments{
 \item{dataset_idno}{Study IDNo}
