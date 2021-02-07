@@ -9,7 +9,9 @@ data_api_publish_table(
   table_id,
   table_metadata,
   csvfile,
-  overwrite = "no"
+  overwrite = "no",
+  api_key = NULL,
+  api_base_url = NULL
 )
 }
 \arguments{

@@ -11,13 +11,13 @@ library(httr)
 #' @param table_id (Required) Table name
 #' @param metadata Table metadata
 #' @export
-data_api_publish_table <- function(db_id, table_id, table_metadata, csvfile,overwrite="no") {
+data_api_publish_table <- function(db_id, table_id, table_metadata, csvfile,overwrite="no", api_key=NULL, api_base_url=NULL) {
 
   #define table
-  table_def=data_api_create_table(db_id=db_id,table_id=table_id,metadata=table_metadata)
+  table_def=data_api_create_table(db_id=db_id,table_id=table_id,metadata=table_metadata, api_key=api_key, api_base_url,api_base_url)
 
   #import csv
-  csv_import=data_api_import_csv(db_id=db_id,table_id=table_id,csvfile=csvfile,overwrite=overwrite)
+  csv_import=data_api_import_csv(db_id=db_id,table_id=table_id,csvfile=csvfile,overwrite=overwrite, api_key=api_key, api_base_url,api_base_url)
 
   return (
     list(
@@ -99,7 +99,7 @@ data_api_create_table <- function(
 #' @return NULL
 #' @param db_id (Required) database name
 #' @param table_id (Required) Table name
-#' @param metadata Table metadata
+#' @param csvfile CSV file
 #' @param overwrite (valid values = "yes" or "no")
 #' @export
 data_api_import_csv <- function(
@@ -142,7 +142,7 @@ data_api_import_csv <- function(
       return (output)
     },
     error= function(cond) {
-      message("ERROR processing response")
+      message(paste0("ERROR processing response:: ", url))
       message(cond)
       return (content(httpResponse,"text"))
     }

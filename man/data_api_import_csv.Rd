@@ -18,9 +18,9 @@ data_api_import_csv(
 
 \item{table_id}{(Required) Table name}
 
-\item{overwrite}{(valid values = "yes" or "no")}
+\item{csvfile}{CSV file}
 
-\item{metadata}{Table metadata}
+\item{overwrite}{(valid values = "yes" or "no")}
 }
 \description{
 Import CSV
