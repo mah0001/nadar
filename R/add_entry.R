@@ -1,11 +1,13 @@
-#' Generic create entry function that replaces the add functions
+#' Create entry in catalog
 #'
-#' @param idno (required) Study unique identifier
-#' @param repositoryid Collection ID that owns the study
-#' @param access_policy Select the access policy suitable for your data. Valid values - "open" "direct" "public" "licensed" "enclave" "remote" "other"
+#' @param type \strong{(required)} Entry type - "document", "script", "table",
+#' @param idno \strong{(required)} Study unique identifier
+#' @param repositoryid Collection ID that owns the entry
+#' @param access_policy Select the access policy suitable for your data. Valid values - "open",
+#' "direct", "public", "licensed", "enclave", "remote", "other"
 #' @param data_remote_url Link to the website where the data is available. Required if access_policy is set to 'remote'.
-#' @param published Set status for study - 0 = Draft, 1 = Published
-#' @param overwrite Overwrite if a study with the same ID already exists? Valid values "yes", "no"
+#' @param published Set status for entry - 0 = Draft, 1 = Published
+#' @param overwrite Overwrite if a entry with the same ID already exists? Valid values "yes", "no"
 #' @param metadata \strong{(required)} Metadata list depending on the type of study
 #' @param api_key
 #' @param api_base_url
