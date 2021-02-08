@@ -228,7 +228,7 @@
 #' )
 #' )
 #'
-#' document_add (
+#' add_document (
 #'   idno="document-idno",
 #'   published = 1,
 #'   overwrite = "yes",
@@ -251,22 +251,35 @@ document_add <- function(idno,
                          api_key=NULL,
                          api_base_url=NULL
 ){
-
   if(is.null(api_key)){
     api_key=get_api_key();
   }
 
-  files=list()
+  # Adding resources
+  resources=list()
 
-  #change file_uri value to keep only file basename
-  if(!is.null(metadata$files)){
-    files=metadata$files
-    for(i in seq_along(metadata$files)){
-      if (file.exists(metadata$files[[i]]$file_uri)){
-        metadata$files[[i]]$file_uri=basename(metadata$files[[i]]$file_uri)
+  # Formerly resources were files - ensure backwards compability
+  # Check whether files field available in metadata if no resources field available
+  # If that's the case, rename "files" to "resources" and "file_uri" to "file_name"
+  if(is.null(metadata$resources) & !is.null(metadata$files)){
+    names(metadata)[which(names(metadata) == "files")] <- "resources"
+    for(i in seq_along(metadata$resources)){
+      if("file_uri" %in% names(metadata$resources[[i]])){
+        names(metadata$resources[[i]])[which(names(metadata$resources[[i]]) == "file_uri")] <- "filename"
       }
     }
   }
+
+  #change filename value to keep only file basename
+  if(!is.null(metadata$resources)){
+    resources=metadata$resources
+    for(i in seq_along(metadata$resources)){
+      if (file.exists(metadata$resources[[i]]$filename)){
+        metadata$resources[[i]]$filename=basename(metadata$resources[[i]]$filename)
+      }
+    }
+  }
+
 
   result = create(type="document",
                   idno=idno,
@@ -280,24 +293,21 @@ document_add <- function(idno,
   )
 
   if(result$status_code==200){
-    if(!is.null(files)){
-      for(f in files){
-        if(file.exists(f$file_uri) || is_valid_url(f$file_uri) ){
+    if(!is.null(resources)){
+      for(f in resources){
+        if(file.exists(f$filename) || is_valid_url(f$filename) ){
           resource_result=external_resources_add(idno=idno,
-                                          dctype="Document [doc/oth]",
-                                          title=basename(f$file_uri),
-                                          file_path=f$file_uri,
-                                          overwrite="yes"
+                                                 dctype="Document [doc/oth]",
+                                                 title=basename(f$filename),
+                                                 file_path=f$filename,
+                                                 overwrite="yes"
           )
-          result$resources[[basename(f$file_uri)]]=resource_result
+          result$resources[[basename(f$filename)]]=resource_result
         } else{
-          warning(paste("File not found:",f$file_uri))
+          warning(paste("File not found:",f$filename))
         }
       }
     }
   }
-
-
-
   return (result)
 }
