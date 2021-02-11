@@ -66,13 +66,13 @@ get_api_url <- function(endpoint=NULL)
 
 
 
-#' set_verbose
+#' set_api_verbose
 #'
 #' Set API calls verbose options
 #'
 #' @param verbose Verbose output to TRUE or FALSE
 #' @export
-set_verbose <- function(verbose=FALSE) {
+set_api_verbose <- function(verbose=FALSE) {
   pkg.globals$verbose <- verbose
 }
 

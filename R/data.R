@@ -1,7 +1,3 @@
-library(httr)
-
-
-
 #' publishTable
 #'
 #' Create a data table with data using CSV
@@ -26,12 +22,6 @@ data_api_publish_table <- function(db_id, table_id, table_metadata, csvfile,over
     )
   )
 }
-
-
-
-
-
-
 
 #' createTable
 #'

@@ -18,7 +18,7 @@ document_add(
 )
 }
 \arguments{
-\item{idno}{(required) Entry unique identifier}
+\item{idno}{\strong{(required)} Entry unique identifier}
 
 \item{metadata}{\strong{(required)} Metadata list}
 
@@ -34,8 +34,7 @@ document_add(
 }
 \description{
 Deprecated function, available for backward compability
-Create a new document
 }
-\examples{
-
+\details{
+Create a new document
 }

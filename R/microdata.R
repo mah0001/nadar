@@ -1,4 +1,3 @@
-
 #' Create Microdata
 #'
 #' Create a new Microdata study
