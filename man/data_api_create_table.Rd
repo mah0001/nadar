@@ -4,13 +4,8 @@
 \alias{data_api_create_table}
 \title{createTable}
 \usage{
-data_api_create_table(
-  db_id,
-  table_id,
-  metadata,
-  api_key = NULL,
-  api_base_url = NULL
-)
+data_api_create_table(db_id, table_id, metadata, api_key = NULL,
+  api_base_url = NULL)
 }
 \arguments{
 \item{db_id}{(Required) database name}

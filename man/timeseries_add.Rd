@@ -4,18 +4,10 @@
 \alias{timeseries_add}
 \title{Create timeseries indicator}
 \usage{
-timeseries_add(
-  idno,
-  repositoryid = "central",
-  access_policy = NULL,
-  data_remote_url = NULL,
-  published = 0,
-  overwrite = "no",
-  metadata = NULL,
-  thumbnail = NULL,
-  api_key = NULL,
-  api_base_url = NULL
-)
+timeseries_add(idno, repositoryid = "central", access_policy = NULL,
+  data_remote_url = NULL, published = 0, overwrite = "no",
+  metadata = NULL, thumbnail = NULL, api_key = NULL,
+  api_base_url = NULL)
 }
 \arguments{
 \item{idno}{(required) Study unique identifier}

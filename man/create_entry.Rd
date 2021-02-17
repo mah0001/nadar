@@ -4,19 +4,10 @@
 \alias{create_entry}
 \title{Create entry in catalog}
 \usage{
-create_entry(
-  type,
-  idno,
-  metadata,
-  repositoryid = NULL,
-  access_policy = NULL,
-  data_remote_url = NULL,
-  published = 0,
-  overwrite = "no",
-  thumbnail = NULL,
-  api_key = NULL,
-  api_base_url = NULL
-)
+create_entry(type, idno, metadata, repositoryid = NULL,
+  access_policy = NULL, data_remote_url = NULL, published = 0,
+  overwrite = "no", thumbnail = NULL, api_key = NULL,
+  api_base_url = NULL)
 }
 \arguments{
 \item{type}{\strong{(required)} Entry type - "document", "script", "table",}

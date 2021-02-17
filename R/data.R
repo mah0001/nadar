@@ -10,10 +10,10 @@
 data_api_publish_table <- function(db_id, table_id, table_metadata, csvfile,overwrite="no", api_key=NULL, api_base_url=NULL) {
 
   #define table
-  table_def=data_api_create_table(db_id=db_id,table_id=table_id,metadata=table_metadata, api_key=api_key, api_base_url,api_base_url)
+  table_def=data_api_create_table(db_id=db_id,table_id=table_id,metadata=table_metadata, api_key=api_key, api_base_url=api_base_url)
 
   #import csv
-  csv_import=data_api_import_csv(db_id=db_id,table_id=table_id,csvfile=csvfile,overwrite=overwrite, api_key=api_key, api_base_url,api_base_url)
+  csv_import=data_api_import_csv(db_id=db_id,table_id=table_id,csvfile=csvfile,overwrite=overwrite, api_key=api_key, api_base_url=api_base_url)
 
   return (
     list(

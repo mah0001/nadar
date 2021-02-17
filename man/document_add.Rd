@@ -4,18 +4,9 @@
 \alias{document_add}
 \title{(deprecated - use add_document) Create new document}
 \usage{
-document_add(
-  idno,
-  metadata,
-  repositoryid = NULL,
-  access_policy = NULL,
-  data_remote_url = NULL,
-  published = 0,
-  overwrite = "no",
-  thumbnail = NULL,
-  api_key = NULL,
-  api_base_url = NULL
-)
+document_add(idno, metadata, repositoryid = NULL, access_policy = NULL,
+  data_remote_url = NULL, published = 0, overwrite = "no",
+  thumbnail = NULL, api_key = NULL, api_base_url = NULL)
 }
 \arguments{
 \item{idno}{\strong{(required)} Entry unique identifier}
