@@ -8,7 +8,7 @@ Description: R client for NADA API
 License: MIT
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 Suggests:
   testthat
 Depends: 

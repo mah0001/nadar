@@ -228,7 +228,7 @@
 #' )
 #' )
 #'
-#' document_add (
+#' add_document (
 #'   idno="document-idno",
 #'   published = 1,
 #'   overwrite = "yes",
@@ -240,7 +240,7 @@
 #'
 #'
 #' @export
-document_add <- function(idno,
+add_document <- function(idno,
                          metadata,
                          repositoryid=NULL,
                          access_policy=NULL,
@@ -270,13 +270,13 @@ document_add <- function(idno,
 
   result = create(type="document",
                   idno=idno,
-                  repositoryid=repositoryid,
-                  access_policy=access_policy,
+                  repositoryid = repositoryid,
+                  access_policy = access_policy,
                   data_remote_url = data_remote_url,
                   published = published,
-                  overwrite= overwrite,
-                  metadata=metadata,
-                  thumbnail=thumbnail
+                  overwrite = overwrite,
+                  metadata = metadata,
+                  thumbnail = thumbnail
   )
 
   if(result$status_code==200){
@@ -296,8 +296,5 @@ document_add <- function(idno,
       }
     }
   }
-
-
-
   return (result)
 }
