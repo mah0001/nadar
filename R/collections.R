@@ -105,11 +105,7 @@ create_collection <- function(
 
   #upload thumbnail
   if(!is.null(thumbnail) && file.exists(thumbnail)) {
-<<<<<<< Updated upstream
-    thumbnail_result = thumbnail_upload(idno = "TEST123_THUMB",
-=======
     thumbnail_result = thumbnail_upload(idno = collectionid,
->>>>>>> Stashed changes
                                         thumbnail = thumbnail)
   }
 
@@ -128,26 +124,6 @@ create_collection <- function(
 
 #' Rename a collection
 #'
-<<<<<<< Updated upstream
-#' @param old_collectionid
-#' @param new_collectionid
-#'
-#' @export
-rename_collection <- function(old_collectionid,
-                              new_collectionid){
-
-}
-
-#' Rename a collection
-#'
-#' @param old_collectionid
-#' @param new_collectionid
-#'
-#' @export
-rename_collection <- function(old_collectionid,
-                              new_collectionid){
-
-=======
 #' Change collection id of collection
 #'
 #' @param old_collectionid Old collection id
@@ -181,7 +157,6 @@ rename_collection <- function(old_collectionid,
   if(httpResponse$status_code!=200){
     warning(content(httpResponse, "text"))
   }
->>>>>>> Stashed changes
 }
 
 #' Update collection
@@ -200,22 +175,6 @@ rename_collection <- function(old_collectionid,
 #'
 #'@export
 #'
-<<<<<<< Updated upstream
-update_collection <- function()
-list_collections()
-get_collection_info(repository_id = "Ag")
-create_collection(collectionid = "test123_thumb",
-                  title = "Test123 collection title",
-                  short_text ="Test123 Short test description" ,
-                  long_text = "Test123 Long test description",
-                  ispublished = 1,
-                  thumbnail = thumb
-)
-thumbnail_upload(idno=idno,thumbnail = thumb)
-
-thumb = "/Users/thijsbenschop/Library/Mobile Documents/com~apple~CloudDocs/World Bank/nadar/NADAR/WBG-HQ.jpg"
-
-=======
 # update_collection <- function()
 # list_collections()
 # get_collection_info(repository_id = "Ag")
@@ -229,4 +188,3 @@ thumb = "/Users/thijsbenschop/Library/Mobile Documents/com~apple~CloudDocs/World
 # thumbnail_upload(idno=idno,thumbnail = thumb)
 # rename_collection(old_collectionid = "TEST123_THUMB",
 #                   new_collectionid = "TEST123_THUMB_rename")
->>>>>>> Stashed changes
