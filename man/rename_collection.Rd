@@ -4,12 +4,8 @@
 \alias{rename_collection}
 \title{Rename a collection}
 \usage{
-rename_collection(
-  old_collectionid,
-  new_collectionid,
-  api_key = NULL,
-  api_base_url = NULL
-)
+rename_collection(old_collectionid, new_collectionid, api_key = NULL,
+  api_base_url = NULL)
 }
 \arguments{
 \item{old_collectionid}{Old collection id}

@@ -4,26 +4,12 @@
 \alias{external_resources_add}
 \title{Create new resource}
 \usage{
-external_resources_add(
-  idno,
-  dctype,
-  title,
-  dcformat = NULL,
-  author = NULL,
-  dcdate = NULL,
-  country = NULL,
-  language = NULL,
-  contributor = NULL,
-  publisher = NULL,
-  rights = NULL,
-  description = NULL,
-  abstract = NULL,
-  toc = NULL,
-  file_path = NULL,
-  overwrite = "no",
-  api_key = NULL,
-  api_base_url = NULL
-)
+external_resources_add(idno, dctype, title, dcformat = NULL,
+  author = NULL, dcdate = NULL, country = NULL, language = NULL,
+  contributor = NULL, publisher = NULL, rights = NULL,
+  description = NULL, abstract = NULL, toc = NULL,
+  file_path = NULL, overwrite = "no", api_key = NULL,
+  api_base_url = NULL)
 }
 \arguments{
 \item{idno}{\strong{(required)} Study IDNO}

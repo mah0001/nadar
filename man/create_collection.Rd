@@ -4,18 +4,9 @@
 \alias{create_collection}
 \title{Create new collection}
 \usage{
-create_collection(
-  collectionid,
-  title,
-  short_text,
-  long_text,
-  thumbnail = NULL,
-  weight = 0,
-  section = 2,
-  ispublished = 0,
-  api_key = NULL,
-  api_base_url = NULL
-)
+create_collection(collectionid, title, short_text, long_text,
+  thumbnail = NULL, weight = 0, section = 2, ispublished = 0,
+  api_key = NULL, api_base_url = NULL)
 }
 \arguments{
 \item{collectionid}{(required) Collection identifier containing numbers and letters only}

@@ -4,7 +4,8 @@
 \alias{nada_http_get}
 \title{Make an http GET request}
 \usage{
-nada_http_get(url, options = list(), api_key = NULL, api_base_url = NULL)
+nada_http_get(url, options = list(), api_key = NULL,
+  api_base_url = NULL)
 }
 \arguments{
 \item{url}{}

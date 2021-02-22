@@ -4,19 +4,9 @@
 \alias{create}
 \title{Create new study}
 \usage{
-create(
-  type,
-  idno,
-  metadata,
-  repositoryid = NULL,
-  access_policy = NULL,
-  data_remote_url = NULL,
-  published = NULL,
-  overwrite = NULL,
-  thumbnail = NULL,
-  api_key = NULL,
-  api_base_url = NULL
-)
+create(type, idno, metadata, repositoryid = NULL, access_policy = NULL,
+  data_remote_url = NULL, published = NULL, overwrite = NULL,
+  thumbnail = NULL, api_key = NULL, api_base_url = NULL)
 }
 \arguments{
 \item{type}{(required) Type of study - survey, geospatial, table, document, timeseries}
