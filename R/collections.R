@@ -86,41 +86,32 @@ create_collection <- function(
     "ispublished" = ispublished
   )
 
+  if (!is.null(thumbnail)){
+    if (file.exists(thumbnail)){
+      options[["thumbnail"]]=upload_file(thumbnail)
+    }else{
+      options[["thumbnail"]]=thumbnail
+    }
+  }
+
   url = get_api_url('collections')
   httpResponse <- POST(url,
                        add_headers("X-API-KEY" = api_key),
-                       body = c(options),
-                       content_type_json(),
-                       encode = "json",
-                       accept_json(),
-                       verbose(get_api_verbose()))
-
+                       body = options,
+                       accept_json())
   output=NULL
 
   if(httpResponse$status_code!=200){
     warning(content(httpResponse, "text"))
   }
 
-  thumbnail_result <- NULL
-
-  #upload thumbnail
-  if(!is.null(thumbnail) && file.exists(thumbnail)) {
-    thumbnail_result = thumbnail_upload(idno = collectionid,
-                                        thumbnail = thumbnail)
-  }
-
-  #set default thumbnail
-  if(!is.null(thumbnail) && thumbnail == 'default'){
-    thumbnail_result= thumbnail_delete(idno = collectionid)
-  }
-
   output=list(
     "status_code"=httpResponse$status_code,
-    "response"=fromJSON(content(httpResponse,"text")),
-    "thumbnail"=thumbnail_result
+    "response"=fromJSON(content(httpResponse,"text"))
   )
   return (output)
 }
+
 
 #' Rename a collection
 #'
