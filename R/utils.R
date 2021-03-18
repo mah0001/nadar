@@ -79,3 +79,20 @@ nada_http_get <- function(
 
   return (output)
 }
+
+
+
+nada_http_response_json <- function(httpResponse)
+{
+  result<- tryCatch(
+    {
+      return (fromJSON(content(httpResponse,"text")))
+    },
+    error= function(cond) {
+      message(paste0("ERROR processing response:: ", cond))
+      return (content(httpResponse,"text"))
+    }
+  )
+
+  return (result)
+}

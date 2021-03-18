@@ -220,7 +220,7 @@ create <- function(
 
   output=list(
     "status_code"=httpResponse$status_code,
-    "response"=fromJSON(content(httpResponse,"text")),
+    "response"= nada_http_response_json(httpResponse),
     "thumbnail"=thumbnail_result
   )
 
