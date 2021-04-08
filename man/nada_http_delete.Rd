@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{nada_http_delete}
 \alias{nada_http_delete}
-\title{Make an http POST request}
+\title{Make an http DELETE request}
 \usage{
 nada_http_delete(url, options = list(), api_key = NULL, api_base_url = NULL)
 }
@@ -13,5 +13,5 @@ nada_http_delete(url, options = list(), api_key = NULL, api_base_url = NULL)
 http request output
 }
 \description{
-Make an http POST request
+Make an http DELETE request
 }
