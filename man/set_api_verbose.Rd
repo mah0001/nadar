@@ -10,8 +10,6 @@ set_api_verbose(verbose = FALSE)
 }
 \arguments{
 \item{verbose}{Verbose output to TRUE or FALSE}
-
-\item{verbose}{Verbose output to TRUE or FALSE}
 }
 \description{
 Set API calls verbose options

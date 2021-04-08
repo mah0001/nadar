@@ -4,8 +4,15 @@
 \alias{data_api_publish_table}
 \title{publishTable}
 \usage{
-data_api_publish_table(db_id, table_id, table_metadata, csvfile,
-  overwrite = "no", api_key = NULL, api_base_url = NULL)
+data_api_publish_table(
+  db_id,
+  table_id,
+  table_metadata,
+  csvfile,
+  overwrite = "no",
+  api_key = NULL,
+  api_base_url = NULL
+)
 }
 \arguments{
 \item{db_id}{(Required) database name}

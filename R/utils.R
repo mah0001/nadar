@@ -81,6 +81,62 @@ nada_http_get <- function(
 }
 
 
+#' Make an http POST request
+#'
+#' @param url
+#'
+#' @return http request output
+#'
+#' @export
+nada_http_post <- function(
+  url,
+  options=list(),
+  api_key=NULL,
+  api_base_url=NULL){
+
+  if(is.null(api_key)){
+    api_key=get_api_key();
+  }
+
+  url=get_api_url(paste0(url))
+  httpResponse <- POST(url, add_headers("X-API-KEY" = api_key), body=options)
+
+  if(httpResponse$status_code!=200){
+    warning(content(httpResponse, "text"))
+  }
+
+  return (httpResponse)
+}
+
+
+
+#' Make an http DELETE request
+#'
+#' @param url
+#'
+#' @return http request output
+#'
+#' @export
+nada_http_delete <- function(
+  url,
+  options=list(),
+  api_key=NULL,
+  api_base_url=NULL){
+
+  if(is.null(api_key)){
+    api_key=get_api_key();
+  }
+
+  url=get_api_url(paste0(url))
+  httpResponse <- DELETE(url, add_headers("X-API-KEY" = api_key), body=options)
+
+  if(httpResponse$status_code!=200){
+    warning(content(httpResponse, "text"))
+  }
+
+  return (httpResponse)
+}
+
 
 nada_http_response_json <- function(httpResponse)
 {

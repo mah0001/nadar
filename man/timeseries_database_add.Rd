@@ -4,8 +4,14 @@
 \alias{timeseries_database_add}
 \title{Create timeseries database}
 \usage{
-timeseries_database_add(idno, published = 0, overwrite = "no",
-  metadata = NULL, api_key = NULL, api_base_url = NULL)
+timeseries_database_add(
+  idno,
+  published = 0,
+  overwrite = "no",
+  metadata = NULL,
+  api_key = NULL,
+  api_base_url = NULL
+)
 }
 \arguments{
 \item{idno}{(required) Study unique identifier}

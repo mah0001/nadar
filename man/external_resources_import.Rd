@@ -4,8 +4,12 @@
 \alias{external_resources_import}
 \title{import_rdf}
 \usage{
-external_resources_import(dataset_idno, rdf_file, api_key = NULL,
-  api_base_url = NULL)
+external_resources_import(
+  dataset_idno,
+  rdf_file,
+  api_key = NULL,
+  api_base_url = NULL
+)
 }
 \arguments{
 \item{dataset_idno}{Study IDNo}

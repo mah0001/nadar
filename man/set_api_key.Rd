@@ -10,8 +10,6 @@ set_api_key(api_key)
 }
 \arguments{
 \item{api_key}{API Key}
-
-\item{api_key}{API Key}
 }
 \value{
 A matrix of the infile

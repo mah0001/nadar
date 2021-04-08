@@ -4,8 +4,7 @@
 \alias{data_api_delete_table}
 \title{deleteTable}
 \usage{
-data_api_delete_table(db_id, table_id, api_key = NULL,
-  api_base_url = NULL)
+data_api_delete_table(db_id, table_id, api_key = NULL, api_base_url = NULL)
 }
 \arguments{
 \item{db_id}{(Required) database name}

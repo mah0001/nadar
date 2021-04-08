@@ -10,8 +10,6 @@ set_api_url(api_url)
 }
 \arguments{
 \item{api_url}{API base endpoint}
-
-\item{api_url}{API base endpoint}
 }
 \description{
 `api_url` is used to set the API base endpoint URL in the global environment variables.
