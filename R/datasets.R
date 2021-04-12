@@ -5,7 +5,7 @@
 #' @return List of studies or a single study info
 #' @param idno (Optional) Dataset IDNo
 #' @export
-datasets <- function(idno=NULL, api_key=NULL, api_base_url=NULL){
+datasets <- function(idno=NULL, offset=NULL, limit=50, api_key=NULL, api_base_url=NULL){
 
   endpoint='datasets/'
 
@@ -13,11 +13,16 @@ datasets <- function(idno=NULL, api_key=NULL, api_base_url=NULL){
     endpoint=paste0(endpoint,'/',idno)
   }
 
+  if(!is.null(offset)){
+    endpoint=paste0(endpoint,'?offset=',offset, '&limit=',limit)
+  }
+
   if(is.null(api_key)){
     api_key=get_api_key();
   }
 
   url=get_api_url(endpoint)
+  print(url)
   httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json())
   output=NULL
 
