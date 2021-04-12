@@ -7,15 +7,17 @@
 #' @export
 datasets <- function(idno=NULL, api_key=NULL, api_base_url=NULL){
 
-  if(is.null(api_key)){
-    api_key=get_api_key();
-  }
+  endpoint='datasets/'
 
   if(!is.null(idno)){
     endpoint=paste0(endpoint,'/',idno)
   }
 
-  url=get_api_url('datasets')
+  if(is.null(api_key)){
+    api_key=get_api_key();
+  }
+
+  url=get_api_url(endpoint)
   httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json())
   output=NULL
 
