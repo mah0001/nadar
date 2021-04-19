@@ -4,7 +4,13 @@
 \alias{datasets}
 \title{GetDatasets}
 \usage{
-datasets(idno = NULL, api_key = NULL, api_base_url = NULL)
+datasets(
+  idno = NULL,
+  offset = NULL,
+  limit = 50,
+  api_key = NULL,
+  api_base_url = NULL
+)
 }
 \arguments{
 \item{idno}{(Optional) Dataset IDNo}

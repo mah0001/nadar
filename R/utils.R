@@ -109,6 +109,38 @@ nada_http_post <- function(
 }
 
 
+#' Make an http PUT request
+#'
+#' @param url
+#'
+#' @return http request output
+#'
+#'
+#' request_encode = c("multipart", "form", "json", "raw")
+#'
+#' @export
+nada_http_put <- function(
+  url,
+  options=list(),
+  request_encode="json",
+  api_key=NULL,
+  api_base_url=NULL){
+
+  if(is.null(api_key)){
+    api_key=get_api_key();
+  }
+
+  url=get_api_url(paste0(url))
+  httpResponse <- PUT(url, add_headers("X-API-KEY" = api_key), body=options, encode=request_encode)
+
+  if(httpResponse$status_code!=200){
+    warning(content(httpResponse, "text"))
+  }
+
+  return (httpResponse)
+}
+
+
 
 #' Make an http DELETE request
 #'
