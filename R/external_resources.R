@@ -256,3 +256,61 @@ external_resources_add <- function(
 }
 
 
+#' Delete External Resources
+#'
+#' Delete external resources for a study
+#'
+#' @return
+#' @param dataset_idno Study IDNo
+#' @param resource_id Resource ID
+#' @export
+external_resources_delete <- function(dataset_idno, resource_id, api_key=NULL, api_base_url=NULL){
+
+  if(is.null(api_key)){
+    api_key=get_api_key();
+  }
+
+  endpoint=paste0('datasets/',dataset_idno,'/resources/',resource_id)
+  url=get_api_url(endpoint)
+
+  httpResponse <- DELETE(url, add_headers("X-API-KEY" = api_key), accept_json(), verbose(get_verbose()))
+  output=NULL
+
+  if(httpResponse$status_code!=200){
+    warning(content(httpResponse, "text"))
+  }else{
+    output=fromJSON(content(httpResponse,"text"))
+  }
+
+  return (output)
+}
+
+
+
+#' Delete all external resources for a study
+#'
+#' Delete all external resources for a study
+#'
+#' @return
+#' @param dataset_idno Study IDNo
+#' @export
+external_resources_delete_all <- function(dataset_idno, resource_id, api_key=NULL, api_base_url=NULL){
+
+  if(is.null(api_key)){
+    api_key=get_api_key();
+  }
+
+  endpoint=paste0('datasets/',dataset_idno,'/resources/delete_all')
+  url=get_api_url(endpoint)
+
+  httpResponse <- DELETE(url, add_headers("X-API-KEY" = api_key), accept_json(), verbose(get_verbose()))
+  output=NULL
+
+  if(httpResponse$status_code!=200){
+    warning(content(httpResponse, "text"))
+  }else{
+    output=fromJSON(content(httpResponse,"text"))
+  }
+
+  return (output)
+}
