@@ -15,9 +15,11 @@ Depends:
     jsonlite, 
     httr, 
     curl,
-    pdftools
+    pdftools,
+    XML
 Imports:
     jsonlite,
     httr,
     curl,
-    pdftools
+    pdftools,
+    XML

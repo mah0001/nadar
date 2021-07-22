@@ -38,36 +38,58 @@ external_resources_list <- function(dataset_idno, api_key=NULL, api_base_url=NUL
 #' @return NULL
 #' @param dataset_idno Study IDNo
 #' @param rdf_file RDF file path
+#' @param skip_uploads TRUE/FALSE - If TRUE, won't upload files
+#' @param overwrite yes/no - Overwrite existing resources
 #' @export
 external_resources_import <- function(
                       dataset_idno,
                       rdf_file,
+                      skip_uploads=FALSE,
+                      overwrite="no",
                       api_key=NULL,
                       api_base_url=NULL
                       ){
-
-  endpoint=paste0('datasets/',dataset_idno,'/resources/import_rdf')
 
   if(is.null(api_key)){
     api_key=get_api_key();
   }
 
-  url=get_api_url(endpoint)
+  resources <- rdfToList(rdf_file)
+  base_folder=dirname(rdf_file)
 
-  options=list(
-    "file"=upload_file(rdf_file)
-  )
+  for(i in 1:length(resources)) {
 
-  httpResponse <- POST(url, add_headers("X-API-KEY" = api_key),body=options, accept_json(), verbose(get_verbose()))
-  output=NULL
+    resource_file=paste0(base_folder,"/",resources[[i]]$filename)
 
-  if(httpResponse$status_code!=200){
-    warning(content(httpResponse, "text"))
-  }else{
-    output=fromJSON(content(httpResponse,"text"))
+    # If file not found in location provided in rdf (incl. sub-folder), look in base_folder itself
+    if(skip_uploads==FALSE && resources[[i]]$is_url==FALSE && file.exists(resource_file) == FALSE) {
+      resource_file = paste0(base_folder, "/", basename(resource_file))
+
+      if (!file.exists(resource_file)){
+        warning(paste0("Resource file not found: ",resource_file))
+      }
+    }
+
+    print(paste0("PROCESSING file.....",resource_file))
+
+    res_response <- external_resources_add(
+        idno = dataset_idno,
+        dctype = rdf_l[[i]]$type,
+        dcformat = rdf_l[[i]]$format,
+        title = rdf_l[[i]]$title,
+        author = rdf_l[[i]]$creator,
+        dcdate = rdf_l[[i]]$date,
+        country = rdf_l[[i]]$spatial,
+        language = rdf_l[[i]]$language,
+        contributor = rdf_l[[i]]$contributor,
+        publisher = rdf_l[[i]]$publisher,
+        rights = rdf_l[[i]]$rights,
+        description = rdf_l[[i]]$label,
+        abstract = rdf_l[[i]]$abstract,
+        toc = rdf_l[[i]]$toc,
+        file_path = resource_file,
+        overwrite = overwrite)
   }
-
-  return (output)
 }
 
 
@@ -235,6 +257,7 @@ external_resources_add <- function(
   }
 
   url=get_api_url(paste0('datasets/',idno,'/resources'))
+  print(url)
   httpResponse <- POST(url,
                        add_headers("X-API-KEY" = api_key),
                        body=options,
@@ -310,6 +333,58 @@ external_resources_delete_all <- function(dataset_idno, resource_id, api_key=NUL
     warning(content(httpResponse, "text"))
   }else{
     output=fromJSON(content(httpResponse,"text"))
+  }
+
+  return (output)
+}
+
+
+
+#' Convert RDF/XML to List
+#'
+#' Convert RDF/XML to list
+#'
+#' @return
+#' @param rdf_file Path to RDF xml file
+#' @export
+rdfToList <- function(rdf_file) {
+
+  rdf <- xmlParse(rdf_file)
+  rdf_l <- xmlToList(rdf)
+
+  output=list()
+
+  for(i in 1:length(rdf_l)) {
+    for(j in 1:length(rdf_l[[i]])) {
+      rdf_l[[i]][j] = trimws(rdf_l[[i]][j], which = c("both", "left", "right"), whitespace = "[ \t\r\n]")
+    }
+
+    filepath = gsub("\\\\", "/", rdf_l[[i]]$.attrs)
+
+    resource<-list(
+      dctype = rdf_l[[i]]$type,
+      dcformat = rdf_l[[i]]$format,
+      title = rdf_l[[i]]$title,
+      author = rdf_l[[i]]$creator,
+      dcdate = rdf_l[[i]]$date,
+      country = rdf_l[[i]]$spatial,
+      language = rdf_l[[i]]$language,
+      contributor = rdf_l[[i]]$contributor,
+      publisher = rdf_l[[i]]$publisher,
+      rights = rdf_l[[i]]$rights,
+      description = rdf_l[[i]]$label,
+      abstract = rdf_l[[i]]$abstract,
+      toc = rdf_l[[i]]$toc,
+      filename = filepath
+    )
+
+    if (is_valid_url(filepath)){
+      resource[['is_url']]=TRUE
+    }else{
+      resource[['is_url']]=FALSE
+    }
+
+    output[[length(output) + 1]] <- resource
   }
 
   return (output)

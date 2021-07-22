@@ -7,6 +7,7 @@
 external_resources_import(
   dataset_idno,
   rdf_file,
+  skip_uploads = FALSE,
   api_key = NULL,
   api_base_url = NULL
 )
@@ -15,6 +16,8 @@ external_resources_import(
 \item{dataset_idno}{Study IDNo}
 
 \item{rdf_file}{RDF file path}
+
+\item{skip_uploads}{TRUE/FALSE - If TRUE, won't upload files}
 }
 \description{
 Import an RDF file
