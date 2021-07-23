@@ -349,3 +349,34 @@ dataset_collections_list <- function(
     class = "dataset_collections"
   )
 }
+
+
+
+
+#' Delete a collection
+#'
+#' Delete a collection
+#'
+#' @return status
+#' @param collection_idno (Required) Collection IDNo
+#'
+#' @export
+collection_delete <- function(collection_idno, api_key=NULL, api_base_url=NULL){
+
+  if(is.null(api_key)){
+    api_key=get_api_key();
+  }
+
+  url=get_api_url(paste0('collections/delete/', collection_idno))
+  httpResponse <- DELETE(url, add_headers("X-API-KEY" = api_key), accept_json())
+  output=NULL
+
+  if(httpResponse$status_code!=200){
+    warning(content(httpResponse, "text"))
+    stop(content(httpResponse, "text"), call. = FALSE)
+  }
+
+  output=fromJSON(content(httpResponse,"text"))
+  return (output)
+}
+
