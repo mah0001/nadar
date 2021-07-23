@@ -8,6 +8,7 @@ external_resources_import(
   dataset_idno,
   rdf_file,
   skip_uploads = FALSE,
+  overwrite = "no",
   api_key = NULL,
   api_base_url = NULL
 )
@@ -18,6 +19,8 @@ external_resources_import(
 \item{rdf_file}{RDF file path}
 
 \item{skip_uploads}{TRUE/FALSE - If TRUE, won't upload files}
+
+\item{overwrite}{yes/no - Overwrite existing resources}
 }
 \description{
 Import an RDF file
