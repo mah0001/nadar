@@ -143,14 +143,14 @@ collection_update <- function(
 #' Load a list of all collections or get info for a single collection
 #'
 #' @return List of studies or a single study info
-#' @param collection_idno (Optional) Collection IDNo
+#' @param repositoryid (Optional) Collection IDNo
 #' @export
-collections <- function(collection_idno=NULL, api_key=NULL, api_base_url=NULL){
+collections <- function(repositorid=NULL, api_key=NULL, api_base_url=NULL){
 
   endpoint='collections/'
 
-  if(!is.null(collection_idno)){
-    endpoint=paste0(endpoint,'/',collection_idno)
+  if(!is.null(repositoryid)){
+    endpoint=paste0(endpoint,'/',repositoryid)
   }
 
   if(is.null(api_key)){
@@ -358,16 +358,16 @@ dataset_collections_list <- function(
 #' Delete a collection
 #'
 #' @return status
-#' @param collection_idno (Required) Collection IDNo
+#' @param repositoryid (Required) Collection IDNo
 #'
 #' @export
-collection_delete <- function(collection_idno, api_key=NULL, api_base_url=NULL){
+collection_delete <- function(repositoryid, api_key=NULL, api_base_url=NULL){
 
   if(is.null(api_key)){
     api_key=get_api_key();
   }
 
-  url=get_api_url(paste0('collections/delete/', collection_idno))
+  url=get_api_url(paste0('collections/delete/', repositoryid))
   httpResponse <- DELETE(url, add_headers("X-API-KEY" = api_key), accept_json())
   output=NULL
 

@@ -4,10 +4,10 @@
 \alias{collections}
 \title{Get all collections}
 \usage{
-collections(collection_idno = NULL, api_key = NULL, api_base_url = NULL)
+collections(repositorid = NULL, api_key = NULL, api_base_url = NULL)
 }
 \arguments{
-\item{collection_idno}{(Optional) Collection IDNo}
+\item{repositoryid}{(Optional) Collection IDNo}
 }
 \value{
 List of studies or a single study info

@@ -4,10 +4,10 @@
 \alias{collection_delete}
 \title{Delete a collection}
 \usage{
-collection_delete(collection_idno, api_key = NULL, api_base_url = NULL)
+collection_delete(repositoryid, api_key = NULL, api_base_url = NULL)
 }
 \arguments{
-\item{collection_idno}{(Required) Collection IDNo}
+\item{repositoryid}{(Required) Collection IDNo}
 }
 \value{
 status
