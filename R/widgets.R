@@ -59,7 +59,7 @@ widgets_create <- function(uuid, options=list(), zip_file, api_key=NULL, api_bas
   url=get_api_url(paste0('widgets/',uuid))
   httpResponse <- POST(url,
                        add_headers("X-API-KEY" = api_key),
-                       body=option)
+                       body=options)
 
   output=NULL
 
