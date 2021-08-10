@@ -59,14 +59,18 @@ external_resources_import <- function(
 
   for(i in 1:length(resources)) {
 
-    resource_file=paste0(base_folder,"/",resources[[i]]$filename)
+    if(is_valid_url(resources[[i]]$filename)){
+      resource_file=resources[[i]]$filename
+    }else {
+      resource_file=paste0(base_folder,"/",resources[[i]]$filename)
 
-    # If file not found in location provided in rdf (incl. sub-folder), look in base_folder itself
-    if(skip_uploads==FALSE && resources[[i]]$is_url==FALSE && file.exists(resource_file) == FALSE) {
-      resource_file = paste0(base_folder, "/", basename(resource_file))
+      # If file not found in location provided in rdf (incl. sub-folder), look in base_folder itself
+      if(skip_uploads==FALSE && resources[[i]]$is_url==FALSE && file.exists(resource_file) == FALSE) {
+        resource_file = paste0(base_folder, "/", basename(resource_file))
 
-      if (!file.exists(resource_file)){
-        warning(paste0("Resource file not found: ",resource_file))
+        if (!file.exists(resource_file)){
+          warning(paste0("Resource file not found: ",resource_file))
+        }
       }
     }
 
@@ -74,8 +78,8 @@ external_resources_import <- function(
 
     res_response <- external_resources_add(
         idno = dataset_idno,
-        dctype = resources[[i]]$type,
-        dcformat = resources[[i]]$format,
+        dctype = resources[[i]]$dctype,
+        dcformat = resources[[i]]$dcformat,
         title = resources[[i]]$title,
         author = resources[[i]]$creator,
         dcdate = resources[[i]]$date,
@@ -253,7 +257,7 @@ external_resources_add <- function(
     options$file=upload_file(file_path)
   }
   else if(is_valid_url(file_path)){
-    options$filename=file_path
+    options[['filename']]=file_path
   }
 
   url=get_api_url(paste0('datasets/',idno,'/resources'))
