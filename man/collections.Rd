@@ -4,7 +4,7 @@
 \alias{collections}
 \title{Get all collections}
 \usage{
-collections(repositorid = NULL, api_key = NULL, api_base_url = NULL)
+collections(repositoryid = NULL, api_key = NULL, api_base_url = NULL)
 }
 \arguments{
 \item{repositoryid}{(Optional) Collection IDNo}
