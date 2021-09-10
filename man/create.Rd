@@ -34,6 +34,10 @@ create(
 \item{published}{Set status for study - 0 = Draft, 1 = Published}
 
 \item{overwrite}{Overwrite if a study with the same ID already exists? Valid values "yes", "no"}
+
+\item{api_key}{API key (optional if API key is set using set_api_key)}
+
+\item{api_base_url}{API base endpoint (optional if API base endpoint is set using set_api_url)}
 }
 \description{
 Create a new study

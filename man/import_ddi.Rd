@@ -5,18 +5,22 @@
 \title{ImportDDI}
 \usage{
 import_ddi(
+  api_key = NULL,
+  api_base_url = NULL,
   xml_file = NULL,
   rdf_file = NULL,
   repositoryid = NULL,
   overwrite = "no",
   access_policy = NULL,
   data_remote_url = NULL,
-  published = NULL,
-  api_key = NULL,
-  api_base_url = NULL
+  published = NULL
 )
 }
 \arguments{
+\item{api_key}{API key (optional if API key is set using set_api_key)}
+
+\item{api_base_url}{API base endpoint (optional if API base endpoint is set using set_api_url)}
+
 \item{xml_file}{(Required) DDI/XML file path}
 
 \item{rdf_file}{RDF file path}

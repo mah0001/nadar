@@ -4,8 +4,16 @@
 #'
 #' @return List of studies or a single study info
 #' @param idno (Optional) Dataset IDNo
+#' @param api_key API key (optional if API key is set using set_api_key)
+#' @param api_base_url API base endpoint (optional if API base endpoint is set using set_api_url)
+#' @param offset Specify the starting row number
+#' @param limit Specify number of rows to return. Default is 50 rows.
 #' @export
-datasets <- function(idno=NULL, offset=NULL, limit=50, api_key=NULL, api_base_url=NULL){
+datasets <- function(idno=NULL,
+                     offset=NULL,
+                     limit=50,
+                     api_key=NULL,
+                     api_base_url=NULL){
 
   endpoint='datasets/'
 
@@ -21,8 +29,14 @@ datasets <- function(idno=NULL, offset=NULL, limit=50, api_key=NULL, api_base_ur
     api_key=get_api_key();
   }
 
-  url=get_api_url(endpoint)
-  print(url)
+  # Create url
+  endpoint <- paste0('datasets/',idno)
+  if(is.null(api_base_url)){
+    url=get_api_url(endpoint=endpoint)
+  } else {
+    url = paste0(api_base_url,"/",endpoint)
+  }
+
   httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json())
   output=NULL
 
@@ -44,15 +58,13 @@ datasets <- function(idno=NULL, offset=NULL, limit=50, api_key=NULL, api_base_ur
   )
 }
 
-
-
-
-
 #' ImportDDI
 #'
 #' Import a DDI file
 #'
 #' @return NULL
+#' @param api_key API key (optional if API key is set using set_api_key)
+#' @param api_base_url API base endpoint (optional if API base endpoint is set using set_api_url)
 #' @param xml_file (Required) DDI/XML file path
 #' @param repositoryid Collection ID that owns the study
 #' @param overwrite Overwrite if a study with the same ID already exists? Valid values "yes", "no"
@@ -62,24 +74,28 @@ datasets <- function(idno=NULL, offset=NULL, limit=50, api_key=NULL, api_base_ur
 #' @param published Set status for study - 0 = Draft, 1 = Published
 #' @param verbose Show verbose output - True, False
 #' @export
-import_ddi <- function(
+import_ddi <- function(api_key=NULL,
+                       api_base_url=NULL,
                       xml_file=NULL,
                       rdf_file=NULL,
                       repositoryid=NULL,
                       overwrite='no',
                       access_policy=NULL,
                       data_remote_url=NULL,
-                      published=NULL,
-                      api_key=NULL,
-                      api_base_url=NULL){
+                      published=NULL){
 
-  endpoint='datasets/import_ddi'
 
   if(is.null(api_key)){
     api_key=get_api_key();
   }
 
-  url=get_api_url(endpoint)
+  # Create url
+  endpoint='datasets/import_ddi'
+  if(is.null(api_base_url)){
+    url=get_api_url(endpoint=endpoint)
+  } else {
+    url = paste0(api_base_url,"/",endpoint)
+  }
 
   options=list(
     "file"=upload_file(xml_file),
@@ -110,8 +126,6 @@ import_ddi <- function(
   return (output)
 }
 
-
-
 #' Create new study
 #'
 #' Create a new study
@@ -125,6 +139,8 @@ import_ddi <- function(
 #' @param published Set status for study - 0 = Draft, 1 = Published
 #' @param overwrite Overwrite if a study with the same ID already exists? Valid values "yes", "no"
 #' @param metadata \strong{(required)} Metadata list depending on the type of study
+#' @param api_key API key (optional if API key is set using set_api_key)
+#' @param api_base_url API base endpoint (optional if API base endpoint is set using set_api_url)
 #'
 #' @examples
 #'
@@ -198,7 +214,14 @@ create <- function(
 
   options= c(options,metadata)
 
-  url=get_api_url(paste0('datasets/create/',type,'/',idno))
+  # Create url
+  endpoint <- paste0('datasets/create/',type,'/',idno)
+  if(is.null(api_base_url)){
+    url=get_api_url(endpoint=endpoint)
+  } else {
+    url = paste0(api_base_url,"/",endpoint)
+  }
+
   httpResponse <- POST(url,
                        add_headers("X-API-KEY" = api_key),
                        body=options,
@@ -234,11 +257,6 @@ create <- function(
   return (output)
 }
 
-
-
-
-
-
 #' Upload thumbnail for a study
 #'
 #' Upload thumbnail for a study
@@ -246,6 +264,8 @@ create <- function(
 #' @return NULL
 #' @param idno (required) Study unique identifier
 #' @param thumbnail \strong{(required)} Path to the thumbnail file
+#' @param api_key API key (optional if API key is set using set_api_key)
+#' @param api_base_url API base endpoint (optional if API base endpoint is set using set_api_url)
 #'
 #' @examples
 #'
@@ -269,7 +289,14 @@ thumbnail_upload <- function(
     file=upload_file(thumbnail)
   )
 
-  url=get_api_url(paste0('datasets/thumbnail/',idno))
+  # Create url
+  endpoint <- paste0('datasets/thumbnail/',idno)
+  if(is.null(api_base_url)){
+    url=get_api_url(endpoint=endpoint)
+  } else {
+    url = paste0(api_base_url,"/",endpoint)
+  }
+
   httpResponse <- POST(url, add_headers("X-API-KEY" = api_key), body=options, verbose(get_verbose()))
 
   output=NULL
@@ -286,14 +313,14 @@ thumbnail_upload <- function(
   return (output)
 }
 
-
-
 #' Delete thumbnail for a study
 #'
 #' Delete thumbnail for a study
 #'
 #' @return NULL
 #' @param idno (required) Study unique identifier
+#' @param api_key API key (optional if API key is set using set_api_key)
+#' @param api_base_url API base endpoint (optional if API base endpoint is set using set_api_url)
 #'
 #' @examples
 #'
@@ -302,7 +329,9 @@ thumbnail_upload <- function(
 #' )
 #'
 #' @export
-thumbnail_delete <- function(idno, api_key=NULL,api_base_url=NULL){
+thumbnail_delete <- function(idno,
+                             api_key=NULL,
+                             api_base_url=NULL){
 
   if(is.null(api_key)){
     api_key=get_api_key();
@@ -312,7 +341,14 @@ thumbnail_delete <- function(idno, api_key=NULL,api_base_url=NULL){
     thumbnail=''
   )
 
-  url=get_api_url(paste0('datasets/',idno))
+  # Create url
+  endpoint <- paste0('datasets/',idno)
+  if(is.null(api_base_url)){
+    url=get_api_url(endpoint=endpoint)
+  } else {
+    url = paste0(api_base_url,"/",endpoint)
+  }
+
   httpResponse <- PUT(url,
                       add_headers("X-API-KEY" = api_key),
                       body=options,
@@ -344,6 +380,8 @@ thumbnail_delete <- function(idno, api_key=NULL,api_base_url=NULL){
 #'
 #' @return NULL
 #' @param idno (required) Study unique identifier
+#' @param api_key API key (optional if API key is set using set_api_key)
+#' @param api_base_url API base endpoint (optional if API base endpoint is set using set_api_url)
 #'
 #' @examples
 #'
@@ -361,7 +399,14 @@ find_by_idno <- function(
     api_key=get_api_key();
   }
 
-  url=get_api_url(paste0('datasets/',idno))
+  # Create url
+  endpoint <- paste0('datasets/',idno)
+  if(is.null(api_base_url)){
+    url=get_api_url(endpoint=endpoint)
+  } else {
+    url = paste0(api_base_url,"/",endpoint)
+  }
+
   httpResponse <- GET(url, add_headers("X-API-KEY" = api_key))
 
   output=NULL
@@ -384,6 +429,8 @@ find_by_idno <- function(
 #'
 #' @return NULL
 #' @param idno (required) Study unique identifier
+#' @param api_key API key (optional if API key is set using set_api_key)
+#' @param api_base_url API base endpoint (optional if API base endpoint is set using set_api_url)
 #' @param access_policy Select the access policy suitable for your data. Valid values - "direct", "public", "licensed", "data_enclave", "remote", "data_na", "open"
 #' @param data_remote_url Link to the website where the data is available. Required if access_policy is set to "remote".
 #' @param published Set status for study - 0 = Draft, 1 = Published
@@ -480,7 +527,13 @@ dataset_options <- function(
     "link_indicator"=link_indicator
   )
 
-  url=get_api_url(paste0('datasets/',idno))
+  # Create url
+  endpoint <- paste0('datasets/',idno)
+  if(is.null(api_base_url)){
+    url=get_api_url(endpoint=endpoint)
+  } else {
+    url = paste0(api_base_url,"/",endpoint)
+  }
 
   httpResponse <- PUT(url,
                       add_headers("X-API-KEY" = api_key),

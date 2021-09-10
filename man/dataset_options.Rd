@@ -22,7 +22,11 @@ dataset_options(
 \arguments{
 \item{idno}{(required) Study unique identifier}
 
-\item{access_policy}{Select the access policy suitable for your data. Valid values - "open", "direct", "public", "licensed", "remote" ("enclave", "other")}
+\item{api_key}{API key (optional if API key is set using set_api_key)}
+
+\item{api_base_url}{API base endpoint (optional if API base endpoint is set using set_api_url)}
+
+\item{access_policy}{Select the access policy suitable for your data. Valid values - "direct", "public", "licensed", "data_enclave", "remote", "data_na", "open"}
 
 \item{data_remote_url}{Link to the website where the data is available. Required if access_policy is set to "remote".}
 
