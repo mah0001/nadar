@@ -384,7 +384,7 @@ find_by_idno <- function(
 #'
 #' @return NULL
 #' @param idno (required) Study unique identifier
-#' @param access_policy Select the access policy suitable for your data. Valid values - "open", "direct", "public", "licensed", "remote" ("enclave", "other")
+#' @param access_policy Select the access policy suitable for your data. Valid values - "direct", "public", "licensed", "data_enclave", "remote", "data_na", "open"
 #' @param data_remote_url Link to the website where the data is available. Required if access_policy is set to "remote".
 #' @param published Set status for study - 0 = Draft, 1 = Published
 #' @param tags Tag or vector of multiple tags for study (string)
@@ -426,7 +426,7 @@ dataset_options <- function(
 
   # Check whether access policy is a valid string
   if(!is.null(access_policy)){
-      valid_access_types <- c("open", "direct", "public", "licensed", "remote") # "enclave", "other"
+      valid_access_types <- c("direct","public","licensed","data_enclave","remote","data_na","open")
       if(!(access_policy %in% valid_access_types)){
         stop(paste("access_policy should be one of the valid types - valid types are", paste(valid_access_types, collapse = ", ")))
       }
