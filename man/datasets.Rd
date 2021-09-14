@@ -14,6 +14,14 @@ datasets(
 }
 \arguments{
 \item{idno}{(Optional) Dataset IDNo}
+
+\item{offset}{Specify the starting row number}
+
+\item{limit}{Specify number of rows to return. Default is 50 rows.}
+
+\item{api_key}{API key (optional if API key is set using set_api_key)}
+
+\item{api_base_url}{API base endpoint (optional if API base endpoint is set using set_api_url)}
 }
 \value{
 List of studies or a single study info

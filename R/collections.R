@@ -145,7 +145,7 @@ collection_update <- function(
 #' @return List of studies or a single study info
 #' @param repositoryid (Optional) Collection IDNo
 #' @export
-collections <- function(repositorid=NULL, api_key=NULL, api_base_url=NULL){
+collections <- function(repositoryid=NULL, api_key=NULL, api_base_url=NULL){
 
   endpoint='collections/'
 

@@ -10,6 +10,10 @@ thumbnail_upload(idno, thumbnail, api_key = NULL, api_base_url = NULL)
 \item{idno}{(required) Study unique identifier}
 
 \item{thumbnail}{\strong{(required)} Path to the thumbnail file}
+
+\item{api_key}{API key (optional if API key is set using set_api_key)}
+
+\item{api_base_url}{API base endpoint (optional if API base endpoint is set using set_api_url)}
 }
 \description{
 Upload thumbnail for a study

@@ -8,6 +8,10 @@ find_by_idno(idno, api_key = NULL, api_base_url = NULL)
 }
 \arguments{
 \item{idno}{(required) Study unique identifier}
+
+\item{api_key}{API key (optional if API key is set using set_api_key)}
+
+\item{api_base_url}{API base endpoint (optional if API base endpoint is set using set_api_url)}
 }
 \description{
 Find a project by IDNO
