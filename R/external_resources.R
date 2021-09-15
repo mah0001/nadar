@@ -305,9 +305,14 @@ external_resources_delete <- function(dataset_idno, resource_id, api_key=NULL, a
 
   if(httpResponse$status_code!=200){
     warning(content(httpResponse, "text"))
-  }else{
-    output=fromJSON(content(httpResponse,"text"))
   }
+
+  output=list(
+    "status_code"=httpResponse$status_code,
+    "response"= nada_http_response_json(httpResponse)
+  )
+
+  return (output)
 
   return (output)
 }
