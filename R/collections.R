@@ -269,6 +269,8 @@ dataset_attach_collections <- function(
 
   url=get_api_url(endpoint)
 
+  print(url)
+
   options = list(
     "study_idno" = study_idno,
     "owner_collection" = owner_collection,
@@ -276,7 +278,12 @@ dataset_attach_collections <- function(
     "mode"=mode
   )
 
-  httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json())
+  httpResponse <- POST(url, add_headers("X-API-KEY" = api_key),
+                       body=options,
+                       content_type_json(),
+                       encode="json",
+                       verbose(get_verbose()))
+
   output=NULL
 
   if(httpResponse$status_code!=200){
