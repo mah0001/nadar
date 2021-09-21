@@ -10,7 +10,7 @@
 #' @param limit Specify number of rows to return. Default is 50 rows.
 #' @export
 datasets <- function(idno=NULL,
-                     offset=NULL,
+                     offset=0,
                      limit=50,
                      api_key=NULL,
                      api_base_url=NULL){
@@ -21,7 +21,7 @@ datasets <- function(idno=NULL,
     endpoint=paste0(endpoint,'/',idno)
   }
 
-  if(!is.null(offset)){
+  if(!is.null(limit)){
     endpoint=paste0(endpoint,'?offset=',offset, '&limit=',limit)
   }
 
@@ -30,14 +30,13 @@ datasets <- function(idno=NULL,
   }
 
   # Create url
-  endpoint <- paste0('datasets/',idno)
   if(is.null(api_base_url)){
     url=get_api_url(endpoint=endpoint)
   } else {
     url = paste0(api_base_url,"/",endpoint)
   }
 
-  httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json())
+  httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json(), verbose(get_verbose()))
   output=NULL
 
   if(httpResponse$status_code!=200){

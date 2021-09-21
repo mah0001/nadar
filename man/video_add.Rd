@@ -35,3 +35,45 @@ video_add(
 \description{
 Create a new video
 }
+\examples{
+
+metadata=list(
+   "repositoryid"= "central",
+   "published"= "1",
+   "overwrite"= "no",
+   "video_description"= list(
+     "idno"= "video-idno",
+     "title"= "Lorem ipsum",
+     "description"= "Description of video",
+     "video_provider"= "youtube",
+     "video_url"= "https://www.youtube.com/watch?v=7X8II6J-6mU",
+     "embed_url"= "https://www.youtube.com/embed/7X8II6J-6mU",
+     "country"= "Country",
+     "language"= "english",
+     "contributor"= "Contributor name",
+     "publisher"= "Publisher",
+     "rights"= "Rights",
+     "author"= "Author name",
+     "date_created"= "2020-01-01",
+     "date_published"= "2021-08-17"
+   ),
+   "tags"= list(
+     list(
+       "tag"= "demo"
+     )
+   )
+)
+
+
+ video_add (
+  idno="video-idno",
+  published = 1,
+  overwrite = "yes",
+  metadata = metadata,
+  thumbnail ="path-to-thumbnail-file.jpg"
+)
+
+
+
+
+}
