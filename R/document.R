@@ -1,4 +1,3 @@
-
 #' Create new document
 #'
 #' Create a new document
@@ -11,6 +10,7 @@
 #' @param published Set status for study - 0 = Draft, 1 = Published
 #' @param overwrite Overwrite if a study with the same ID already exists? Valid values "yes", "no"
 #' @param metadata \strong{(required)} Metadata list
+#' @export
 #'
 #' @examples
 #'
@@ -228,7 +228,7 @@
 #' )
 #' )
 #'
-#' add_document (
+#' document_add(
 #'   idno="document-idno",
 #'   published = 1,
 #'   overwrite = "yes",
@@ -236,11 +236,7 @@
 #'   thumbnail ="images/thumbnail.jpg"
 #' )
 #'
-#'
-#'
-#'
-#' @export
-add_document <- function(idno,
+document_add <- function(idno,
                          metadata,
                          repositoryid=NULL,
                          access_policy=NULL,
@@ -249,8 +245,7 @@ add_document <- function(idno,
                          overwrite="no",
                          thumbnail=NULL,
                          api_key=NULL,
-                         api_base_url=NULL
-){
+                         api_base_url=NULL){
 
   if(is.null(api_key)){
     api_key=get_api_key();
@@ -284,12 +279,11 @@ add_document <- function(idno,
       for(f in files){
         if(file.exists(f$file_uri) || is_valid_url(f$file_uri) ){
           resource_result=external_resources_add(idno=idno,
-                                          dctype="Document [doc/oth]",
-                                          title=basename(f$file_uri),
-                                          file_path=f$file_uri,
-                                          overwrite="yes"
-          )
-          result$resources[[basename(f$file_uri)]]=resource_result
+                                                 dctype="Document [doc/oth]",
+                                                 title=basename(f$file_uri),
+                                                 file_path=f$file_uri,
+                                                 overwrite="yes")
+          result$resources[[basename(f$file_uri)]] <- resource_result
         } else{
           warning(paste("File not found:",f$file_uri))
         }
