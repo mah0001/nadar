@@ -6,7 +6,7 @@
 \usage{
 datasets(
   idno = NULL,
-  offset = NULL,
+  offset = 0,
   limit = 50,
   api_key = NULL,
   api_base_url = NULL
@@ -15,9 +15,9 @@ datasets(
 \arguments{
 \item{idno}{(Optional) Dataset IDNo}
 
-\item{offset}{Specify the starting row number}
+\item{offset}{Specify the number of rows to skip, default is 0}
 
-\item{limit}{Specify number of rows to return. Default is 50 rows.}
+\item{limit}{Specify number of rows to return, default is 50 rows. Note: if more than 500 rows are requested, several API calls are made.}
 
 \item{api_key}{API key (optional if API key is set using set_api_key)}
 

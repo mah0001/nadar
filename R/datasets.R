@@ -6,34 +6,36 @@
 #' @param idno (Optional) Dataset IDNo
 #' @param api_key API key (optional if API key is set using set_api_key)
 #' @param api_base_url API base endpoint (optional if API base endpoint is set using set_api_url)
-#' @param offset Specify the starting row number
-#' @param limit Specify number of rows to return. Default is 50 rows.
+#' @param offset Specify the number of rows to skip, default is 0
+#' @param limit Specify number of rows to return, default is 50 rows. Note: if more than 500 rows are requested, several API calls are made and results are combined..
 #' @export
+#'
 datasets <- function(idno=NULL,
                      offset=0,
                      limit=50,
                      api_key=NULL,
                      api_base_url=NULL){
 
-  endpoint='datasets/'
-
-  if(!is.null(idno)){
-    endpoint=paste0(endpoint,'/',idno)
-  }
-
-  if(!is.null(limit)){
-    endpoint=paste0(endpoint,'?offset=',offset, '&limit=',limit)
-  }
-
   if(is.null(api_key)){
     api_key=get_api_key();
   }
 
+  # if only one dataset is requested
+  if(!is.null(idno)){
+    endpoint=paste0('datasets/','/',idno)
+  } else { # if list of datasets is requested
+    if(limit < 500){ # up to 500 one API call
+      endpoint <- paste0("datasets/", "?offset=", offset, "&limit=", limit)
+    }else { # if more than 500 requested, multiple API calls
+      endpoint=paste0("datasets/", "?offset=", offset, "&limit=500")
+    }
+  }
+
   # Create url
   if(is.null(api_base_url)){
-    url=get_api_url(endpoint=endpoint)
+    url <- get_api_url(endpoint = endpoint)
   } else {
-    url = paste0(api_base_url,"/",endpoint)
+    url <- paste0(api_base_url,"/",endpoint)
   }
 
   httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json(), verbose(get_verbose()))
@@ -46,6 +48,41 @@ datasets <- function(idno=NULL,
 
   output=fromJSON(content(httpResponse,"text"))
   #return (output)
+
+  # add more API calls if limit > 500
+  if(limit > 500){
+    cur_datasets <- output$datasets # adding result datasets for each call
+    num_entries_to_add <- min(limit, output$total) - 500 # number of entries to add (max of limit and available entries)
+
+    while(output$found > 0 & num_entries_to_add > 0){
+      offset <- offset + 500 # update offset
+      endpoint <- paste0("datasets/", "?offset=", offset, "&limit=500")
+
+      # Create URL
+      if(is.null(api_base_url)){
+        url <- get_api_url(endpoint = endpoint)
+      } else {
+        url <- paste0(api_base_url,"/",endpoint)
+      }
+
+      # API call
+      httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json(), verbose(get_verbose()))
+
+      if(httpResponse$status_code!=200){
+        warning(content(httpResponse, "text"))
+        stop(content(httpResponse, "text"), call. = FALSE)
+      }
+
+      output <- fromJSON(content(httpResponse,"text"))
+
+      cur_datasets <- rbind(cur_datasets, output$datasets) # combine results
+      num_entries_to_add <- num_entries_to_add - 500 # update number of entries to add
+    }
+
+    output$datasets <- cur_datasets
+  }
+
+  dim(cur_datasets)
 
   structure(
     list(
