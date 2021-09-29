@@ -39,22 +39,22 @@ datasets <- function(idno=NULL,
   }
 
   httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json(), verbose(get_verbose()))
-  output=NULL
+  output <- NULL
 
   if(httpResponse$status_code!=200){
     warning(content(httpResponse, "text"))
     stop(content(httpResponse, "text"), call. = FALSE)
   }
 
-  output=fromJSON(content(httpResponse,"text"))
-  #return (output)
+  output <- fromJSON(content(httpResponse,"text"))
 
   # add more API calls if limit > 500
+  print(limit)
   if(limit > 500){
     cur_datasets <- output$datasets # adding result datasets for each call
     num_entries_to_add <- min(limit, output$total) - 500 # number of entries to add (max of limit and available entries)
 
-    while(output$found > 0 & num_entries_to_add > 0){
+    while(output$found > 0 & num_entries_to_add > 0){ # while more entires to add
       offset <- offset + 500 # update offset
       endpoint <- paste0("datasets/", "?offset=", offset, "&limit=500")
 
@@ -81,8 +81,6 @@ datasets <- function(idno=NULL,
 
     output$datasets <- cur_datasets
   }
-
-  dim(cur_datasets)
 
   structure(
     list(
