@@ -115,7 +115,7 @@ data_api_import_csv <- function(
     'overwrite'=overwrite
   )
 
-  httpResponse <- POST(url, add_headers("X-API-KEY" = api_key),body=csv_options)
+  httpResponse <- POST(url, add_headers("X-API-KEY" = api_key),body=csv_options, encode="multipart")
   output=NULL
 
   if(httpResponse$status_code!=200){
@@ -126,7 +126,7 @@ data_api_import_csv <- function(
     {
       output=list(
         "status_code"=httpResponse$status_code,
-        "response"=fromJSON(content(httpResponse,"text"))
+        "response"=nada_http_response_json(httpResponse)
       )
 
       return (output)
