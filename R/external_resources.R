@@ -326,7 +326,7 @@ external_resources_delete <- function(dataset_idno, resource_id, api_key=NULL, a
 #' @return
 #' @param dataset_idno Study IDNo
 #' @export
-external_resources_delete_all <- function(dataset_idno, resource_id, api_key=NULL, api_base_url=NULL){
+external_resources_delete_all <- function(dataset_idno, api_key=NULL, api_base_url=NULL){
 
   if(is.null(api_key)){
     api_key=get_api_key();
