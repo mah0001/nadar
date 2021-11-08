@@ -4,26 +4,36 @@
 #'
 #' @return image file
 #' @param file_path \strong{(required)} PDF file path
+#' @param file_name_jpg \strong{(optional)} file name to store jpg. If empty, file name of jpg is same as pdf
 #' @param dpi set image DPI, default is 72 dpi
 #' @export
-capture_pdf_cover <- function(file_path, dpi=72) {
+capture_pdf_cover <- function(file_path, file_name_jpg = NULL, dpi = 72) {
 
   if (!file.exists(file_path)){
     warning(paste("file not found:: ", file_path))
     return (NULL)
   }
 
-  jpg <- gsub(".pdf", ".jpg", file_path)
-
-  if(!file.exists(jpg)) {
-    pdf_convert(file_path, format = "jpg", pages = 1, filenames = jpg, dpi = dpi,  verbose = FALSE)
+  if(is.null(file_name_jpg)){
+    jpg <- gsub(".pdf", ".jpg", file_path)
+  } else {
+    if(!grepl(".jpg", file_name_jpg, fixed = TRUE)){
+      file_name_jpg <- paste0(file_name_jpg, ".jpg")
+    }
+    jpg <- paste0(dirname(file_path), "/", file_name_jpg)
   }
 
-  return (jpg)
+  if(!file.exists(jpg)) {
+    pdf_convert(file_path,
+                format = "jpg",
+                pages = 1,
+                filenames = jpg,
+                dpi = dpi,
+                verbose = FALSE)
+  }
+
+  return(jpg)
 }
-
-
-
 
 #' Check string is a URL
 #'

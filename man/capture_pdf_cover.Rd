@@ -4,10 +4,12 @@
 \alias{capture_pdf_cover}
 \title{Capture cover page of a PDF}
 \usage{
-capture_pdf_cover(file_path, dpi = 72)
+capture_pdf_cover(file_path, file_name_jpg = NULL, dpi = 72)
 }
 \arguments{
 \item{file_path}{\strong{(required)} PDF file path}
+
+\item{file_name_jpg}{\strong{(optional)} file name to store jpg. If empty, file name of jpg is same as pdf}
 
 \item{dpi}{set image DPI, default is 72 dpi}
 }
