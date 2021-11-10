@@ -5,34 +5,55 @@
 #' @return image file
 #' @param file_path \strong{(required)} PDF file path
 #' @param file_name_jpg \strong{(optional)} file name to store jpg. If empty, file name of jpg is same as pdf
-#' @param dpi set image DPI, default is 72 dpi
+#' @param file_dir_jpg \strong{(optional)} file directory to store jpg. If empty, file will be stored in same folder as pdf
+#' @param dpi set image resolution in dpi, default is 72 dpi
 #' @export
-capture_pdf_cover <- function(file_path, file_name_jpg = NULL, dpi = 72) {
+capture_pdf_cover <- function(file_path, file_name_jpg = NULL,
+                              file_dir_jpg = NULL, dpi = 72) {
 
   if (!file.exists(file_path)){
-    warning(paste("file not found:: ", file_path))
+    warning(paste("File not found: ", file_path))
     return (NULL)
   }
 
-  if(is.null(file_name_jpg)){
-    jpg <- gsub(".pdf", ".jpg", file_path)
-  } else {
-    if(!grepl(".jpg", file_name_jpg, fixed = TRUE)){
-      file_name_jpg <- paste0(file_name_jpg, ".jpg")
+  # determine file name and directory for jpg
+  if(is.null(file_name_jpg) & is.null(file_dir_jpg)){ # same name and directory as pdf
+    jpg_path <- gsub(".pdf", ".jpg", file_path)
+  } else { # change directory and/or file name
+    pdf_directory <- dirname(file_path)
+    pdf_name      <- basename(file_path)
+
+    if(!is.null(file_name_jpg)){ # new file name
+      if(!grepl(".jpg", file_name_jpg, fixed = TRUE)){
+        file_name_jpg <- paste0(file_name_jpg, ".jpg")
+      }
+    } else {
+      file_name_jpg <- gsub(".pdf", ".jpg", pdf_name)  # same as pdf name
     }
-    jpg <- paste0(dirname(file_path), "/", file_name_jpg)
+
+    if(!is.null(file_dir_jpg)){ # new directory
+      if (!dir.exists(file_dir_jpg)){
+        warning(paste("Dir does not exist: ", file_dir_jpg))
+        return (NULL)
+      }
+    } else {
+      file_dir_jpg <- pdf_directory # same as pdf directory
+    }
+
+    jpg_path <- paste0(file_dir_jpg, "/", file_name_jpg)
   }
 
-  if(!file.exists(jpg)) {
+  # Convert pdf to jpg and save jpg
+  if(!file.exists(jpg_path)) {
     pdf_convert(file_path,
                 format = "jpg",
                 pages = 1,
-                filenames = jpg,
+                filenames = jpg_path,
                 dpi = dpi,
                 verbose = FALSE)
   }
 
-  return(jpg)
+  return(jpg_path)
 }
 
 #' Check string is a URL
