@@ -54,6 +54,8 @@ datasets <- function(idno=NULL,
     cur_datasets <- output$datasets # adding result datasets for each call
     num_entries_to_add <- min(limit, output$total) - 500 # number of entries to add (max of limit and available entries)
 
+    df_column_names <- colnames(cur_datasets)
+
     while(output$found > 0 & num_entries_to_add > 0){ # while more entires to add
       offset <- offset + 500 # update offset
       endpoint <- paste0("datasets/", "?offset=", offset, "&limit=500")
@@ -75,7 +77,13 @@ datasets <- function(idno=NULL,
 
       output <- fromJSON(content(httpResponse,"text"))
 
-      cur_datasets <- rbind(cur_datasets, output$datasets) # combine results
+      if (output$found==0){
+        warning("exiting....")
+        break;
+      }
+
+      output_ds <- subset(output$datasets, select = df_column_names)
+      cur_datasets <- rbind(cur_datasets, output_ds) # combine results
       num_entries_to_add <- num_entries_to_add - 500 # update number of entries to add
     }
 

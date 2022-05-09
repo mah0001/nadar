@@ -17,7 +17,7 @@ datasets(
 
 \item{offset}{Specify the number of rows to skip, default is 0}
 
-\item{limit}{Specify number of rows to return, default is 50 rows. Note: if more than 500 rows are requested, several API calls are made.}
+\item{limit}{Specify number of rows to return, default is 50 rows. Note: if more than 500 rows are requested, several API calls are made and results are combined..}
 
 \item{api_key}{API key (optional if API key is set using set_api_key)}
 

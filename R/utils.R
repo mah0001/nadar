@@ -64,7 +64,8 @@ nada_http_get <- function(
   }
 
   url=get_api_url(paste0(url))
-  httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), body=options)
+  print(url)
+  httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), body=options, verbose(get_verbose()) )
 
   output=NULL
 
@@ -177,7 +178,7 @@ nada_http_response_json <- function(httpResponse)
       return (fromJSON(content(httpResponse,"text")))
     },
     error= function(cond) {
-      message(paste0("ERROR processing response:: ", cond))
+      warning(paste0("ERROR processing response:: ", content(httpResponse,"text")))
       return (content(httpResponse,"text"))
     }
   )
