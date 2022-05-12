@@ -4,11 +4,66 @@
 \alias{catalog_search}
 \title{Search catalog}
 \usage{
-catalog_search(options = list())
+catalog_search(
+  options = list(sk = NULL, from = NULL, to = NULL, country = NULL, collection = NULL,
+    created = NULL, dtype = NULL),
+  page = 0,
+  ps = 50,
+  sort_by = NULL,
+  sort_order = NULL,
+  api_key = NULL,
+  api_base_url = NULL
+)
+}
+\arguments{
+\item{options}{- Search options:
+\itemize{
+  \item sk - Keywords
+  \item from - Year from
+  \item to | Year to
+  \item country | Country names or codes. To search for multiple countries, use pipe (|) to separate them e.g. Albania|Turkey
+  \item collection - Filter by one or more collections. e.g. `collection1, collection2`
+  \item created - Filter by date of creation. Use date format YYYY-MM-DD. For example, `2020/04/01` returns rows created on and after the date. To specify a date range, use 2020/04/01-2020/04/15
+  \item dtype - Data access types (`open`, `direct`, `public`, `licensed`, `remote`). For multiple values, use comma e.g. `open,direct`
+}}
+
+\item{page}{Page}
+
+\item{ps}{Page size (number of rows per page)}
+
+\item{sort_by}{Sort results by field, support fields are `title`,`year`,`nation`}
+
+\item{sort_order}{Sort results order, valid options are `asc`, `desc`}
 }
 \value{
 list
 }
 \description{
 Search catalog
+}
+\examples{
+
+#example - keywords search
+
+catalog_search (
+  options=list(
+    sk="health survey"
+  ),
+  ps=1000
+)
+
+#example - keywords search + filter by country and collection
+
+catalog_search (
+  options=list(
+    sk="health survey",
+    country="albania|afghanistan",
+    collection="dhs"
+  ),
+  ps=1000
+)
+
+
+
+
 }

@@ -6,7 +6,6 @@
 \usage{
 external_resources_delete_all(
   dataset_idno,
-  resource_id,
   api_key = NULL,
   api_base_url = NULL
 )
