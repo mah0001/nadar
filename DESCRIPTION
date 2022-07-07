@@ -16,10 +16,20 @@ Depends:
     httr, 
     curl,
     pdftools,
-    XML
+    XML,
+    readr,
+    haven,
+    stringi,
+    stringr,
+    dplyr
 Imports:
     jsonlite,
     httr,
     curl,
     pdftools,
-    XML
+    XML,
+    readr,
+    haven,
+    stringi,
+    stringr,
+    dplyr
