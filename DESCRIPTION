@@ -21,7 +21,7 @@ Depends:
     haven,
     stringi,
     stringr,
-    dplyr
+    plyr
 Imports:
     jsonlite,
     httr,
@@ -32,4 +32,4 @@ Imports:
     haven,
     stringi,
     stringr,
-    dplyr
+    plyr

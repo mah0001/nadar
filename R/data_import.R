@@ -11,8 +11,8 @@
 #'
 #' @examples  import('\\Sample Data\\in\\HND_2012_L2L.dta', 'dta', 'F1', 36000)
 #'
-#' @export datafile_data_dictionary
-datafile_data_dictionary <- function(filepath,
+#' @export datafile_dictionary
+datafile_dictionary <- function(filepath,
                                      type="CSV",
                                      fileId="F1",
                                      freqLimit=50) {
@@ -135,12 +135,6 @@ datafile_data_dictionary <- function(filepath,
       }
 
     }
-
-    #. if type is date, get the length of the variable
-    #. TO DO: mismatch with Nesstar, correct the logic
-    #if(class(DF_DATA[varName][[1]]) == 'Date'){
-    #  location.width <- format.info(format(DF_DATA[[varName]]))
-    #}
 
     catList <- NA
 
@@ -335,4 +329,79 @@ datafile_data_dictionary <- function(filepath,
   #   warning(err)
   #   return(list(result='error', message= paste('error >> ',err)))
   # })
+}
+
+
+#' @title Export file to CSV
+#'
+#' @description Export datafiles (SPSS, STATA) to CSV format
+#'
+#' @param filepath Path to data file
+#' @param type Type of data file (dta | sav)
+#' @param csvFile Output file path
+#'
+#' @return A list contains the status
+#'
+#' @examples  datafile_write_csv('/Data/example.dta', 'dta','/Data/example.csv')
+#'
+#' @export datafile_write_csv
+
+datafile_write_csv <- function(filepath="", type="", csvPath="") {
+  tryCatch({
+
+    csvFile <-  csvPath
+
+    # create directory if not exists
+    #dir.create(dirname(csvFile), recursive = TRUE, showWarnings = FALSE)
+
+    # read dataset files
+    if (toupper(type) == 'DTA') {
+      DF_DATA <- read_dta(filepath)
+    } else if (toupper(type) == 'SAV') {
+      DF_DATA <- read_spss(filepath)
+    } else if (toupper(type) == 'SAS7BDAT') {
+      DF_DATA <- read_sas(filepath)
+    }  else if (toupper(type) == 'CSV') {
+      #. to resolve the unicode issues, used readr::read_csv instead of read.csv method
+      # DF_DATA <- read.csv(filepath, stringsAsFactors = TRUE)
+      DF_DATA <- suppressWarnings(suppressMessages(read_csv(filepath)))
+      DF_DATA[ is.na(DF_DATA) ] <- NA
+
+      # get col names as variables
+      variables <- colnames(DF_DATA)
+
+      # set factor levels instead of label
+      for(j in 1:length(variables)){
+
+        varName <- variables[j]
+
+        # If factor, set levels as labels, otherwise labels will be exported to CSV
+        # Convert type as numeric
+        if(is.factor(DF_DATA[[varName]])){
+          labels <- as.factor(levels(DF_DATA[[varName]]))
+          levels <- as.factor(labels(labels))
+          DF_DATA[[varName]] <- factor(DF_DATA[[varName]], labels = levels)
+          DF_DATA[[varName]] <- as.numeric( DF_DATA[[varName]] )
+        }
+      }
+    }
+
+    # Replace empty string with NA
+    DF_DATA[sapply(DF_DATA, is.character)] <- lapply(DF_DATA[sapply(DF_DATA, is.character)],
+                                                     function(x) zap_empty(x))
+
+    DF_DATA[ is.na(DF_DATA) ] <- NA    #missing values replaced with NA
+
+
+    # To resolve the unicode issues, used readr package instead of haven to write the csv file.
+    write_csv(DF_DATA, csvFile, na = "*", append = FALSE)
+    # write.csv(DF_DATA, file=file(csvFile, encoding="UTF-8"), row.names = FALSE, quote = TRUE, na= "*")
+
+
+    return(list(result='ok', file=csvFile ))
+  }, warning = function(war) {
+    return(list(result='warning', message= paste('warning >> ',war)))
+  }, error = function(err) {
+    return(list(result='error', message= paste('error >> ',err)))
+  })
 }
