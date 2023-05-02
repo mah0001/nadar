@@ -9,8 +9,8 @@
 #' @param published Set status for entry - 0 = Draft, 1 = Published
 #' @param overwrite Overwrite if a entry with the same ID already exists? Valid values "yes", "no"
 #' @param metadata \strong{(required)} Metadata list depending on the type of study
-#' @param api_key
-#' @param api_base_url
+#' @param api_key (optoinal) API key
+#' @param api_base_url (optional) API URL
 #'
 #' @return result
 #' @export

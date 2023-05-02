@@ -13,9 +13,6 @@ external_resources_delete_all(
 \arguments{
 \item{dataset_idno}{Study IDNo}
 }
-\value{
-
-}
 \description{
 Delete all external resources for a study
 }

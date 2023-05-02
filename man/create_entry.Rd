@@ -36,7 +36,9 @@ create_entry(
 
 \item{overwrite}{Overwrite if a entry with the same ID already exists? Valid values "yes", "no"}
 
-\item{api_base_url}{}
+\item{api_key}{(optoinal) API key}
+
+\item{api_base_url}{(optional) API URL}
 }
 \value{
 result

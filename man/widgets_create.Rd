@@ -19,9 +19,6 @@ widgets_create(
 
 \item{zip_file}{Zip file}
 }
-\value{
-
-}
 \description{
 Create widget
 }

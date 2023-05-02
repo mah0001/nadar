@@ -16,9 +16,6 @@ external_resources_delete(
 
 \item{resource_id}{Resource ID}
 }
-\value{
-
-}
 \description{
 Delete external resources for a study
 }

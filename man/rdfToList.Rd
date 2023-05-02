@@ -9,9 +9,6 @@ rdfToList(rdf_file)
 \arguments{
 \item{rdf_file}{Path to RDF xml file}
 }
-\value{
-
-}
 \description{
 Convert RDF/XML to list
 }
