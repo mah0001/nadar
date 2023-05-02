@@ -7,8 +7,6 @@
 editor_resources_import_rdf(
   idno,
   rdf_file,
-  skip_uploads = FALSE,
-  overwrite = "no",
   api_key = NULL,
   api_base_url = NULL
 )

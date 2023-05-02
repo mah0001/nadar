@@ -104,6 +104,7 @@ editor_resources_add <- function(
     idno,
     dctype,
     title,
+    subtitle=NULL,
     dcformat=NULL,
     author=NULL,
     dcdate=NULL,
@@ -115,6 +116,7 @@ editor_resources_add <- function(
     description=NULL,
     abstract=NULL,
     toc=NULL,
+    subjects=NULL,
     file_path=NULL,
     overwrite="no",
     api_key=NULL,
@@ -129,6 +131,7 @@ editor_resources_add <- function(
     dctype=dctype,
     dcformat=dcformat,
     title=title,
+    subtitle=subtitle,
     author=author,
     dcdate=dcdate,
     country=country,
@@ -139,6 +142,7 @@ editor_resources_add <- function(
     description=description,
     abstract=abstract,
     toc=toc,
+    subjects=subjects,
     overwrite=overwrite
   )
 
