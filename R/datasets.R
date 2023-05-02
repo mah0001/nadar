@@ -570,14 +570,14 @@ dataset_options <- function(
   )
 
   # Create url
-  endpoint <- paste0('datasets/',idno)
+  endpoint <- paste0('datasets/options/',idno)
   if(is.null(api_base_url)){
     url=get_api_url(endpoint=endpoint)
   } else {
     url = paste0(api_base_url,"/",endpoint)
   }
 
-  httpResponse <- PUT(url,
+  httpResponse <- POST(url,
                       add_headers("X-API-KEY" = api_key),
                       body = options,
                       encode = "json",
