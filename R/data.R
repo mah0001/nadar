@@ -250,3 +250,81 @@ data_api_delete_table <- function(
 
   return (result)
 }
+
+
+
+
+
+
+
+#' Attach Data API to a study
+#'
+#' Attach dataset available via API to a study
+#'
+#' @return NULL
+#' @param db_id (required) DB ID
+#' @param table_id (required) Table ID
+#' @param idno (required) Study unique identifier
+#' @param dataset_title (required) Dataset title
+#' @param api_key API key (optional if API key is set using set_api_key)
+#' @param api_base_url API base endpoint (optional if API base endpoint is set using set_api_url)
+#'
+#' @examples
+#'
+#' attach_to_study (
+#'   db_id="example",
+#'   table_id="prices",
+#'   idno="survey-idno-test",
+#'   dataset_title = "Dataset title"
+#' )
+#'
+#' @export
+attach_to_study <- function(
+					db_id,
+					table_id,
+          idno,
+					dataset_title,
+					api_key=NULL,
+					api_base_url=NULL){
+
+  if(is.null(api_key)){
+    api_key=get_api_key();
+  }
+
+  options=list(
+    db_id=db_id,
+	table_id=table_id,	
+	idno=idno,
+	title=dataset_title
+  )
+
+  # Create url
+  endpoint <- paste0('tables/attach_to_study')
+  if(is.null(api_base_url)){
+    url=get_api_url(endpoint=endpoint)
+  } else {
+    url = paste0(api_base_url,"/",endpoint)
+  }
+
+  httpResponse <- POST(url, 
+                       add_headers("X-API-KEY" = api_key), 
+                       body=options,
+                       content_type_json(),
+                       encode="json",
+                       accept_json(),
+                       verbose(get_verbose()))
+
+  output=NULL
+
+  if(httpResponse$status_code!=200){
+    warning(content(httpResponse, "text"))
+  }
+
+  output=list(
+    "status_code"=httpResponse$status_code,
+    "response"=fromJSON(content(httpResponse,"text"))
+  )
+
+  return (output)
+}
+
