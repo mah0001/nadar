@@ -596,3 +596,68 @@ dataset_options <- function(
   return(output)
 }
 
+
+
+#' Attach related studies
+#'
+#' Attach related studies
+#'
+#' @return NULL
+#' @param idno (required) Study unique identifier
+#' @param related_datasets \strong{(required)} list of related studies IDNOs
+#' @param api_key API key (optional)
+#' @param api_base_url API base endpoint (optional)
+#'
+#' @examples
+#'
+#' attached_related_studies (
+#'   idno="survey-idno-test",
+#'   related_datasets = c("idno-1", "idno-2", "idno-3")
+#' )
+#'
+#' @export
+attach_related_studies <- function(
+                   idno,
+                   related_datasets,
+                   api_key=NULL,
+                   api_base_url=NULL){
+
+  if(is.null(api_key)){
+    api_key=get_api_key();
+  }
+
+  options=list(
+    idno=idno,
+	related_datasets=related_datasets
+  )
+
+  # Create url
+  endpoint <- paste0('datasets/related_datasets')
+  if(is.null(api_base_url)){
+    url=get_api_url(endpoint=endpoint)
+  } else {
+    url = paste0(api_base_url,"/",endpoint)
+  }
+
+  httpResponse <- POST(url, 
+                       add_headers("X-API-KEY" = api_key), 
+                       body=options, 
+                       content_type_json(),
+                       encode="json",
+                       accept_json(),
+                       verbose(get_verbose()))
+
+  output=NULL
+
+  if(httpResponse$status_code!=200){
+    warning(content(httpResponse, "text"))
+  }
+
+  output=list(
+    "status_code"=httpResponse$status_code,
+    "response"=fromJSON(content(httpResponse,"text"))
+  )
+
+  return (output)
+}
+
