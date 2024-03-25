@@ -301,8 +301,8 @@ study_json <- function(idno,is_legacy=FALSE, api_key=NULL,api_base_url=NULL){
 
 
       #remove id, sid
-      if (!is.null(json_study$data_files)){
-        json_study$data_files <- subset(metadata$data_files, select = -c(id, sid))
+      if (!is.null(json_metadata$data_files)){
+        json_metadata$data_files <- subset(json_metadata$data_files, select = -c(id, sid))
       }
 
       return (json_metadata$response)
