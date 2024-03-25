@@ -275,3 +275,102 @@ replace_idno <- function(old_idno,new_idno,api_key=NULL,api_base_url=NULL){
 
   return (output)
 }
+
+
+#' Get study metadata as JSON
+#'
+#' Get study metadata as JSON
+#'
+#' @return Metadata as JSON
+#' @param idno Dataset IDNo
+#' @param is_legacy TRUE | FALSE - if using NADA < 5.3, use legacy as TRUE
+#' @export
+study_json <- function(idno,is_legacy=FALSE, api_key=NULL,api_base_url=NULL){
+
+    if(is.null(api_key)){
+      api_key=get_api_key();
+    }
+
+
+    if (is_legacy==FALSE){
+      json_metadata<-nadar::nada_http_get(paste0('catalog/json/',idno))
+
+      if (is.null(json_metadata$response)){
+        stop(paste("Failed to get study metadata:",idno))
+      }
+
+
+      #remove id, sid
+      if (!is.null(json_study$data_files)){
+        json_study$data_files <- subset(metadata$data_files, select = -c(id, sid))
+      }
+
+      return (json_metadata$response)
+    }
+
+
+    # for older/legacy versions of NADA
+    result<-nadar::nada_http_get(paste0('catalog/',idno))
+
+    #hold json metadata for the study
+    json_study=list()
+
+    if (is.null(result$response$dataset$metadata)){
+      stop(paste("Failed to get study metadata:","IDNO") )
+    }else{
+      json_study=result$response$dataset$metadata
+    }
+
+    # get data files
+    data_files<-nadar::nada_http_get(paste0('catalog/data_files/',idno))
+
+    if (!is.null(data_files$response$datafiles)){
+      json_study$data_files=data_files$response$datafiles
+
+      #remove id, sid
+      json_study$data_files <- subset(json_study$data_files, select = -c(id, sid))
+    }
+
+    # read variables
+    variables<-nadar::nada_http_get(paste0('catalog/variables/',idno))
+
+    if (!is.null(variables$response$variables)){
+
+      json_study$variables=list()
+
+      for(i in 1:nrow(variables$response$variables)){
+        vid=variables$response$variables$vid[i]
+
+        #get variable metadata
+        variable<-nadar::nada_http_get(paste0('catalog/variable/',idno,"/",vid))
+
+        if (!is.null(variable$response$variable$metadata)){
+          json_study$variables<-list.append(json_study$variables, variable$response$variable$metadata)
+        }
+      }
+
+      # remove var_format column as the field has changed
+      if (any(names(json_study$variables) == 'var_format')){
+        json_study$variables<-subset(json_study$variables, select=-c(var_format))
+      }
+
+    }
+
+    return (json_study)
+}
+
+
+
+#' Write study metadata as JSON
+#'
+#' Write study metadata as JSON
+#'
+#' @return None
+#' @param idno Dataset IDNo
+#' @param output_file Path to the output file
+#' @param is_legacy TRUE | FALSE - if using NADA < 5.3, use legacy as TRUE
+#' @export
+write_study_json<-function(idno,output_file,is_legacy=FALSE,api_key=NULL, api_base_url=NULL){
+  json_metadata=study_json(idno,api_key=api_key, is_legacy=is_legacy, api_base_url=api_base_url)
+  write(jsonlite::toJSON(json_metadata,auto_unbox=TRUE), output_file)
+}

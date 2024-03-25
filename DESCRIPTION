@@ -8,7 +8,7 @@ Description: R client for NADA API
 License: MIT
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Suggests:
   testthat
 Depends: 
@@ -21,7 +21,8 @@ Depends:
     haven,
     stringi,
     stringr,
-    plyr
+    plyr,
+    rlist
 Imports:
     jsonlite,
     httr,
@@ -32,4 +33,5 @@ Imports:
     haven,
     stringi,
     stringr,
-    plyr
+    plyr,
+    rlist
