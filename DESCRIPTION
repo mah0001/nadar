@@ -10,7 +10,10 @@ Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.3.2
 Suggests:
-  testthat
+  testthat,
+  httptest,
+  withr,
+  covr
 Depends: 
     jsonlite, 
     httr, 
