@@ -312,7 +312,7 @@ data_api_delete_table <- function(
   }
 
   url=get_api_url(endpoint)
-  httpResponse <- DELETE(url, add_headers("X-API-KEY" = api_key),verbose(get_verbose()))
+  httpResponse <- POST(url, add_headers("X-API-KEY" = api_key),verbose(get_verbose()))
 
   output=NULL
 
