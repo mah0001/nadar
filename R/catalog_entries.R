@@ -212,45 +212,23 @@ catalog_download_ddi <- function(idno, output_file = NULL, ddi_url = NULL, api_k
     }
   }
 
-  httpResponse <- GET(url,
-                      add_headers("X-API-KEY" = api_key,
-                                  "Accept-Encoding" = "identity"),
-                      verbose(get_verbose()))
-
-  if (httpResponse$status_code != 200) {
-    warning(content(httpResponse, "text"))
-    stop(content(httpResponse, "text"), call. = FALSE)
+  if (is.null(output_file)) {
+    output_file <- tempfile(fileext = ".xml")
   }
 
-  raw_content <- content(httpResponse, "raw")
+  headers <- if (!is.null(api_key)) c("X-API-KEY" = api_key) else NULL
+  
+  download.file(url, output_file,
+                method = "curl",
+                headers = headers,
+                quiet = !get_verbose())
 
-  print(raw_content)
-
-  if (is.null(raw_content) || length(raw_content) == 0) {
-    warning("DDI content is empty or null")
-    if (!is.null(ddi_url)) {
-      stop("Failed to retrieve DDI content from URL: ", ddi_url, call. = FALSE)
-    } else {
-      stop("Failed to retrieve DDI content for study: ", idno, call. = FALSE)
-    }
-  }
-
-  if (!is.null(output_file)) {
-    writeBin(raw_content, output_file)
-    result <- list(
-      file_path = output_file,
-      api_url = url,
-      status_code = httpResponse$status_code,
-      idno = if (!is.null(ddi_url)) NULL else idno
-    )
-  } else {
-    result <- list(
-      content = raw_content,
-      api_url = url,
-      status_code = httpResponse$status_code,
-      idno = if (!is.null(ddi_url)) NULL else idno
-    )
-  }
+  result <- list(
+    file_path = output_file,
+    api_url = url,
+    status_code = 200,
+    idno = if (!is.null(ddi_url)) NULL else idno
+  )
 
   structure(result, class = "nada_ddi_download")
 }
@@ -283,48 +261,23 @@ catalog_download_rdf <- function(idno, output_file = NULL, rdf_url = NULL, api_k
     }
   }
 
-  if (!is.null(output_file)) {
-    # Use download.file for file output
-    download.file(url, output_file,
-                 method = "curl",
-                 quiet = !get_verbose())
-
-    result <- list(
-      file_path = output_file,
-      api_url = url,
-      status_code = 200,
-      idno = if (!is.null(rdf_url)) NULL else idno
-    )
-  } else {
-    # For content return, use GET
-    httpResponse <- GET(url,
-                        add_headers("X-API-KEY" = api_key,
-                                    "Accept-Encoding" = "identity"),
-                        verbose(get_verbose()))
-
-    if (httpResponse$status_code != 200) {
-      warning(content(httpResponse, "text"))
-      stop(content(httpResponse, "text"), call. = FALSE)
-    }
-
-    raw_content <- content(httpResponse, "raw")
-
-    if (is.null(raw_content) || length(raw_content) == 0) {
-      warning("RDF content is empty or null")
-      if (!is.null(rdf_url)) {
-        stop("Failed to retrieve RDF content from URL: ", rdf_url, call. = FALSE)
-      } else {
-        stop("Failed to retrieve RDF content for study: ", idno, call. = FALSE)
-      }
-    }
-
-    result <- list(
-      content = raw_content,
-      api_url = url,
-      status_code = httpResponse$status_code,
-      idno = if (!is.null(rdf_url)) NULL else idno
-    )
+  if (is.null(output_file)) {
+    output_file <- tempfile(fileext = ".rdf")
   }
+
+  headers <- if (!is.null(api_key)) c("X-API-KEY" = api_key) else NULL
+  
+  download.file(url, output_file,
+                method = "curl",
+                headers = headers,
+                quiet = !get_verbose())
+
+  result <- list(
+    file_path = output_file,
+    api_url = url,
+    status_code = 200,
+    idno = if (!is.null(rdf_url)) NULL else idno
+  )
 
   structure(result, class = "nada_rdf_download")
 }
