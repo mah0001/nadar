@@ -1,71 +1,3 @@
-#' List catalog entries
-#'
-#' List all entries in the catalog
-#'
-#' @return List of studies or a single study info
-#' @param idno (Optional) Dataset IDNo
-#' @export
-catalog_list <- function(idno=NULL, api_key=NULL, api_base_url=NULL){
-
-  if(is.null(api_key)){
-    api_key=get_api_key();
-  }
-
-  if(!is.null(idno)){
-    endpoint=paste0(endpoint,'/',idno)
-  }
-
-  url=get_api_url('datasets')
-  httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json())
-  output=NULL
-
-  if(httpResponse$status_code!=200){
-    warning(content(httpResponse, "text"))
-    stop(content(httpResponse, "text"), call. = FALSE)
-  }
-
-  output=fromJSON(content(httpResponse,"text"))
-  #return (output)
-
-  structure(
-    list(
-      content = output,
-      api_url = url,
-      status_code = httpResponse$status_code
-    ),
-    class = "nada_datasets"
-  )
-}
-
-
-#' Delete a catalog study
-#'
-#' Delete a single entry from the catalog
-#'
-#' @return list
-#' @param idno (Required) Dataset IDNo
-#'
-#' @export
-catalog_delete <- function(idno, api_key=NULL, api_base_url=NULL){
-
-  if(is.null(api_key)){
-    api_key=get_api_key();
-  }
-
-  url=get_api_url(paste0('datasets/', idno))
-  httpResponse <- DELETE(url, add_headers("X-API-KEY" = api_key), accept_json())
-  output=NULL
-
-  if(httpResponse$status_code!=200){
-    warning(content(httpResponse, "text"))
-    stop(content(httpResponse, "text"), call. = FALSE)
-  }
-
-  output=fromJSON(content(httpResponse,"text"))
-  return (output)
-}
-
-
 #' Search catalog
 #'
 #' Search catalog
@@ -114,109 +46,291 @@ catalog_delete <- function(idno, api_key=NULL, api_base_url=NULL){
 #'
 #' @export
 catalog_search <- function(
-                     options=list(
-                       sk=NULL,
-                       from=NULL,
-                       to=NULL,
-                       country=NULL,
-                       collection=NULL,
-                       created=NULL,
-                       dtype=NULL
+                     options = list(
+                       sk = NULL,
+                       from = NULL,
+                       to = NULL,
+                       country = NULL,
+                       collection = NULL,
+                       created = NULL,
+                       dtype = NULL
                      ),
-                     page=0,
-                     ps=50,
-                     sort_by=NULL,
-                     sort_order=NULL,
-                     api_key=NULL,
-                     api_base_url=NULL){
+                     page = 0,
+                     ps = 50,
+                     sort_by = NULL,
+                     sort_order = NULL,
+                     api_key = NULL,
+                     api_base_url = NULL){
 
-  if(is.null(api_key)){
-    api_key=get_api_key();
+  MAX_SINGLE_REQUEST <- 100
+  if (page < 0) {
+    stop("page must be >= 0", call. = FALSE)
+  }
+  if (ps <= 0) {
+    stop("ps must be > 0", call. = FALSE)
+  }
+  if (!is.null(sort_order) && !sort_order %in% c("asc", "desc")) {
+    stop("sort_order must be 'asc' or 'desc'", call. = FALSE)
   }
 
-  params<-c()
+  if (is.null(api_key)) {
+    api_key <- get_api_key()
+  }
+
+  params <- c()
   for (param in names(options)) {
-    if (!is.null(options[[param]])){
-      params<-append(params,paste0(param,'=',URLencode(options[[param]],reserved = TRUE)))
+    if (!is.null(options[[param]])) {
+      params <- append(params, paste0(param, '=', URLencode(options[[param]], reserved = TRUE)))
     }
   }
 
-  params=paste(params, collapse="&");
-
-  print(params)
-
-  if(ps <= 100){ # up to 500 one API call
-    endpoint <- paste0("catalog", "?page=", page, "&ps=", ps, '&',params)
-  }else { # if more than 500 requested, multiple API calls
-    endpoint=paste0("catalog", "?page=", page, "&ps=100", '&',params)
+  if (!is.null(sort_by)) {
+    params <- append(params, paste0("sort_by=", sort_by))
+  }
+  if (!is.null(sort_order)) {
+    params <- append(params, paste0("sort_order=", sort_order))
   }
 
-  # Create url
-  if(is.null(api_base_url)){
+  params <- paste(params, collapse = "&")
+
+  if (ps <= MAX_SINGLE_REQUEST) {
+    endpoint <- paste0("catalog", "?page=", page, "&ps=", ps, '&', params)
+  } else {
+    endpoint <- paste0("catalog", "?page=", page, "&ps=", MAX_SINGLE_REQUEST, '&', params)
+  }
+
+  handle_api_error <- function(response, context = "") {
+    if (response$status_code != 200) {
+      error_msg <- content(response, "text")
+      warning(paste(context, error_msg))
+      stop(paste(context, error_msg), call. = FALSE)
+    }
+  }
+
+  if (is.null(api_base_url)) {
     url <- get_api_url(endpoint = endpoint)
   } else {
-    url <- paste0(api_base_url,"/",endpoint)
+    url <- paste0(api_base_url, "/", endpoint)
   }
 
   httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json(), verbose(get_verbose()))
-  output <- NULL
+  handle_api_error(httpResponse, "Initial API call failed:")
 
-  if(httpResponse$status_code!=200){
-    warning(content(httpResponse, "text"))
-    stop(content(httpResponse, "text"), call. = FALSE)
-  }
+  output <- fromJSON(content(httpResponse, "text"))
 
-  output <- fromJSON(content(httpResponse,"text"))
+  total_found <- as.integer(output$result$found)
+  rows_returned <- nrow(output$result$rows)
+  found_pages <- ceiling(total_found / MAX_SINGLE_REQUEST)
+  ps_used <- if (ps > MAX_SINGLE_REQUEST) MAX_SINGLE_REQUEST else ps
+  pages_fetched <- 1
 
-  # add more API calls if limit > 500
-  if(ps > 100){
-    cur_datasets <- output$result$rows # adding result datasets for each call
-    num_entries_to_add <- min(ps, as.integer(output$result$found)) - 100 # number of entries to add (max of limit and available entries)
+  if (ps > MAX_SINGLE_REQUEST) {
+    all_datasets <- output$result$rows
+    num_entries_to_add <- min(ps, total_found) - MAX_SINGLE_REQUEST
 
-    df_column_names <- colnames(cur_datasets)
-
-    if (page==0){
-      page=1
+    if (total_found <= MAX_SINGLE_REQUEST) {
+      num_entries_to_add <- 0
     }
 
-    while(output$result$found > 0 & num_entries_to_add > 0){ # while more entires to add
-      page <- page + 1 # update offset
-      endpoint <- paste0("catalog", "?page=", page, "&ps=100",'&',params)
+    df_column_names <- colnames(all_datasets)
+    current_page <- 1
 
-      # Create URL
-      if(is.null(api_base_url)){
+    while (num_entries_to_add > 0 && current_page <= found_pages) {
+      endpoint <- paste0("catalog", "?page=", current_page, "&ps=", MAX_SINGLE_REQUEST, '&', params)
+
+      if (is.null(api_base_url)) {
         url <- get_api_url(endpoint = endpoint)
       } else {
-        url <- paste0(api_base_url,"/",endpoint)
+        url <- paste0(api_base_url, "/", endpoint)
       }
 
-      # API call
       httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json(), verbose(get_verbose()))
+      handle_api_error(httpResponse, paste("Pagination API call failed (page", current_page, "):"))
 
-      if(httpResponse$status_code!=200){
-        warning(content(httpResponse, "text"))
-        stop(content(httpResponse, "text"), call. = FALSE)
+      page_output <- fromJSON(content(httpResponse, "text"))
+
+      if (is.null(page_output$result$rows) || nrow(page_output$result$rows) == 0) {
+        break
       }
 
-      output <- fromJSON(content(httpResponse,"text"))
-
-      output_ds <- subset(output$result$rows, select = df_column_names)
-      cur_datasets <- rbind(cur_datasets, output_ds) # combine results
-      num_entries_to_add <- num_entries_to_add - 100 # update number of entries to add
+      page_datasets <- subset(page_output$result$rows, select = df_column_names)
+      all_datasets <- rbind(all_datasets, page_datasets)
+      num_entries_to_add <- num_entries_to_add - nrow(page_datasets)
+      current_page <- current_page + 1
+      pages_fetched <- pages_fetched + 1
     }
 
-    output$datasets <- cur_datasets
+    output$result$rows <- all_datasets
+    rows_returned <- nrow(all_datasets)
   }
 
   structure(
     list(
       content = output,
       api_url = url,
-      status_code = httpResponse$status_code
+      status_code = httpResponse$status_code,
+      search_info = list(
+        rows_found = total_found,
+        rows_returned = rows_returned,
+        ps_requested = ps,
+        ps_used = ps_used,
+        found_pages = found_pages,
+        pages_fetched = pages_fetched
+      )
     ),
     class = "nada_catalog_search"
   )
 }
+
+
+#' Download DDI metadata
+#'
+#' Download DDI/XML by Study IDNO or Direct URL
+#'
+#' @param idno Study IDNo (ignored if ddi_url is provided)
+#' @param output_file Optional output file path to save DDI content
+#' @param ddi_url Optional direct URL to download DDI from
+#' @param api_key API key
+#' @param api_base_url Base URL for the API
+#' @return DDI XML content as character string (if no output_file) or file path (if output_file provided)
+#' @export
+catalog_download_ddi <- function(idno, output_file = NULL, ddi_url = NULL, api_key = NULL, api_base_url = NULL) {
+
+  if (is.null(api_key)) {
+    api_key <- get_api_key()
+  }
+
+  if (!is.null(ddi_url)) {
+    url <- ddi_url
+  } else {
+    endpoint <- paste0("catalog/ddi/", idno)
+
+    if (is.null(api_base_url)) {
+      url <- get_api_url(endpoint = endpoint)
+    } else {
+      url <- paste0(api_base_url, "/", endpoint)
+    }
+  }
+
+  httpResponse <- GET(url,
+                      add_headers("X-API-KEY" = api_key,
+                                  "Accept-Encoding" = "identity"),
+                      verbose(get_verbose()))
+
+  if (httpResponse$status_code != 200) {
+    warning(content(httpResponse, "text"))
+    stop(content(httpResponse, "text"), call. = FALSE)
+  }
+
+  raw_content <- content(httpResponse, "raw")
+
+  print(raw_content)
+
+  if (is.null(raw_content) || length(raw_content) == 0) {
+    warning("DDI content is empty or null")
+    if (!is.null(ddi_url)) {
+      stop("Failed to retrieve DDI content from URL: ", ddi_url, call. = FALSE)
+    } else {
+      stop("Failed to retrieve DDI content for study: ", idno, call. = FALSE)
+    }
+  }
+
+  if (!is.null(output_file)) {
+    writeBin(raw_content, output_file)
+    result <- list(
+      file_path = output_file,
+      api_url = url,
+      status_code = httpResponse$status_code,
+      idno = if (!is.null(ddi_url)) NULL else idno
+    )
+  } else {
+    result <- list(
+      content = raw_content,
+      api_url = url,
+      status_code = httpResponse$status_code,
+      idno = if (!is.null(ddi_url)) NULL else idno
+    )
+  }
+
+  structure(result, class = "nada_ddi_download")
+}
+
+
+#' Download RDF/XML by Study IDNO or Direct URL
+#'
+#' @param idno Study IDNo (ignored if rdf_url is provided)
+#' @param output_file Optional output file path to save RDF content
+#' @param rdf_url Optional direct URL to download RDF from
+#' @param api_key API key
+#' @param api_base_url Base URL for the API
+#' @return RDF XML content as character string (if no output_file) or file path (if output_file provided)
+#' @export
+catalog_download_rdf <- function(idno, output_file = NULL, rdf_url = NULL, api_key = NULL, api_base_url = NULL) {
+
+  if (is.null(api_key)) {
+    api_key <- get_api_key()
+  }
+
+  if (!is.null(rdf_url)) {
+    url <- rdf_url
+  } else {
+    endpoint <- paste0("catalog/rdf/", idno)
+
+    if (is.null(api_base_url)) {
+      url <- get_api_url(endpoint = endpoint)
+    } else {
+      url <- paste0(api_base_url, "/", endpoint)
+    }
+  }
+
+  if (!is.null(output_file)) {
+    # Use download.file for file output
+    download.file(url, output_file,
+                 method = "curl",
+                 quiet = !get_verbose())
+
+    result <- list(
+      file_path = output_file,
+      api_url = url,
+      status_code = 200,
+      idno = if (!is.null(rdf_url)) NULL else idno
+    )
+  } else {
+    # For content return, use GET
+    httpResponse <- GET(url,
+                        add_headers("X-API-KEY" = api_key,
+                                    "Accept-Encoding" = "identity"),
+                        verbose(get_verbose()))
+
+    if (httpResponse$status_code != 200) {
+      warning(content(httpResponse, "text"))
+      stop(content(httpResponse, "text"), call. = FALSE)
+    }
+
+    raw_content <- content(httpResponse, "raw")
+
+    if (is.null(raw_content) || length(raw_content) == 0) {
+      warning("RDF content is empty or null")
+      if (!is.null(rdf_url)) {
+        stop("Failed to retrieve RDF content from URL: ", rdf_url, call. = FALSE)
+      } else {
+        stop("Failed to retrieve RDF content for study: ", idno, call. = FALSE)
+      }
+    }
+
+    result <- list(
+      content = raw_content,
+      api_url = url,
+      status_code = httpResponse$status_code,
+      idno = if (!is.null(rdf_url)) NULL else idno
+    )
+  }
+
+  structure(result, class = "nada_rdf_download")
+}
+
+
+
 
 
 #' Find a study by IDNO

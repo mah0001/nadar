@@ -661,3 +661,30 @@ attach_related_studies <- function(
   return (output)
 }
 
+
+#' Delete a study
+#'
+#' Delete a single entry from the catalog
+#'
+#' @return list
+#' @param idno (Required) Dataset IDNo
+#'
+#' @export
+delete_entry <- function(idno, api_key=NULL, api_base_url=NULL){
+
+  if(is.null(api_key)){
+    api_key=get_api_key();
+  }
+
+  url=get_api_url(paste0('datasets/', idno))
+  httpResponse <- DELETE(url, add_headers("X-API-KEY" = api_key), accept_json())
+  output=NULL
+
+  if(httpResponse$status_code!=200){
+    warning(content(httpResponse, "text"))
+    stop(content(httpResponse, "text"), call. = FALSE)
+  }
+
+  output=fromJSON(content(httpResponse,"text"))
+  return (output)
+}

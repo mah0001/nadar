@@ -11,7 +11,8 @@ data_api_publish_table(
   csvfile,
   overwrite = "no",
   api_key = NULL,
-  api_base_url = NULL
+  api_base_url = NULL,
+  sleep_seconds = 1
 )
 }
 \arguments{
