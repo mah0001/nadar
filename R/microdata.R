@@ -48,7 +48,7 @@
 #'  )
 #')
 #'
-#' microdata_add (
+#' nada_admin_microdata_add (
 #'   idno="survey-idno-test",
 #'   type="survey",
 #'   published = 1,
@@ -61,7 +61,7 @@
 #'
 #'
 #' @export
-microdata_add <- function(
+nada_admin_microdata_add <- function(
   idno,
   repositoryid="central",
   access_policy=NULL,
@@ -74,10 +74,10 @@ microdata_add <- function(
   api_base_url=NULL){
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
-  result = create(type="survey",
+  result = nada_admin_study_create(type="survey",
                   idno=idno,
                   repositoryid=repositoryid,
                   access_policy=access_policy,

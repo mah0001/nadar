@@ -11,8 +11,8 @@
 #'
 #' @examples  import('\\Sample Data\\in\\HND_2012_L2L.dta', 'dta', 'F1', 36000)
 #'
-#' @export datafile_dictionary
-datafile_dictionary <- function(filepath,
+#' @export nada_datafile_get_dictionary
+nada_datafile_get_dictionary <- function(filepath,
                                      type="CSV",
                                      fileId="F1",
                                      freqLimit=50) {
@@ -348,8 +348,8 @@ datafile_dictionary <- function(filepath,
 #'
 #' @examples  import('\\Sample Data\\in\\HND_2012_L2L.dta', 'dta', 'F1', 36000)
 #'
-#' @export datafile_dictionary_no_stats
-datafile_dictionary_no_stats <- function(filepath,
+#' @export nada_datafile_get_dictionary_no_stats
+nada_datafile_get_dictionary_no_stats <- function(filepath,
                                 type="CSV",
                                 fileId="F1",
                                 freqLimit=50) {
@@ -683,11 +683,11 @@ datafile_dictionary_no_stats <- function(filepath,
 #'
 #' @return A list contains the status
 #'
-#' @examples  datafile_write_csv('/Data/example.dta', 'dta','/Data/example.csv')
+#' @examples  nada_datafile_write_csv('/Data/example.dta', 'dta','/Data/example.csv')
 #'
-#' @export datafile_write_csv
+#' @export nada_datafile_write_csv
 
-datafile_write_csv <- function(filepath="", type="", csvPath="") {
+nada_datafile_write_csv <- function(filepath="", type="", csvPath="") {
   tryCatch({
 
     csvFile <-  csvPath

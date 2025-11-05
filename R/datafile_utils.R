@@ -62,7 +62,7 @@
   }
 
   # Get column names of DF, convert tibble to dataframe, assign the column names
-  # Resolve the issue of spanish datasets, column names were converted to unicode chars while converting to df
+  # Resolve the issue of spanish nada_study_list, column names were converted to unicode chars while converting to df
   colnames <- colnames(DF_DATA)
   DF_DATA <- data.frame(DF_DATA)
   colnames(DF_DATA) <- colnames

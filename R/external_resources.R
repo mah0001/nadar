@@ -9,16 +9,16 @@
 #' @return List of external resources
 #' @param dataset_idno Study IDNo
 #' @export
-external_resources_list <- function(dataset_idno, api_key=NULL, api_base_url=NULL){
+nada_resource_list <- function(dataset_idno, api_key=NULL, api_base_url=NULL){
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
   endpoint=paste0('datasets/',dataset_idno,'/resources')
-  url=get_api_url(endpoint)
+  url=nada_get_api_url(endpoint)
 
-  httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json(), verbose(get_verbose()))
+  httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json(), verbose(nada_get_verbose()))
   output=NULL
 
   if(httpResponse$status_code!=200){
@@ -41,7 +41,7 @@ external_resources_list <- function(dataset_idno, api_key=NULL, api_base_url=NUL
 #' @param skip_uploads TRUE/FALSE - If TRUE, won't upload files
 #' @param overwrite yes/no - Overwrite existing resources
 #' @export
-external_resources_import <- function(
+nada_admin_resource_import <- function(
                       dataset_idno,
                       rdf_file,
                       skip_uploads=FALSE,
@@ -51,15 +51,15 @@ external_resources_import <- function(
                       ){
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
-  resources <- rdfToList(rdf_file)
+  resources <- nada_rdf_to_list(rdf_file)
   base_folder=dirname(rdf_file)
 
   for(i in 1:length(resources)) {
 
-    if(is_valid_url(resources[[i]]$filename)){
+    if(nada_is_valid_url(resources[[i]]$filename)){
       resource_file=resources[[i]]$filename
     }else {
       resource_file=paste0(base_folder,"/",resources[[i]]$filename)
@@ -76,7 +76,7 @@ external_resources_import <- function(
 
     print(paste0("PROCESSING file.....",resource_file))
 
-    res_response <- external_resources_add(
+    res_response <- nada_admin_resource_add(
         idno = dataset_idno,
         dctype = resources[[i]]$dctype,
         dcformat = resources[[i]]$dcformat,
@@ -108,7 +108,7 @@ external_resources_import <- function(
 #' @param resource_id (Optional) External resource ID
 #' @param file External resource file to be uploaded
 #' @export
-external_resources_upload <- function(
+nada_admin_resource_upload <- function(
                       dataset_idno,
                       resource_id=NULL,
                       file,
@@ -118,16 +118,16 @@ external_resources_upload <- function(
   endpoint=paste0('datasets/',dataset_idno,'/files')
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
-  url=get_api_url(endpoint)
+  url=nada_get_api_url(endpoint)
 
   options=list(
     "file"=upload_file(file)
   )
 
-  httpResponse <- POST(url, add_headers("X-API-KEY" = api_key),body=options, accept_json(), verbose(get_verbose()))
+  httpResponse <- POST(url, add_headers("X-API-KEY" = api_key),body=options, accept_json(), verbose(nada_get_verbose()))
   output=NULL
 
   if(httpResponse$status_code!=200){
@@ -149,16 +149,16 @@ external_resources_upload <- function(
 #' @param dataset_idno Study IDNo
 #' @param resource_id Resource ID
 #' @export
-external_resources_download <- function(dataset_idno, resource_id,api_key=NULL, api_base_url=NULL){
+nada_resource_download <- function(dataset_idno, resource_id,api_key=NULL, api_base_url=NULL){
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
   endpoint=paste0('datasets/',dataset_idno,'/resources/download/',resource_id)
-  url=get_api_url(endpoint)
+  url=nada_get_api_url(endpoint)
 
-  httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json(), verbose(get_verbose()))
+  httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json(), verbose(nada_get_verbose()))
   output=NULL
 
   if(httpResponse$status_code!=200){
@@ -211,7 +211,7 @@ external_resources_download <- function(dataset_idno, resource_id,api_key=NULL, 
 #'
 #'
 #' @export
-external_resources_add <- function(
+nada_admin_resource_add <- function(
                       idno,
                       dctype,
                       title,
@@ -232,7 +232,7 @@ external_resources_add <- function(
                       api_base_url=NULL){
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
   options=list(
@@ -256,17 +256,17 @@ external_resources_add <- function(
   if (file.exists(file_path)){
     options$file=upload_file(file_path)
   }
-  else if(is_valid_url(file_path)){
+  else if(nada_is_valid_url(file_path)){
     options[['filename']]=file_path
   }
 
-  url=get_api_url(paste0('datasets/',idno,'/resources'))
+  url=nada_get_api_url(paste0('datasets/',idno,'/resources'))
   print(url)
   httpResponse <- POST(url,
                        add_headers("X-API-KEY" = api_key),
                        body=options,
                        accept_json(),
-                       verbose(get_verbose()))
+                       verbose(nada_get_verbose()))
 
   output=NULL
 
@@ -287,20 +287,20 @@ external_resources_add <- function(
 #'
 #' Delete external resources for a study
 #'
-#' @return
+#' @return List with status_code and response
 #' @param dataset_idno Study IDNo
 #' @param resource_id Resource ID
 #' @export
-external_resources_delete <- function(dataset_idno, resource_id, api_key=NULL, api_base_url=NULL){
+nada_admin_resource_delete <- function(dataset_idno, resource_id, api_key=NULL, api_base_url=NULL){
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
   endpoint=paste0('datasets/',dataset_idno,'/resources/',resource_id)
-  url=get_api_url(endpoint)
+  url=nada_get_api_url(endpoint)
 
-  httpResponse <- DELETE(url, add_headers("X-API-KEY" = api_key), accept_json(), verbose(get_verbose()))
+  httpResponse <- DELETE(url, add_headers("X-API-KEY" = api_key), accept_json(), verbose(nada_get_verbose()))
   output=NULL
 
   if(httpResponse$status_code!=200){
@@ -313,8 +313,6 @@ external_resources_delete <- function(dataset_idno, resource_id, api_key=NULL, a
   )
 
   return (output)
-
-  return (output)
 }
 
 
@@ -323,19 +321,19 @@ external_resources_delete <- function(dataset_idno, resource_id, api_key=NULL, a
 #'
 #' Delete all external resources for a study
 #'
-#' @return
+#' @return List with status_code and response
 #' @param dataset_idno Study IDNo
 #' @export
-external_resources_delete_all <- function(dataset_idno, api_key=NULL, api_base_url=NULL){
+nada_admin_resource_delete_all <- function(dataset_idno, api_key=NULL, api_base_url=NULL){
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
   endpoint=paste0('datasets/',dataset_idno,'/resources/delete_all')
-  url=get_api_url(endpoint)
+  url=nada_get_api_url(endpoint)
 
-  httpResponse <- DELETE(url, add_headers("X-API-KEY" = api_key), accept_json(), verbose(get_verbose()))
+  httpResponse <- DELETE(url, add_headers("X-API-KEY" = api_key), accept_json(), verbose(nada_get_verbose()))
   output=NULL
 
   if(httpResponse$status_code!=200){
@@ -353,10 +351,10 @@ external_resources_delete_all <- function(dataset_idno, api_key=NULL, api_base_u
 #'
 #' Convert RDF/XML to list
 #'
-#' @return
+#' @return List of resource metadata extracted from RDF file
 #' @param rdf_file Path to RDF xml file
 #' @export
-rdfToList <- function(rdf_file) {
+nada_rdf_to_list <- function(rdf_file) {
 
   rdf <- xmlParse(rdf_file)
   rdf_l <- xmlToList(rdf)
@@ -387,7 +385,7 @@ rdfToList <- function(rdf_file) {
       filename = filepath
     )
 
-    if (is_valid_url(filepath)){
+    if (nada_is_valid_url(filepath)){
       resource[['is_url']]=TRUE
     }else{
       resource[['is_url']]=FALSE

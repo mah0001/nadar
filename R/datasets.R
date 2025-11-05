@@ -1,29 +1,29 @@
 #' GetDatasets
 #'
-#' Load a list of all datasets or get info for a single dataset/study
+#' Load a list of all studies/datasets or get info for a single dataset/study
 #'
 #' @return List of studies or a single study info
 #' @param idno (Optional) Dataset IDNo
-#' @param api_key API key (optional if API key is set using set_api_key)
-#' @param api_base_url API base endpoint (optional if API base endpoint is set using set_api_url)
+#' @param api_key API key (optional if API key is set using nada_set_api_key)
+#' @param api_base_url API base endpoint (optional if API base endpoint is set using nada_set_api_url)
 #' @param offset Specify the number of rows to skip, default is 0
 #' @param limit Specify number of rows to return, default is 50 rows. Note: if more than 500 rows are requested, several API calls are made and results are combined..
 #' @export
 #'
-datasets <- function(idno=NULL,
+nada_admin_study_list <- function(idno=NULL,
                      offset=0,
                      limit=50,
                      api_key=NULL,
                      api_base_url=NULL){
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
   # if only one dataset is requested
   if(!is.null(idno)){
     endpoint=paste0('datasets/','/',idno)
-  } else { # if list of datasets is requested
+  } else { # if list of studies/datasets is requested
     if(limit < 500){ # up to 500 one API call
       endpoint <- paste0("datasets/", "?offset=", offset, "&limit=", limit)
     }else { # if more than 500 requested, multiple API calls
@@ -33,12 +33,12 @@ datasets <- function(idno=NULL,
 
   # Create url
   if(is.null(api_base_url)){
-    url <- get_api_url(endpoint = endpoint)
+    url <- nada_get_api_url(endpoint = endpoint)
   } else {
     url <- paste0(api_base_url,"/",endpoint)
   }
 
-  httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json(), verbose(get_verbose()))
+  httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json(), verbose(nada_get_verbose()))
   output <- NULL
 
   if(httpResponse$status_code!=200){
@@ -51,7 +51,7 @@ datasets <- function(idno=NULL,
   # add more API calls if limit > 500
   print(limit)
   if(limit > 500){
-    cur_datasets <- output$datasets # adding result datasets for each call
+    cur_datasets <- output$nada_study_list # adding result nada_study_list for each call
     num_entries_to_add <- min(limit, output$total) - 500 # number of entries to add (max of limit and available entries)
 
     df_column_names <- colnames(cur_datasets)
@@ -62,13 +62,13 @@ datasets <- function(idno=NULL,
 
       # Create URL
       if(is.null(api_base_url)){
-        url <- get_api_url(endpoint = endpoint)
+        url <- nada_get_api_url(endpoint = endpoint)
       } else {
         url <- paste0(api_base_url,"/",endpoint)
       }
 
       # API call
-      httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json(), verbose(get_verbose()))
+      httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json(), verbose(nada_get_verbose()))
 
       if(httpResponse$status_code!=200){
         warning(content(httpResponse, "text"))
@@ -82,12 +82,12 @@ datasets <- function(idno=NULL,
         break;
       }
 
-      output_ds <- subset(output$datasets, select = df_column_names)
+      output_ds <- subset(output$nada_study_list, select = df_column_names)
       cur_datasets <- rbind(cur_datasets, output_ds) # combine results
       num_entries_to_add <- num_entries_to_add - 500 # update number of entries to add
     }
 
-    output$datasets <- cur_datasets
+    output$nada_study_list <- cur_datasets
   }
 
   structure(
@@ -105,8 +105,8 @@ datasets <- function(idno=NULL,
 #' Import a DDI file
 #'
 #' @return NULL
-#' @param api_key API key (optional if API key is set using set_api_key)
-#' @param api_base_url API base endpoint (optional if API base endpoint is set using set_api_url)
+#' @param api_key API key (optional if API key is set using nada_set_api_key)
+#' @param api_base_url API base endpoint (optional if API base endpoint is set using nada_set_api_url)
 #' @param xml_file (Required) DDI/XML file path
 #' @param repositoryid Collection ID that owns the study
 #' @param overwrite Overwrite if a study with the same ID already exists? Valid values "yes", "no"
@@ -116,7 +116,7 @@ datasets <- function(idno=NULL,
 #' @param published Set status for study - 0 = Draft, 1 = Published
 #' @param verbose Show verbose output - True, False
 #' @export
-import_ddi <- function(api_key=NULL,
+nada_admin_study_import_ddi <- function(api_key=NULL,
                        api_base_url=NULL,
                       xml_file=NULL,
                       rdf_file=NULL,
@@ -128,13 +128,13 @@ import_ddi <- function(api_key=NULL,
 
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
   # Create url
   endpoint='datasets/import_ddi'
   if(is.null(api_base_url)){
-    url=get_api_url(endpoint=endpoint)
+    url=nada_get_api_url(endpoint=endpoint)
   } else {
     url = paste0(api_base_url,"/",endpoint)
   }
@@ -152,7 +152,7 @@ import_ddi <- function(api_key=NULL,
     options[["rdf"]]=upload_file(rdf_file)
   }
 
-  httpResponse <- POST(url, add_headers("X-API-KEY" = api_key),body=options, accept_json(), verbose(get_verbose()))
+  httpResponse <- POST(url, add_headers("X-API-KEY" = api_key),body=options, accept_json(), verbose(nada_get_verbose()))
 
   output=NULL
 
@@ -181,8 +181,8 @@ import_ddi <- function(api_key=NULL,
 #' @param published Set status for study - 0 = Draft, 1 = Published
 #' @param overwrite Overwrite if a study with the same ID already exists? Valid values "yes", "no"
 #' @param metadata \strong{(required)} Metadata list depending on the type of study
-#' @param api_key API key (optional if API key is set using set_api_key)
-#' @param api_base_url API base endpoint (optional if API base endpoint is set using set_api_url)
+#' @param api_key API key (optional if API key is set using nada_set_api_key)
+#' @param api_base_url API base endpoint (optional if API base endpoint is set using nada_set_api_url)
 #'
 #' @examples
 #'
@@ -215,7 +215,7 @@ import_ddi <- function(api_key=NULL,
 #' )
 #' )
 #'
-#' create (
+#' nada_admin_study_create (
 #'   idno="survey-idno-test",
 #'   type="survey",
 #'   published = 1,
@@ -228,7 +228,7 @@ import_ddi <- function(api_key=NULL,
 #'
 #'
 #' @export
-create <- function(
+nada_admin_study_create <- function(
                    type,
                    idno,
                    metadata,
@@ -242,7 +242,7 @@ create <- function(
                    api_base_url=NULL){
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
   options=list(
@@ -259,7 +259,7 @@ create <- function(
   # Create url
   endpoint <- paste0('datasets/create/',type,'/',idno)
   if(is.null(api_base_url)){
-    url=get_api_url(endpoint=endpoint)
+    url=nada_get_api_url(endpoint=endpoint)
   } else {
     url = paste0(api_base_url,"/",endpoint)
   }
@@ -270,7 +270,7 @@ create <- function(
                        content_type_json(),
                        encode="json",
                        accept_json(),
-                       verbose(get_verbose()))
+                       verbose(nada_get_verbose()))
 
   output=NULL
 
@@ -282,12 +282,12 @@ create <- function(
 
   #upload thumbnail
   if(!is.null(thumbnail) && file.exists(thumbnail)) {
-    thumbnail_result=thumbnail_upload(idno=idno,thumbnail = thumbnail)
+    thumbnail_result=nada_admin_thumbnail_upload(idno=idno,thumbnail = thumbnail)
   }
 
   #set default thumbnail
   if(!is.null(thumbnail) && thumbnail == 'default'){
-    thumbnail_result= thumbnail_delete(idno=idno)
+    thumbnail_result= nada_admin_thumbnail_delete(idno=idno)
   }
 
   output=list(
@@ -306,25 +306,25 @@ create <- function(
 #' @return NULL
 #' @param idno (required) Study unique identifier
 #' @param thumbnail \strong{(required)} Path to the thumbnail file
-#' @param api_key API key (optional if API key is set using set_api_key)
-#' @param api_base_url API base endpoint (optional if API base endpoint is set using set_api_url)
+#' @param api_key API key (optional if API key is set using nada_set_api_key)
+#' @param api_base_url API base endpoint (optional if API base endpoint is set using nada_set_api_url)
 #'
 #' @examples
 #'
-#' upload_thumbnail (
+#' nada_admin_thumbnail_upload (
 #'   idno="survey-idno-test",
 #'   thumbnail = "/thumbnails/thumbnail-idno-test.png"
 #' )
 #'
 #' @export
-thumbnail_upload <- function(
+nada_admin_thumbnail_upload <- function(
                    idno,
                    thumbnail,
                    api_key=NULL,
                    api_base_url=NULL){
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
   options=list(
@@ -334,12 +334,12 @@ thumbnail_upload <- function(
   # Create url
   endpoint <- paste0('datasets/thumbnail/',idno)
   if(is.null(api_base_url)){
-    url=get_api_url(endpoint=endpoint)
+    url=nada_get_api_url(endpoint=endpoint)
   } else {
     url = paste0(api_base_url,"/",endpoint)
   }
 
-  httpResponse <- POST(url, add_headers("X-API-KEY" = api_key), body=options, verbose(get_verbose()))
+  httpResponse <- POST(url, add_headers("X-API-KEY" = api_key), body=options, verbose(nada_get_verbose()))
 
   output=NULL
 
@@ -361,22 +361,22 @@ thumbnail_upload <- function(
 #'
 #' @return NULL
 #' @param idno (required) Study unique identifier
-#' @param api_key API key (optional if API key is set using set_api_key)
-#' @param api_base_url API base endpoint (optional if API base endpoint is set using set_api_url)
+#' @param api_key API key (optional if API key is set using nada_set_api_key)
+#' @param api_base_url API base endpoint (optional if API base endpoint is set using nada_set_api_url)
 #'
 #' @examples
 #'
-#' delete_thumbnail (
+#' nada_admin_thumbnail_delete (
 #'   idno="survey-idno-test"
 #' )
 #'
 #' @export
-thumbnail_delete <- function(idno,
+nada_admin_thumbnail_delete <- function(idno,
                              api_key=NULL,
                              api_base_url=NULL){
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
   options=list(
@@ -386,7 +386,7 @@ thumbnail_delete <- function(idno,
   # Create url
   endpoint <- paste0('datasets/',idno)
   if(is.null(api_base_url)){
-    url=get_api_url(endpoint=endpoint)
+    url=nada_get_api_url(endpoint=endpoint)
   } else {
     url = paste0(api_base_url,"/",endpoint)
   }
@@ -397,7 +397,7 @@ thumbnail_delete <- function(idno,
                       content_type_json(),
                       encode="json",
                       accept_json(),
-                      verbose(get_verbose()))
+                      verbose(nada_get_verbose()))
 
   output=NULL
 
@@ -422,29 +422,29 @@ thumbnail_delete <- function(idno,
 #'
 #' @return NULL
 #' @param idno (required) Study unique identifier
-#' @param api_key API key (optional if API key is set using set_api_key)
-#' @param api_base_url API base endpoint (optional if API base endpoint is set using set_api_url)
+#' @param api_key API key (optional if API key is set using nada_set_api_key)
+#' @param api_base_url API base endpoint (optional if API base endpoint is set using nada_set_api_url)
 #'
 #' @examples
 #'
-#' find_by_idno (
+#' nada_study_get_by_idno (
 #'   idno="survey-idno-test"
 #' )
 #'
 #' @export
-find_by_idno <- function(
+nada_study_get_by_idno <- function(
                     idno,
                     api_key=NULL,
                     api_base_url=NULL){
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
   # Create url
   endpoint <- paste0('datasets/',idno)
   if(is.null(api_base_url)){
-    url=get_api_url(endpoint=endpoint)
+    url=nada_get_api_url(endpoint=endpoint)
   } else {
     url = paste0(api_base_url,"/",endpoint)
   }
@@ -467,26 +467,26 @@ find_by_idno <- function(
 
 #' Set various options for dataset
 #'
-#' Set various options for dataset, such as access policy, project publish status, tags and aliases, owner and linked collections and links to the data, study website and indicators website.
+#' Set various options for dataset, such as access policy, project publish status, tags and aliases, owner and linked nada_collection_list and links to the data, study website and indicators website.
 #'
 #' @return NULL
 #' @param idno (required) Study unique identifier
-#' @param api_key API key (optional if API key is set using set_api_key)
-#' @param api_base_url API base endpoint (optional if API base endpoint is set using set_api_url)
+#' @param api_key API key (optional if API key is set using nada_set_api_key)
+#' @param api_base_url API base endpoint (optional if API base endpoint is set using nada_set_api_url)
 #' @param access_policy Select the access policy suitable for your data. Valid values - "direct", "public", "licensed", "data_enclave", "remote", "data_na", "open"
 #' @param data_remote_url Link to the website where the data is available. Required if access_policy is set to "remote".
 #' @param published Set status for study - 0 = Draft, 1 = Published
 #' @param tags Tag or vector of multiple tags for study (string)
 #' @param aliases Alias or vector of multiple aliases for study (string)
 #' @param owner_collection Collection that owns the dataset (repositoryid (string) of existing collection)
-#' @param linked_collections Display in other collections (repositoryid (string) of existing collection or vector with multiple collections)
+#' @param linked_collections Display in other nada_collection_list (repositoryid (string) of existing collection or vector with multiple nada_collection_list)
 #' @param link_study URL for study website (string must include http:// or https://)
 #' @param link_indicator URL to the indicators website (string must include http:// or https://)
 #'
 #' @param verbose Show verbose output - True, False
 #' @examples
 #'
-#' dataset_options (
+#' nada_admin_study_get_options (
 #'   idno="survey-idno-test",
 #'   access_policy = "licensed",
 #'   tags = "ihsn",
@@ -495,7 +495,7 @@ find_by_idno <- function(
 #' )
 #'
 #' @export
-dataset_options <- function(
+nada_admin_study_get_options <- function(
   idno,
   api_key=NULL,
   api_base_url=NULL,
@@ -510,7 +510,7 @@ dataset_options <- function(
   link_indicator=NULL){
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
   # Check whether access policy is a valid string
@@ -526,17 +526,17 @@ dataset_options <- function(
       stop(paste("published should be either 0 (draft) or 1 (published)"))
     }
   }
-  # Check if owner and linked collections exist
+  # Check if owner and linked nada_collection_list exist
   if(!is.null(owner_collection)){
-    existing_collections <- collections()$content$collections[,"repositoryid"]
+    existing_collections <- nada_collection_list()$content$nada_collection_list[,"repositoryid"]
     if(!(owner_collection %in% existing_collections)){
         stop("owner_collection is not an existing collection - to proceed first create the collection")
     }
   }
   if(!is.null(linked_collections)){
-    existing_collections <- collections()$content$collections[,"repositoryid"]
+    existing_collections <- nada_collection_list()$content$nada_collection_list[,"repositoryid"]
     if(!(all(linked_collections %in% existing_collections))){
-      stop("linked_collections contains collections that are not an existing collection - to proceed first create the collection")
+      stop("linked_collections contains nada_collection_list that are not an existing collection - to proceed first create the collection")
     }
   }
 
@@ -572,7 +572,7 @@ dataset_options <- function(
   # Create url
   endpoint <- paste0('datasets/options/',idno)
   if(is.null(api_base_url)){
-    url=get_api_url(endpoint=endpoint)
+    url=nada_get_api_url(endpoint=endpoint)
   } else {
     url = paste0(api_base_url,"/",endpoint)
   }
@@ -610,20 +610,20 @@ dataset_options <- function(
 #'
 #' @examples
 #'
-#' attached_related_studies (
+#' nada_admin_study_attach_related (
 #'   idno="survey-idno-test",
 #'   related_datasets = c("idno-1", "idno-2", "idno-3")
 #' )
 #'
 #' @export
-attach_related_studies <- function(
+nada_admin_study_attach_related <- function(
                    idno,
                    related_datasets,
                    api_key=NULL,
                    api_base_url=NULL){
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
   options=list(
@@ -634,7 +634,7 @@ attach_related_studies <- function(
   # Create url
   endpoint <- paste0('datasets/related_datasets')
   if(is.null(api_base_url)){
-    url=get_api_url(endpoint=endpoint)
+    url=nada_get_api_url(endpoint=endpoint)
   } else {
     url = paste0(api_base_url,"/",endpoint)
   }
@@ -645,7 +645,7 @@ attach_related_studies <- function(
                        content_type_json(),
                        encode="json",
                        accept_json(),
-                       verbose(get_verbose()))
+                       verbose(nada_get_verbose()))
 
   output=NULL
 
@@ -670,13 +670,13 @@ attach_related_studies <- function(
 #' @param idno (Required) Dataset IDNo
 #'
 #' @export
-delete_entry <- function(idno, api_key=NULL, api_base_url=NULL){
+nada_admin_study_delete <- function(idno, api_key=NULL, api_base_url=NULL){
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
-  url=get_api_url(paste0('datasets/', idno))
+  url=nada_get_api_url(paste0('datasets/', idno))
   httpResponse <- DELETE(url, add_headers("X-API-KEY" = api_key), accept_json())
   output=NULL
 

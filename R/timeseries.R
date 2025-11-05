@@ -201,7 +201,7 @@
 #'   "additional"= list()
 #' )
 #'
-#' timeseries_add (
+#' nada_admin_timeseries_add (
 #'   idno="document-idno",
 #'   published = 1,
 #'   overwrite = "yes",
@@ -213,7 +213,7 @@
 #'
 #'
 #' @export
-timeseries_add <- function(idno,
+nada_admin_timeseries_add <- function(idno,
                             repositoryid="central",
                             access_policy=NULL,
                             data_remote_url=NULL,
@@ -225,10 +225,10 @@ timeseries_add <- function(idno,
                             api_base_url=NULL){
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
-  result = create(type="timeseries",
+  result = nada_admin_study_create(type="timeseries",
                   idno=idno,
                   repositoryid=repositoryid,
                   access_policy=access_policy,

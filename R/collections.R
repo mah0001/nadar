@@ -10,7 +10,7 @@
 #' @param section Section
 #' @param ispublished Set collection status - 1 = Published, 0 = Unpublished
 #' @export
-collection_add <- function(
+nada_admin_collection_create <- function(
   repositoryid = NULL,
   title = NULL,
   short_text = NULL,
@@ -25,10 +25,10 @@ collection_add <- function(
   endpoint='collections'
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
-  url=get_api_url(endpoint)
+  url=nada_get_api_url(endpoint)
 
   options = list(
     "repositoryid" = repositoryid,
@@ -47,7 +47,7 @@ collection_add <- function(
 
   httpResponse <- POST(url, add_headers("X-API-KEY" = api_key),
                        body=options,
-                       verbose(get_verbose()))
+                       verbose(nada_get_verbose()))
 
   output = NULL
 
@@ -77,7 +77,7 @@ collection_add <- function(
 #' @param section Section
 #' @param ispublished Set collection status - 1 = Published, 0 = Unpublished
 #' @export
-collection_update <- function(
+nada_admin_collection_update <- function(
   repositoryid = NULL,
   title = NULL,
   short_text = NULL,
@@ -92,10 +92,10 @@ collection_update <- function(
   endpoint='collections/update'
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
-  url=get_api_url(endpoint)
+  url=nada_get_api_url(endpoint)
 
   tmp = list(
     "repositoryid" = repositoryid,
@@ -121,7 +121,7 @@ collection_update <- function(
 
   httpResponse <- POST(url, add_headers("X-API-KEY" = api_key),
                        body=options,
-                       verbose(get_verbose()))
+                       verbose(nada_get_verbose()))
 
   output = NULL
 
@@ -140,12 +140,12 @@ collection_update <- function(
 
 #' Get all collections
 #'
-#' Load a list of all collections or get info for a single collection
+#' Load a list of all nada_collection_list or get info for a single collection
 #'
 #' @return List of studies or a single study info
 #' @param repositoryid (Optional) Collection IDNo
 #' @export
-collections <- function(repositoryid=NULL, api_key=NULL, api_base_url=NULL){
+nada_collection_list <- function(repositoryid=NULL, api_key=NULL, api_base_url=NULL){
 
   endpoint='collections/'
 
@@ -154,10 +154,10 @@ collections <- function(repositoryid=NULL, api_key=NULL, api_base_url=NULL){
   }
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
-  url=get_api_url(endpoint)
+  url=nada_get_api_url(endpoint)
   print(url)
   httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json())
   output=NULL
@@ -203,7 +203,7 @@ for (col in names(options)){
 #' @param old_idno (Required) old collection IDNO
 #' @param new_idno (Required) new collection IDNO
 #' @export
-collection_rename <- function(
+nada_admin_collection_rename <- function(
   old_idno,
   new_idno,
   api_key = NULL,
@@ -212,10 +212,10 @@ collection_rename <- function(
   endpoint='collections/rename'
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
-  url=get_api_url(endpoint)
+  url=nada_get_api_url(endpoint)
 
   options = list(
     "old_repositoryid" = old_idno,
@@ -224,7 +224,7 @@ collection_rename <- function(
 
   httpResponse <- POST(url, add_headers("X-API-KEY" = api_key),
                        body=options,
-                       verbose(get_verbose()))
+                       verbose(nada_get_verbose()))
 
   output = NULL
 
@@ -245,15 +245,15 @@ collection_rename <- function(
 
 
 
-#' Set owner and linked collections for studies
+#' Set owner and linked nada_collection_list for studies
 #'
 #' @return NULL
 #' @param study_idno (Required) Study/dataset IDNo
 #' @param owner_collection (Optional) Owner Collection IDNo
-#' @param link_collections List of collections to add to a study/dataset
-#' @param mode (Required) Update or replace the linked collections. Values 'update' or 'replace'. Default is 'update'
+#' @param link_collections List of nada_collection_list to add to a study/dataset
+#' @param mode (Required) Update or replace the linked nada_collection_list. Values 'update' or 'replace'. Default is 'update'
 #' @export
-dataset_attach_collections <- function(
+nada_admin_study_attach_collections <- function(
   study_idno,
   owner_collection=NULL,
   link_collections=list(),
@@ -264,10 +264,10 @@ dataset_attach_collections <- function(
   endpoint='datasets/collections'
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
-  url=get_api_url(endpoint)
+  url=nada_get_api_url(endpoint)
 
   print(url)
 
@@ -282,7 +282,7 @@ dataset_attach_collections <- function(
                        body=options,
                        content_type_json(),
                        encode="json",
-                       verbose(get_verbose()))
+                       verbose(nada_get_verbose()))
 
   output=NULL
 
@@ -306,14 +306,14 @@ dataset_attach_collections <- function(
 
 
 
-#' Get owner and linked collections by studies
+#' Get owner and linked nada_collection_list by studies
 #'
 #' @return NULL
 #' @param study_idno (Optional) Study/dataset IDNo
 #' @param offset (Optional) Offset for pagination
 #' @param limit (Optional) Number of rows to return
 #' @export
-dataset_collections_list <- function(
+nada_admin_study_get_collections <- function(
   study_idno=NULL,
   offset=0,
   limit=1000,
@@ -332,10 +332,10 @@ dataset_collections_list <- function(
 
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
-  url=get_api_url(endpoint)
+  url=nada_get_api_url(endpoint)
 
   httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json())
   output=NULL
@@ -368,13 +368,13 @@ dataset_collections_list <- function(
 #' @param repositoryid (Required) Collection IDNo
 #'
 #' @export
-collection_delete <- function(repositoryid, api_key=NULL, api_base_url=NULL){
+nada_admin_collection_delete <- function(repositoryid, api_key=NULL, api_base_url=NULL){
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
-  url=get_api_url(paste0('collections/delete/', repositoryid))
+  url=nada_get_api_url(paste0('collections/delete/', repositoryid))
   httpResponse <- DELETE(url, add_headers("X-API-KEY" = api_key), accept_json())
   output=NULL
 

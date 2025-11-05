@@ -40,7 +40,7 @@
 #' )
 #' )
 #'
-#' geospatial_add (
+#' nada_admin_geospatial_add (
 #'   idno="survey-idno-test",
 #'   published = 1,
 #'   overwrite = "yes",
@@ -53,7 +53,7 @@
 #'
 #'
 #' @export
-geospatial_add <- function(
+nada_admin_geospatial_add <- function(
   idno,
   metadata,
   repositoryid=NULL,
@@ -66,10 +66,10 @@ geospatial_add <- function(
   api_base_url=NULL){
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
-  result = create(type="geospatial",
+  result = nada_admin_study_create(type="geospatial",
                   idno=idno,
                   repositoryid=repositoryid,
                   access_policy=access_policy,
@@ -102,7 +102,7 @@ geospatial_add <- function(
 #' @examples
 #'
 #'
-#' geospatial_import (
+#' nada_admin_geospatial_import (
 #'   published = 1,
 #'   overwrite = "yes",
 #'   file = "http://example.com/file/file-iso13913.xml",
@@ -112,7 +112,7 @@ geospatial_add <- function(
 #'
 #'
 #' @export
-geospatial_import <- function(
+nada_admin_geospatial_import <- function(
   file_uri,
   repositoryid=NULL,
   access_policy=NULL,
@@ -123,7 +123,7 @@ geospatial_import <- function(
   api_base_url=NULL){
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
 
@@ -138,16 +138,16 @@ geospatial_import <- function(
   if (file.exists(file_uri)){
     options$file=upload_file(file_uri)
   }
-  else if(is_valid_url(file_uri)){
+  else if(nada_is_valid_url(file_uri)){
     options$file=file_uri
   }
 
-  url=get_api_url('datasets/import_geospatial')
+  url=nada_get_api_url('datasets/import_geospatial')
   httpResponse <- POST(url,
                        add_headers("X-API-KEY" = api_key),
                        body=options,
                        accept_json(),
-                       verbose(get_verbose()))
+                       verbose(nada_get_verbose()))
 
 
   output=NULL

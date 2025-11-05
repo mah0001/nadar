@@ -3,19 +3,20 @@
 #' List all widgets
 #'
 #' @return List of widgets
-#' @param NULL
+#' @param api_key API key (optional if API key is set using nada_set_api_key)
+#' @param api_base_url API base endpoint (optional if API base endpoint is set using nada_set_api_url)
 #' @export
-widgets_list <- function(api_key=NULL,
+nada_widget_list <- function(api_key=NULL,
                         api_base_url=NULL){
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
   endpoint=paste0('widgets/')
-  url=get_api_url(endpoint)
+  url=nada_get_api_url(endpoint)
 
-  httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json(), verbose(get_verbose()))
+  httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json(), verbose(nada_get_verbose()))
   output=NULL
 
   if(httpResponse$status_code!=200){
@@ -38,15 +39,17 @@ widgets_list <- function(api_key=NULL,
 #'
 #' Create widget
 #'
-#' @return
+#' @return List with status_code and response
 #' @param uuid \strong{(required)} Unique identifier for widget
 #' @param options (list) widget options (title, description, thumbnail)
 #' @param zip_file Zip file
+#' @param api_key API key (optional if API key is set using nada_set_api_key)
+#' @param api_base_url API base endpoint (optional if API base endpoint is set using nada_set_api_url)
 #' @export
-widgets_create <- function(uuid, options=list(), zip_file, api_key=NULL, api_base_url=NULL){
+nada_admin_widget_create <- function(uuid, options=list(), zip_file, api_key=NULL, api_base_url=NULL){
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
   if (!file.exists(zip_file)){
@@ -56,7 +59,7 @@ widgets_create <- function(uuid, options=list(), zip_file, api_key=NULL, api_bas
   options[["file"]]=upload_file(zip_file)
   options[["uuid"]]=uuid
 
-  url=get_api_url(paste0('widgets/',uuid))
+  url=nada_get_api_url(paste0('widgets/',uuid))
   httpResponse <- POST(url,
                        add_headers("X-API-KEY" = api_key),
                        body=options)
@@ -88,14 +91,14 @@ widgets_create <- function(uuid, options=list(), zip_file, api_key=NULL, api_bas
 #' @param uuid (required) Widget ID
 #'
 #' @export
-widgets_attach <- function(
+nada_admin_widget_attach <- function(
   idno,
   uuid,
   api_key=NULL,
   api_base_url=NULL){
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
   options=list(
@@ -103,14 +106,14 @@ widgets_attach <- function(
     "uuid"=uuid
   )
 
-  url=get_api_url(paste0('widgets/attach_to_study'))
+  url=nada_get_api_url(paste0('widgets/attach_to_study'))
   httpResponse <- POST(url,
                        add_headers("X-API-KEY" = api_key),
                        body=options,
                        content_type_json(),
                        encode="json",
                        accept_json(),
-                       verbose(get_verbose()))
+                       verbose(nada_get_verbose()))
 
   output=NULL
 
@@ -137,14 +140,14 @@ widgets_attach <- function(
 #' @param uuid (required) Widget ID
 #'
 #' @export
-widgets_detach <- function(
+nada_admin_widget_detach <- function(
   idno,
   uuid,
   api_key=NULL,
   api_base_url=NULL){
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
   options=list(
@@ -152,14 +155,14 @@ widgets_detach <- function(
     "uuid"=uuid
   )
 
-  url=get_api_url(paste0('widgets/detach_study'))
+  url=nada_get_api_url(paste0('widgets/detach_study'))
   httpResponse <- POST(url,
                        add_headers("X-API-KEY" = api_key),
                        body=options,
                        content_type_json(),
                        encode="json",
                        accept_json(),
-                       verbose(get_verbose()))
+                       verbose(nada_get_verbose()))
 
   output=NULL
 
@@ -188,22 +191,22 @@ widgets_detach <- function(
 #' @param uuid (required) Widget ID
 #'
 #' @export
-widgets_delete <- function(
+nada_admin_widget_delete <- function(
   uuid,
   api_key=NULL,
   api_base_url=NULL){
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
-  url=get_api_url(paste0('widgets/',uuid))
+  url=nada_get_api_url(paste0('widgets/',uuid))
   httpResponse <- DELETE(url,
                        add_headers("X-API-KEY" = api_key),
                        content_type_json(),
                        encode="json",
                        accept_json(),
-                       verbose(get_verbose()))
+                       verbose(nada_get_verbose()))
 
   output=NULL
 

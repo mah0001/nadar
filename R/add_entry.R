@@ -14,7 +14,7 @@
 #'
 #' @return result
 #' @export
-create_entry <- function(
+nada_admin_study_create_entry <- function(
   type,
   idno,
   metadata,
@@ -28,7 +28,7 @@ create_entry <- function(
   api_base_url=NULL){
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
   if (type %in% c("document", "script", "table")) {
@@ -45,7 +45,7 @@ create_entry <- function(
     }
   }
 
-  result = create(type=type,
+  result = nada_admin_study_create(type=type,
                   idno=idno,
                   repositoryid=repositoryid,
                   access_policy=access_policy,
@@ -60,8 +60,8 @@ create_entry <- function(
     if(result$status_code==200){
       if(!is.null(files)){
         for(f in files){
-          if(file.exists(f$file_uri) || is_valid_url(f$file_uri) ){
-            resource_result=external_resources_add(idno=idno,
+          if(file.exists(f$file_uri) || nada_is_valid_url(f$file_uri) ){
+            resource_result=nada_admin_resource_add(idno=idno,
                                                    dctype="Document [doc/oth]",
                                                    title=basename(f$file_uri),
                                                    file_path=f$file_uri,
