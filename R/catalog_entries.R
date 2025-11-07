@@ -339,9 +339,6 @@ nada_study_download_rdf <- function(idno, output_file = NULL, rdf_url = NULL, ap
 }
 
 
-
-
-
 #' Find a study by IDNO
 #'
 #' Find study by IDNO
@@ -405,6 +402,64 @@ nada_admin_study_replace_idno <- function(old_idno,new_idno,api_key=NULL,api_bas
   return (output)
 }
 
+#' Get study information excluding data dictionary
+#'
+#' Fetches detail metadata of a study without the excluding
+#'
+#' @param idno Character. Study unique ID number
+#' @param api_key API key
+#' @param api_base_url Base URL for the API
+#'
+#' @return A parsed JSON
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#'   study <- nada_study_information(idno = "AFG_2015_DHS_v01_M")
+#'   print(study)
+#' }
+nada_study_information <- function(
+    idno = NULL,
+    api_key = NULL,
+    api_base_url = NULL
+) {
+
+  # survey id
+  if (is.null(idno)) {
+    cli::cli_abort("Study ID is not provided")
+  }
+
+  # Construct API endpoint
+  endpoint <- paste0("catalog/", idno)
+
+  if (is.null(api_base_url)) {
+    url <- nada_get_api_url(endpoint = endpoint)
+  } else {
+    url <- paste0(api_base_url, endpoint)
+  }
+
+  # Send GET request
+  httpResponse <- GET(url,
+                      accept_json(),
+                      verbose(nada_get_verbose())
+  )
+
+  # Check for HTTP errors
+  if (httr::http_error(httpResponse)) {
+
+    cli::cli_abort(c(
+      "x" = "HTTP error {.code {httr::status_code(httpResponse)}}",
+      "!" = httr::content(httpResponse, "text")
+    ))
+
+  }
+
+  # Parse content
+  parsed <- httr::content(httpResponse, "parsed", type = "application/json")
+
+  return(parsed$dataset$metadata)
+
+}
 
 #' Get study metadata as JSON
 #'
