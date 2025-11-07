@@ -3,12 +3,12 @@
 #' Fetches the list of data access types available
 #'
 #'
-#' @param as_data_table Logical. If `TRUE` and format is JSON, converts the result to a `data.table`. Defaults to `TRUE`.
+#' @param as_data_table Logical. If `TRUE`, converts the result to a `data.table`. Defaults to `TRUE`.
 #'
 #' @return A `data.table` if `as_data_table = TRUE`, otherwise a list (parsed JSON) or raw text for other formats.
 #' @export
 #'
-n#' @examples
+#' @examples
 #' \dontrun{
 #'   dt <- nada_study_access_types()
 #'   print(dt)

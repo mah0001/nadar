@@ -217,7 +217,63 @@ nada_study_download_ddi <- function(idno, output_file = NULL, ddi_url = NULL, ap
   }
 
   headers <- if (!is.null(api_key)) c("X-API-KEY" = api_key) else NULL
-  
+
+  download.file(url, output_file,
+                method = "curl",
+                headers = headers,
+                quiet = !nada_get_verbose())
+
+  result <- list(
+    file_path = output_file,
+    api_url = url,
+    status_code = 200,
+    idno = if (!is.null(ddi_url)) NULL else idno
+  )
+
+  structure(result, class = "nada_ddi_download")
+}
+
+
+#' Download DDI-JSON metadata
+#'
+#' Download DDI/JSON by Study IDNO or Direct URL
+#'
+#' @param idno Study IDNo (ignored if ddi_url is provided)
+#' @param output_file Optional output file path to save DDI content
+#' @param ddi_url Optional direct URL to download DDI from
+#' @param api_key API key
+#' @param api_base_url Base URL for the API
+#' @return DDI JSON content as character string (if no output_file) or file path (if output_file provided)
+#' @export
+nada_study_download_ddi_json <- function(idno,
+                                         output_file = NULL,
+                                         ddi_url = NULL,
+                                         api_key = NULL,
+                                         api_base_url = NULL) {
+
+  if (is.null(api_key)) {
+    api_key <- nada_get_api_key()
+  }
+
+  if (!is.null(ddi_url)) {
+    url <- ddi_url
+  } else {
+
+    endpoint <- paste0("catalog/json/", idno)
+
+    if (is.null(api_base_url)) {
+      url <- nada_get_api_url(endpoint = endpoint)
+    } else {
+      url <- paste0(api_base_url, "/", endpoint)
+    }
+  }
+
+  if (is.null(output_file)) {
+    output_file <- tempfile(fileext = ".json")
+  }
+
+  headers <- if (!is.null(api_key)) c("X-API-KEY" = api_key) else NULL
+
   download.file(url, output_file,
                 method = "curl",
                 headers = headers,
@@ -266,7 +322,7 @@ nada_study_download_rdf <- function(idno, output_file = NULL, rdf_url = NULL, ap
   }
 
   headers <- if (!is.null(api_key)) c("X-API-KEY" = api_key) else NULL
-  
+
   download.file(url, output_file,
                 method = "curl",
                 headers = headers,
