@@ -137,7 +137,7 @@ nada_data_file_info <- function(
   if (httr::http_error(httpResponse)) {
 
     cli::cli_abort(c(
-      "x" = "HTTP error {.code {httr::status_code(response)}}",
+      "x" = "HTTP error {.code {httr::status_code(httpResponse)}}",
       "!" = httr::content(httpResponse, "text")
     ))
 
@@ -205,7 +205,7 @@ nada_variables_info <- function(
   if (httr::http_error(httpResponse)) {
 
     cli::cli_abort(c(
-      "x" = "HTTP error {.code {httr::status_code(response)}}",
+      "x" = "HTTP error {.code {httr::status_code(httpResponse)}}",
       "!" = httr::content(httpResponse, "text")
     ))
 
@@ -276,7 +276,7 @@ nada_list_variables <- function(
   if (httr::http_error(httpResponse)) {
 
     cli::cli_abort(c(
-      "x" = "HTTP error {.code {httr::status_code(response)}}",
+      "x" = "HTTP error {.code {httr::status_code(httpResponse)}}",
       "!" = httr::content(httpResponse, "text")
     ))
 
@@ -352,7 +352,7 @@ nada_find_variable <- function(
   if (httr::http_error(httpResponse)) {
 
     cli::cli_abort(c(
-      "x" = "HTTP error {.code {httr::status_code(response)}}",
+      "x" = "HTTP error {.code {httr::status_code(httpResponse)}}",
       "!" = httr::content(httpResponse, "text")
     ))
 
