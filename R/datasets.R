@@ -100,6 +100,61 @@ nada_admin_study_list <- function(idno=NULL,
   )
 }
 
+#' Get study list
+#'
+#' Fetches the list of studies published
+#'
+#' @param ps Integer. Page size — number of results per page. Default is 20000.
+#' @param api_key API key (optional if API key is set using nada_set_api_key)
+#' @param api_base_url API base endpoint (optional if API base endpoint is set using nada_set_api_url)
+#'
+#' @return A `data.table`.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#'   number_studies <- nada_study_list()
+#' }
+nada_study_list <- function(
+    ps = 20000,
+    api_key = NULL,
+    api_base_url = NULL
+) {
+
+  # Construct API endpoint
+  endpoint <- paste0("catalog/?ps=", ps)
+
+  if (is.null(api_base_url)) {
+    url <- nada_get_api_url(endpoint = endpoint)
+  } else {
+    url <- paste0(api_base_url, endpoint)
+  }
+
+  # Send GET request
+  httpResponse <- GET(url,
+                      add_headers("X-API-KEY" = api_key),
+                      accept_json(),
+                      verbose(nada_get_verbose())
+  )
+
+  # Check for HTTP errors
+  if (httr::http_error(httpResponse)) {
+
+    cli::cli_abort(c(
+      "x" = "HTTP error {.code {httr::status_code(httpResponse)}}",
+      "!" = httr::content(httpResponse, "text")
+    ))
+
+  }
+
+  # Parse content
+  parsed <- jsonlite::fromJSON(url)
+  dt <- data.table::as.data.table(parsed$result$rows)
+
+  return(dt)
+
+}
+
 #' ImportDDI
 #'
 #' Import a DDI file
@@ -639,9 +694,9 @@ nada_admin_study_attach_related <- function(
     url = paste0(api_base_url,"/",endpoint)
   }
 
-  httpResponse <- POST(url, 
-                       add_headers("X-API-KEY" = api_key), 
-                       body=options, 
+  httpResponse <- POST(url,
+                       add_headers("X-API-KEY" = api_key),
+                       body=options,
                        content_type_json(),
                        encode="json",
                        accept_json(),
