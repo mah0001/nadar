@@ -217,7 +217,63 @@ nada_study_download_ddi <- function(idno, output_file = NULL, ddi_url = NULL, ap
   }
 
   headers <- if (!is.null(api_key)) c("X-API-KEY" = api_key) else NULL
-  
+
+  download.file(url, output_file,
+                method = "curl",
+                headers = headers,
+                quiet = !nada_get_verbose())
+
+  result <- list(
+    file_path = output_file,
+    api_url = url,
+    status_code = 200,
+    idno = if (!is.null(ddi_url)) NULL else idno
+  )
+
+  structure(result, class = "nada_ddi_download")
+}
+
+
+#' Download DDI-JSON metadata
+#'
+#' Download DDI/JSON by Study IDNO or Direct URL
+#'
+#' @param idno Study IDNo (ignored if ddi_url is provided)
+#' @param output_file Optional output file path to save DDI content
+#' @param ddi_url Optional direct URL to download DDI from
+#' @param api_key API key
+#' @param api_base_url Base URL for the API
+#' @return DDI JSON content as character string (if no output_file) or file path (if output_file provided)
+#' @export
+nada_study_download_ddi_json <- function(idno,
+                                         output_file = NULL,
+                                         ddi_url = NULL,
+                                         api_key = NULL,
+                                         api_base_url = NULL) {
+
+  if (is.null(api_key)) {
+    api_key <- nada_get_api_key()
+  }
+
+  if (!is.null(ddi_url)) {
+    url <- ddi_url
+  } else {
+
+    endpoint <- paste0("catalog/json/", idno)
+
+    if (is.null(api_base_url)) {
+      url <- nada_get_api_url(endpoint = endpoint)
+    } else {
+      url <- paste0(api_base_url, "/", endpoint)
+    }
+  }
+
+  if (is.null(output_file)) {
+    output_file <- tempfile(fileext = ".json")
+  }
+
+  headers <- if (!is.null(api_key)) c("X-API-KEY" = api_key) else NULL
+
   download.file(url, output_file,
                 method = "curl",
                 headers = headers,
@@ -266,7 +322,7 @@ nada_study_download_rdf <- function(idno, output_file = NULL, rdf_url = NULL, ap
   }
 
   headers <- if (!is.null(api_key)) c("X-API-KEY" = api_key) else NULL
-  
+
   download.file(url, output_file,
                 method = "curl",
                 headers = headers,
@@ -281,9 +337,6 @@ nada_study_download_rdf <- function(idno, output_file = NULL, rdf_url = NULL, ap
 
   structure(result, class = "nada_rdf_download")
 }
-
-
-
 
 
 #' Find a study by IDNO
@@ -349,6 +402,64 @@ nada_admin_study_replace_idno <- function(old_idno,new_idno,api_key=NULL,api_bas
   return (output)
 }
 
+#' Get study information excluding data dictionary
+#'
+#' Fetches detail metadata of a study without the excluding
+#'
+#' @param idno Character. Study unique ID number
+#' @param api_key API key
+#' @param api_base_url Base URL for the API
+#'
+#' @return A parsed JSON
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#'   study <- nada_study_information(idno = "AFG_2015_DHS_v01_M")
+#'   print(study)
+#' }
+nada_study_information <- function(
+    idno = NULL,
+    api_key = NULL,
+    api_base_url = NULL
+) {
+
+  # survey id
+  if (is.null(idno)) {
+    cli::cli_abort("Study ID is not provided")
+  }
+
+  # Construct API endpoint
+  endpoint <- paste0("catalog/", idno)
+
+  if (is.null(api_base_url)) {
+    url <- nada_get_api_url(endpoint = endpoint)
+  } else {
+    url <- paste0(api_base_url, endpoint)
+  }
+
+  # Send GET request
+  httpResponse <- GET(url,
+                      accept_json(),
+                      verbose(nada_get_verbose())
+  )
+
+  # Check for HTTP errors
+  if (httr::http_error(httpResponse)) {
+
+    cli::cli_abort(c(
+      "x" = "HTTP error {.code {httr::status_code(httpResponse)}}",
+      "!" = httr::content(httpResponse, "text")
+    ))
+
+  }
+
+  # Parse content
+  parsed <- httr::content(httpResponse, "parsed", type = "application/json")
+
+  return(parsed$dataset$metadata)
+
+}
 
 #' Get study metadata as JSON
 #'
@@ -446,4 +557,77 @@ nada_admin_study_get_json <- function(idno,is_legacy=FALSE, api_key=NULL,api_bas
 nada_admin_study_write_json<-function(idno,output_file,is_legacy=FALSE,api_key=NULL, api_base_url=NULL){
   json_metadata=nada_admin_study_get_json(idno,api_key=api_key, is_legacy=is_legacy, api_base_url=api_base_url)
   write(jsonlite::toJSON(json_metadata,auto_unbox=TRUE), output_file)
+}
+
+
+#' Get Latest catalog entries from World Bank Microdata Library
+#'
+#' Fetches the latest catalog entries from the World Bank Microdata Library API.
+#'
+#' @param api_key API key (optional if API key is set using nada_set_api_key)
+#' @param api_base_url API base endpoint (optional if API base endpoint is set using nada_set_api_url)
+#' @param as_data_table Logical. If `TRUE` and format is JSON, converts the result to a `data.table`. Defaults to `TRUE`.
+#'
+#' @return A `data.table` if `as_data_table = TRUE`, otherwise a list (parsed JSON) or raw text for other formats.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#'   dt <- nada_latest_entries()
+#'   print(dt)
+#' }
+nada_latest_entries <- function(
+    api_key = NULL,
+    api_base_url = NULL,
+    as_data_table = TRUE
+) {
+
+  # Construct API endpoint
+  endpoint <- paste0("catalog/latest")
+
+  if (is.null(api_base_url)) {
+    url <- nada_get_api_url(endpoint = endpoint)
+  } else {
+    url <- paste0(api_base_url, endpoint)
+  }
+
+  # Send GET request
+  httpResponse <- GET(url,
+                      accept_json(),
+                      add_headers("X-API-KEY" = api_key),
+                      verbose(nada_get_verbose())
+  )
+
+  # Check for HTTP errors
+  if (httr::http_error(httpResponse)) {
+
+    cli::cli_abort(c(
+      "x" = "HTTP error {.code {httr::status_code(httpResponse)}}",
+      "!" = httr::content(httpResponse, "text")
+    ))
+
+  }
+
+  # Parse content
+  parsed <- httr::content(httpResponse, "parsed", type = "application/json")
+  if (as_data_table) {
+
+    dt <- data.table::rbindlist(
+      lapply(parsed$result, function(x) {
+        data.table::data.table(
+          idno = x$idno,
+          title = x$title,
+          nation = x$nation,
+          created = x$created,
+          changed = x$changed
+        )
+      }),
+      fill = TRUE
+    )
+    return(dt)
+
+  } else {
+    return(parsed)
+  }
+
 }

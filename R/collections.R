@@ -138,47 +138,186 @@ nada_admin_collection_update <- function(
 }
 
 
-#' Get all collections
+#' Get collections detail
 #'
-#' Load a list of all nada_collection_list or get info for a single collection
+#' Provides functions to list available collections and retrieve detailed information
+#' about a specific collection.
 #'
-#' @return List of studies or a single study info
-#' @param repositoryid (Optional) Collection IDNo
+#' @param api_key API key (optional if API key is set using nada_set_api_key)
+#' @param api_base_url API base endpoint (optional if API base endpoint is set using nada_set_api_url)
+#' @param as_data_table Logical. If `TRUE`, converts the result to `data.table`. Defaults to `TRUE`.
+#'
+#' @return A `data.table`, a list (parsed JSON), or datatable depending on `as_data_table`.
+#'
 #' @export
-nada_collection_list <- function(repositoryid=NULL, api_key=NULL, api_base_url=NULL){
+#'
+#' @examples
+#' \dontrun{
+#'   collection <- nada_collection_list()
+#'   print(collection)
+#' }
+nada_collection_list <- function(
+    api_key = NULL,
+    api_base_url = NULL,
+    as_data_table = TRUE
+) {
 
-  endpoint='collections/'
+  # Construct API endpoint
+  endpoint <- paste0("catalog/collections")
 
-  if(!is.null(repositoryid)){
-    endpoint=paste0(endpoint,'/',repositoryid)
+  if (is.null(api_base_url)) {
+    url <- nada_get_api_url(endpoint = endpoint)
+  } else {
+    url <- paste0(api_base_url, endpoint)
   }
 
-  if(is.null(api_key)){
-    api_key=nada_get_api_key();
-  }
-
-  url=nada_get_api_url(endpoint)
-  print(url)
-  httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json())
-  output=NULL
-
-  if(httpResponse$status_code!=200){
-    warning(content(httpResponse, "text"))
-    stop(content(httpResponse, "text"), call. = FALSE)
-  }
-
-  output=fromJSON(content(httpResponse,"text"))
-  #return (output)
-
-  structure(
-    list(
-      content = output,
-      api_url = url,
-      status_code = httpResponse$status_code
-    ),
-    class = "nada_collections"
+  # Send GET request
+  httpResponse <- GET(url,
+                      accept_json(),
+                      add_headers("X-API-KEY" = api_key),
+                      verbose(nada_get_verbose())
   )
+
+  # Check for HTTP errors
+  if (httr::http_error(httpResponse)) {
+
+    cli::cli_abort(c(
+      "x" = "HTTP error {.code {httr::status_code(httpResponse)}}",
+      "!" = httr::content(httpResponse, "text")
+    ))
+
+  }
+
+  # Parse content
+  parsed <- httr::content(httpResponse, "parsed", type = "application/json")
+
+  if (as_data_table) {
+
+    dt <- data.table::rbindlist(
+      lapply(parsed$collections, function(x) {
+        data.table::data.table(
+          id = x$id,
+          repositoryid = x$repositoryid,
+          title = x$title,
+          file_name = x$file_name,
+          thumbnail = x$thumbnail,
+          short_text = x$short_text,
+          long_text = x$long_text
+        )
+      }),
+      fill = TRUE
+    )
+
+    return(dt)
+
+  } else {
+    return(parsed)
+  }
 }
+
+#' @describeIn nada_collection_list Fetches details of a single collection by its repository ID.
+#'
+#' @param repoid Character. Repository or collection ID.
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#'   collection <- nada_single_collection(repoid = "dhs")
+#'   print(collection)
+#' }
+nada_single_collection <- function(
+    api_key = NULL,
+    api_base_url = NULL,
+    repoid = NULL,
+    as_data_table = TRUE
+) {
+
+  # repository/ collection id
+  if (is.null(repoid)) {
+    cli::cli_abort("Repository or collection ID is not provided")
+  }
+
+  # Construct API endpoint
+  endpoint <- paste0("catalog/collections/", repoid)
+
+  if (is.null(api_base_url)) {
+    url <- nada_get_api_url(endpoint = endpoint)
+  } else {
+    url <- paste0(api_base_url, endpoint)
+  }
+
+  # Send GET request
+  httpResponse <- GET(url,
+                      accept_json(),
+                      add_headers("X-API-KEY" = api_key),
+                      verbose(nada_get_verbose())
+  )
+
+  # Check for HTTP errors
+  if (httr::http_error(httpResponse)) {
+
+    cli::cli_abort(c(
+      "x" = "HTTP error {.code {httr::status_code(httpResponse)}}",
+      "!" = httr::content(httpResponse, "text")
+    ))
+
+  }
+
+  # Parse content
+  parsed <- httr::content(httpResponse, "parsed", type = "application/json")
+
+  if (as_data_table) {
+
+    dt <- data.table::as.data.table(parsed)
+    return(dt)
+
+  } else {
+    return(parsed)
+  }
+}
+
+#' #' Get all collections
+#' #'
+#' #' Load a list of all nada_collection_list or get info for a single collection
+#' #'
+#' #' @return List of studies or a single study info
+#' #' @param repositoryid (Optional) Collection IDNo
+#' #' @export
+#' nada_collection_list <- function(repositoryid=NULL, api_key=NULL, api_base_url=NULL){
+#'
+#'   endpoint='collections/'
+#'
+#'   if(!is.null(repositoryid)){
+#'     endpoint=paste0(endpoint,'/',repositoryid)
+#'   }
+#'
+#'   if(is.null(api_key)){
+#'     api_key=nada_get_api_key();
+#'   }
+#'
+#'   url=nada_get_api_url(endpoint)
+#'   print(url)
+#'   httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json())
+#'   output=NULL
+#'
+#'   if(httpResponse$status_code!=200){
+#'     warning(content(httpResponse, "text"))
+#'     stop(content(httpResponse, "text"), call. = FALSE)
+#'   }
+#'
+#'   output=fromJSON(content(httpResponse,"text"))
+#'   #return (output)
+#'
+#'   structure(
+#'     list(
+#'       content = output,
+#'       api_url = url,
+#'       status_code = httpResponse$status_code
+#'     ),
+#'     class = "nada_collections"
+#'   )
+#' }
 
 options = list(
   "repositoryid" = "repositoryid",
