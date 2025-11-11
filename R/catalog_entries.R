@@ -558,3 +558,76 @@ nada_admin_study_write_json<-function(idno,output_file,is_legacy=FALSE,api_key=N
   json_metadata=nada_admin_study_get_json(idno,api_key=api_key, is_legacy=is_legacy, api_base_url=api_base_url)
   write(jsonlite::toJSON(json_metadata,auto_unbox=TRUE), output_file)
 }
+
+
+#' Get Latest catalog entries from World Bank Microdata Library
+#'
+#' Fetches the latest catalog entries from the World Bank Microdata Library API.
+#'
+#' @param api_key API key (optional if API key is set using nada_set_api_key)
+#' @param api_base_url API base endpoint (optional if API base endpoint is set using nada_set_api_url)
+#' @param as_data_table Logical. If `TRUE` and format is JSON, converts the result to a `data.table`. Defaults to `TRUE`.
+#'
+#' @return A `data.table` if `as_data_table = TRUE`, otherwise a list (parsed JSON) or raw text for other formats.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#'   dt <- nada_latest_entries()
+#'   print(dt)
+#' }
+nada_latest_entries <- function(
+    api_key = NULL,
+    api_base_url = NULL,
+    as_data_table = TRUE
+) {
+
+  # Construct API endpoint
+  endpoint <- paste0("catalog/latest")
+
+  if (is.null(api_base_url)) {
+    url <- nada_get_api_url(endpoint = endpoint)
+  } else {
+    url <- paste0(api_base_url, endpoint)
+  }
+
+  # Send GET request
+  httpResponse <- GET(url,
+                      accept_json(),
+                      add_headers("X-API-KEY" = api_key),
+                      verbose(nada_get_verbose())
+  )
+
+  # Check for HTTP errors
+  if (httr::http_error(httpResponse)) {
+
+    cli::cli_abort(c(
+      "x" = "HTTP error {.code {httr::status_code(httpResponse)}}",
+      "!" = httr::content(httpResponse, "text")
+    ))
+
+  }
+
+  # Parse content
+  parsed <- httr::content(httpResponse, "parsed", type = "application/json")
+  if (as_data_table) {
+
+    dt <- data.table::rbindlist(
+      lapply(parsed$result, function(x) {
+        data.table::data.table(
+          idno = x$idno,
+          title = x$title,
+          nation = x$nation,
+          created = x$created,
+          changed = x$changed
+        )
+      }),
+      fill = TRUE
+    )
+    return(dt)
+
+  } else {
+    return(parsed)
+  }
+
+}
