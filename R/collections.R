@@ -277,47 +277,47 @@ nada_single_collection <- function(
   }
 }
 
-#' #' Get all collections
-#' #'
-#' #' Load a list of all nada_collection_list or get info for a single collection
-#' #'
-#' #' @return List of studies or a single study info
-#' #' @param repositoryid (Optional) Collection IDNo
-#' #' @export
-#' nada_collection_list <- function(repositoryid=NULL, api_key=NULL, api_base_url=NULL){
+#' Get all collections
 #'
-#'   endpoint='collections/'
+#' Load a list of all nada_collection_list or get info for a single collection
 #'
-#'   if(!is.null(repositoryid)){
-#'     endpoint=paste0(endpoint,'/',repositoryid)
-#'   }
-#'
-#'   if(is.null(api_key)){
-#'     api_key=nada_get_api_key();
-#'   }
-#'
-#'   url=nada_get_api_url(endpoint)
-#'   print(url)
-#'   httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json())
-#'   output=NULL
-#'
-#'   if(httpResponse$status_code!=200){
-#'     warning(content(httpResponse, "text"))
-#'     stop(content(httpResponse, "text"), call. = FALSE)
-#'   }
-#'
-#'   output=fromJSON(content(httpResponse,"text"))
-#'   #return (output)
-#'
-#'   structure(
-#'     list(
-#'       content = output,
-#'       api_url = url,
-#'       status_code = httpResponse$status_code
-#'     ),
-#'     class = "nada_collections"
-#'   )
-#' }
+#' @return List of studies or a single study info
+#' @param repositoryid (Optional) Collection IDNo
+#' @export
+nada_collection_list <- function(repositoryid=NULL, api_key=NULL, api_base_url=NULL){
+
+  endpoint='collections/'
+
+  if(!is.null(repositoryid)){
+    endpoint=paste0(endpoint,'/',repositoryid)
+  }
+
+  if(is.null(api_key)){
+    api_key=nada_get_api_key();
+  }
+
+  url=nada_get_api_url(endpoint)
+  print(url)
+  httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json())
+  output=NULL
+
+  if(httpResponse$status_code!=200){
+    warning(content(httpResponse, "text"))
+    stop(content(httpResponse, "text"), call. = FALSE)
+  }
+
+  output=fromJSON(content(httpResponse,"text"))
+  #return (output)
+
+  structure(
+    list(
+      content = output,
+      api_url = url,
+      status_code = httpResponse$status_code
+    ),
+    class = "nada_collections"
+  )
+}
 
 options = list(
   "repositoryid" = "repositoryid",

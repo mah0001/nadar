@@ -2,16 +2,54 @@
 % Please edit documentation in R/collections.R
 \name{nada_collection_list}
 \alias{nada_collection_list}
-\title{Get all collections}
+\alias{nada_single_collection}
+\title{Get collections detail}
 \usage{
+nada_collection_list(repositoryid = NULL, api_key = NULL, api_base_url = NULL)
+
+nada_single_collection(
+  api_key = NULL,
+  api_base_url = NULL,
+  repoid = NULL,
+  as_data_table = TRUE
+)
+
 nada_collection_list(repositoryid = NULL, api_key = NULL, api_base_url = NULL)
 }
 \arguments{
 \item{repositoryid}{(Optional) Collection IDNo}
+
+\item{api_key}{API key (optional if API key is set using nada_set_api_key)}
+
+\item{api_base_url}{API base endpoint (optional if API base endpoint is set using nada_set_api_url)}
+
+\item{repoid}{Character. Repository or collection ID.}
+
+\item{as_data_table}{Logical. If `TRUE`, converts the result to `data.table`. Defaults to `TRUE`.}
 }
 \value{
+A `data.table`, a list (parsed JSON), or datatable depending on `as_data_table`.
+
 List of studies or a single study info
 }
 \description{
+Provides functions to list available collections and retrieve detailed information
+about a specific collection.
+
 Load a list of all nada_collection_list or get info for a single collection
+}
+\section{Functions}{
+\itemize{
+\item \code{nada_single_collection()}: Fetches details of a single collection by its repository ID.
+
+}}
+\examples{
+\dontrun{
+  collection <- nada_collection_list()
+  print(collection)
+}
+\dontrun{
+  collection <- nada_single_collection(repoid = "dhs")
+  print(collection)
+}
 }
