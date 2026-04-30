@@ -7,8 +7,8 @@
 nada_admin_dsd_import_json(
   payload = NULL,
   file = NULL,
-  dry_run = FALSE,
-  overwrite_codelists = FALSE,
+  dry_run = NULL,
+  overwrite = NULL,
   api_key = NULL,
   api_base_url = NULL
 )
@@ -18,9 +18,12 @@ nada_admin_dsd_import_json(
 
 \item{file}{Path to a JSON file with the payload (mutually exclusive with `payload`).}
 
-\item{dry_run}{When TRUE, the API validates only and does not persist (HTTP 200).}
+\item{dry_run}{If not `NULL`, sets body field `dry_run` (boolean). When `NULL`, leaves
+any value already present in `payload` / file unchanged.}
 
-\item{overwrite_codelists}{When TRUE, replace items on any matched existing codelist.}
+\item{overwrite}{If not `NULL`, sets body field `overwrite` (boolean). When `NULL`, leaves
+any value already present in `payload` / file unchanged. The API uses `overwrite` for
+matched codelist item replacement rules on import.}
 
 \item{api_key, api_base_url}{See `nada_admin_dsd_list`.}
 }
@@ -35,16 +38,20 @@ Body shape is documented in application/schemas/data-structure-schema.json.
 Each coded component binds codelists via a single nested object, e.g.:
 \preformatted{
 list(
-  structure = list(idno = "NADA_DSD_PRICES_1.0", name = "DSD_PRICES",
-                   agency = "NADA", version = "1.0"),
-  components = list(
-    list(name = "REF_AREA", column_type = "geography", data_type = "string",
-         codelist = list(idno = "NADA_CL_AREA_1.0", name = "CL_AREA",
-                         items = list(list(code = "AA", label = "Area A")))),
-    list(name = "TIME_PERIOD", column_type = "time_period",
-         time_period_format = "YYYY-MM"),
-    list(name = "OBS_VALUE", column_type = "observation_value", data_type = "double")
-  )
+  data_structure = list(
+    idno = "NADA_DSD_PRICES_1.0", name = "DSD_PRICES",
+    agency = "NADA", version = "1.0", title = "Prices",
+    components = list(
+      list(name = "REF_AREA", column_type = "geography", data_type = "string",
+           codelist = list(idno = "NADA_CL_AREA_1.0", name = "CL_AREA",
+                           items = list(list(code = "AA", label = "Area A")))),
+      list(name = "TIME_PERIOD", column_type = "time_period",
+           time_period_format = "YYYY-MM"),
+      list(name = "OBS_VALUE", column_type = "observation_value", data_type = "double")
+    )
+  ),
+  overwrite = FALSE,
+  dry_run = FALSE
 )
 }
 Reuse an existing codelist with \code{codelist = list(idno = "...")} (no items).

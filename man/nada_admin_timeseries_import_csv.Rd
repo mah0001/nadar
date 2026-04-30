@@ -10,6 +10,7 @@ nada_admin_timeseries_import_csv(
   delimiter = ",",
   mapping = NULL,
   ensure_unique_index = TRUE,
+  dsd_idno = NULL,
   api_key = NULL,
   api_base_url = NULL
 )
@@ -28,6 +29,9 @@ Headers absent from the mapping are used as-is.}
 \item{ensure_unique_index}{When TRUE (default), the unique `key_hash` index
 is created before insert. Set FALSE to allow duplicates through.}
 
+\item{dsd_idno}{Optional catalogue DSD idno; when set, the API links this DSD
+to the study (same effect as `nada_admin_timeseries_attach_dsd`) before import.}
+
 \item{api_key}{Optional API key; defaults to `nada_get_api_key()`.}
 
 \item{api_base_url}{Optional API base URL; defaults to `nada_get_api_url()`.}
@@ -36,11 +40,12 @@ is created before insert. Set FALSE to allow duplicates through.}
 list with `status_code` and `response`.
 }
 \description{
-Wraps POST /api/admin/timeseries/data/{idno}/import.
+Wraps POST /api/admin/timeseries/data/import (multipart body includes `idno` and `file`).
 }
 \details{
-The study must already be linked to a global DSD (see
-`nada_admin_timeseries_set_dsd`). The server:
+The study must be linked to a global DSD, either beforehand (see
+`nada_admin_timeseries_attach_dsd`) or in the same call by passing `dsd_idno`.
+The server:
   - Resolves the DSD from `surveys.data_structure_id`.
   - Ensures Mongo indexes (including unique `key_hash` by default).
   - Reads the CSV, applies the optional header `mapping`, and rejects any

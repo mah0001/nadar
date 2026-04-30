@@ -236,3 +236,54 @@ nada_admin_codelist_item_add <- function(codelist_id, code, title = NULL,
 
   list(status_code = httpResponse$status_code, response = nada_http_response_json(httpResponse))
 }
+
+#' Import one codelist and its items from JSON
+#'
+#' Wraps POST /api/admin/codelists/import_json. Body fields `overwrite` and `dry_run`
+#' are sent in the JSON body only (no query parameters).
+#'
+#' @param payload Named list with `codelist` (nested object with idno/name/items, etc.),
+#'   optional `overwrite` and `dry_run` booleans, OR a legacy flat list accepted by the API
+#'   when it is unambiguous.
+#' @param file Path to a JSON file (mutually exclusive with `payload`).
+#' @param dry_run If not `NULL`, sets body field `dry_run`.
+#' @param overwrite If not `NULL`, sets body field `overwrite` (replace items on matched list).
+#' @param api_key,api_base_url See `nada_admin_dsd_list`.
+#'
+#' @return list with status_code and response
+#' @export
+nada_admin_codelist_import_json <- function(payload = NULL, file = NULL,
+                                            dry_run = NULL, overwrite = NULL,
+                                            api_key = NULL, api_base_url = NULL) {
+  if (is.null(payload) && is.null(file)) {
+    stop("Provide either `payload` (list) or `file` (path to a JSON file).")
+  }
+  if (!is.null(payload) && !is.null(file)) {
+    stop("Provide only one of `payload` or `file`, not both.")
+  }
+  if (is.null(api_key)) api_key <- nada_get_api_key()
+
+  endpoint <- "admin/codelists/import_json"
+  url <- if (is.null(api_base_url)) nada_get_api_url(endpoint) else paste0(api_base_url, "/", endpoint)
+
+  if (!is.null(file)) {
+    if (!file.exists(file)) stop(paste0("File not found: ", file))
+    body_raw <- readChar(file, file.info(file)$size, useBytes = TRUE)
+    body <- jsonlite::fromJSON(body_raw, simplifyVector = FALSE)
+    if (!is.list(body)) stop("JSON root must be an object (list).")
+  } else {
+    body <- payload
+  }
+  if (!is.null(dry_run)) body$dry_run <- isTRUE(dry_run)
+  if (!is.null(overwrite)) body$overwrite <- isTRUE(overwrite)
+
+  httpResponse <- POST(url,
+                       add_headers("X-API-KEY" = api_key),
+                       body = body,
+                       content_type_json(),
+                       encode = "json",
+                       accept_json(),
+                       verbose(nada_get_verbose()))
+
+  list(status_code = httpResponse$status_code, response = nada_http_response_json(httpResponse))
+}

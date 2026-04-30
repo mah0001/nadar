@@ -1,9 +1,10 @@
 #' Import observations from a CSV file into MongoDB
 #'
-#' Wraps POST /api/admin/timeseries/data/{idno}/import.
+#' Wraps POST /api/admin/timeseries/data/import (multipart body includes `idno` and `file`).
 #'
-#' The study must already be linked to a global DSD (see
-#' `nada_admin_timeseries_attach_dsd`). The server:
+#' The study must be linked to a global DSD, either beforehand (see
+#' `nada_admin_timeseries_attach_dsd`) or in the same call by passing `dsd_idno`.
+#' The server:
 #'   - Resolves the DSD from `surveys.data_structure_id`.
 #'   - Ensures Mongo indexes (including unique `key_hash` by default).
 #'   - Reads the CSV, applies the optional header `mapping`, and rejects any
@@ -23,6 +24,8 @@
 #'   Headers absent from the mapping are used as-is.
 #' @param ensure_unique_index When TRUE (default), the unique `key_hash` index
 #'   is created before insert. Set FALSE to allow duplicates through.
+#' @param dsd_idno Optional catalogue DSD idno; when set, the API links this DSD
+#'   to the study (same effect as `nada_admin_timeseries_attach_dsd`) before import.
 #' @param api_key Optional API key; defaults to `nada_get_api_key()`.
 #' @param api_base_url Optional API base URL; defaults to `nada_get_api_url()`.
 #'
@@ -45,6 +48,7 @@ nada_admin_timeseries_import_csv <- function(idno,
                                              delimiter = ",",
                                              mapping = NULL,
                                              ensure_unique_index = TRUE,
+                                             dsd_idno = NULL,
                                              api_key = NULL,
                                              api_base_url = NULL) {
   if (is.null(idno) || !nzchar(as.character(idno))) {
@@ -55,9 +59,7 @@ nada_admin_timeseries_import_csv <- function(idno,
   }
   if (is.null(api_key)) api_key <- nada_get_api_key()
 
-  endpoint <- paste0("admin/timeseries/data/",
-                     utils::URLencode(idno, reserved = TRUE),
-                     "/import")
+  endpoint <- "admin/timeseries/data/import"
   url <- if (is.null(api_base_url)) {
     nada_get_api_url(endpoint)
   } else {
@@ -65,6 +67,7 @@ nada_admin_timeseries_import_csv <- function(idno,
   }
 
   body <- list(
+    idno      = as.character(idno),
     file      = httr::upload_file(file),
     delimiter = delimiter
   )
@@ -73,6 +76,9 @@ nada_admin_timeseries_import_csv <- function(idno,
     body$mapping <- jsonlite::toJSON(mapping, auto_unbox = TRUE)
   }
   body$ensure_unique_index <- if (isTRUE(ensure_unique_index)) "1" else "0"
+  if (!is.null(dsd_idno) && nzchar(as.character(dsd_idno))) {
+    body$dsd_idno <- as.character(dsd_idno)
+  }
 
   httpResponse <- POST(url,
                        add_headers("X-API-KEY" = api_key),

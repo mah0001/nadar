@@ -95,30 +95,37 @@ nada_admin_dsd_delete <- function(id_or_idno, api_key = NULL, api_base_url = NUL
 #' Each coded component binds codelists via a single nested object, e.g.:
 #' \preformatted{
 #' list(
-#'   structure = list(idno = "NADA_DSD_PRICES_1.0", name = "DSD_PRICES",
-#'                    agency = "NADA", version = "1.0"),
-#'   components = list(
-#'     list(name = "REF_AREA", column_type = "geography", data_type = "string",
-#'          codelist = list(idno = "NADA_CL_AREA_1.0", name = "CL_AREA",
-#'                          items = list(list(code = "AA", label = "Area A")))),
-#'     list(name = "TIME_PERIOD", column_type = "time_period",
-#'          time_period_format = "YYYY-MM"),
-#'     list(name = "OBS_VALUE", column_type = "observation_value", data_type = "double")
-#'   )
+#'   data_structure = list(
+#'     idno = "NADA_DSD_PRICES_1.0", name = "DSD_PRICES",
+#'     agency = "NADA", version = "1.0", title = "Prices",
+#'     components = list(
+#'       list(name = "REF_AREA", column_type = "geography", data_type = "string",
+#'            codelist = list(idno = "NADA_CL_AREA_1.0", name = "CL_AREA",
+#'                            items = list(list(code = "AA", label = "Area A")))),
+#'       list(name = "TIME_PERIOD", column_type = "time_period",
+#'            time_period_format = "YYYY-MM"),
+#'       list(name = "OBS_VALUE", column_type = "observation_value", data_type = "double")
+#'     )
+#'   ),
+#'   overwrite = FALSE,
+#'   dry_run = FALSE
 #' )
 #' }
 #' Reuse an existing codelist with \code{codelist = list(idno = "...")} (no items).
 #'
 #' @param payload Named list matching data-structure-schema.json, OR
 #' @param file Path to a JSON file with the payload (mutually exclusive with `payload`).
-#' @param dry_run When TRUE, the API validates only and does not persist (HTTP 200).
-#' @param overwrite_codelists When TRUE, replace items on any matched existing codelist.
+#' @param dry_run If not `NULL`, sets body field `dry_run` (boolean). When `NULL`, leaves
+#'   any value already present in `payload` / file unchanged.
+#' @param overwrite If not `NULL`, sets body field `overwrite` (boolean). When `NULL`, leaves
+#'   any value already present in `payload` / file unchanged. The API uses `overwrite` for
+#'   matched codelist item replacement rules on import.
 #' @param api_key,api_base_url See `nada_admin_dsd_list`.
 #'
 #' @return list with status_code and response (parsed JSON summary from the importer)
 #' @export
 nada_admin_dsd_import_json <- function(payload = NULL, file = NULL,
-                                       dry_run = FALSE, overwrite_codelists = FALSE,
+                                       dry_run = NULL, overwrite = NULL,
                                        api_key = NULL, api_base_url = NULL) {
   if (is.null(payload) && is.null(file)) {
     stop("Provide either `payload` (list) or `file` (path to a JSON file).")
@@ -131,30 +138,24 @@ nada_admin_dsd_import_json <- function(payload = NULL, file = NULL,
   endpoint <- "admin/data_structures/import_json"
   url <- if (is.null(api_base_url)) nada_get_api_url(endpoint) else paste0(api_base_url, "/", endpoint)
 
-  qp <- list()
-  if (isTRUE(dry_run))             qp$dry_run             <- "1"
-  if (isTRUE(overwrite_codelists)) qp$overwrite_codelists <- "1"
-
   if (!is.null(file)) {
     if (!file.exists(file)) stop(paste0("File not found: ", file))
     body_raw <- readChar(file, file.info(file)$size, useBytes = TRUE)
-    httpResponse <- POST(url,
-                         add_headers("X-API-KEY" = api_key),
-                         body = body_raw,
-                         content_type_json(),
-                         accept_json(),
-                         query = qp,
-                         verbose(nada_get_verbose()))
+    body <- jsonlite::fromJSON(body_raw, simplifyVector = FALSE)
+    if (!is.list(body)) stop("JSON root must be an object (list).")
   } else {
-    httpResponse <- POST(url,
-                         add_headers("X-API-KEY" = api_key),
-                         body = payload,
-                         content_type_json(),
-                         encode = "json",
-                         accept_json(),
-                         query = qp,
-                         verbose(nada_get_verbose()))
+    body <- payload
   }
+  if (!is.null(dry_run)) body$dry_run <- isTRUE(dry_run)
+  if (!is.null(overwrite)) body$overwrite <- isTRUE(overwrite)
+
+  httpResponse <- POST(url,
+                       add_headers("X-API-KEY" = api_key),
+                       body = body,
+                       content_type_json(),
+                       encode = "json",
+                       accept_json(),
+                       verbose(nada_get_verbose()))
 
   list(status_code = httpResponse$status_code, response = nada_http_response_json(httpResponse))
 }
