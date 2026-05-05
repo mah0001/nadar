@@ -301,6 +301,101 @@ nada_admin_study_create <- function(
   return (output)
 }
 
+#' Patch study metadata using JSON Patch
+#'
+#' Apply RFC 6902 JSON Patch operations to an existing study metadata document.
+#'
+#' @return list
+#' @param type (required) Type of study - survey, geospatial, table, document, timeseries, timeseriesdb, image, video
+#' @param idno (required) Study unique identifier
+#' @param patches (required) List of JSON Patch operations (each operation must include `op` and `path`)
+#' @param api_key API key (optional if API key is set using nada_set_api_key)
+#' @param api_base_url API base endpoint (optional if API base endpoint is set using nada_set_api_url)
+#'
+#' @examples
+#' \dontrun{
+#' nada_admin_study_patch(
+#'   type = "survey",
+#'   idno = "survey-idno-test",
+#'   patches = list(
+#'     list(
+#'       op = "replace",
+#'       path = "/database_description/title_statement/title",
+#'       value = "A nre title updated using patch"
+#'     )
+#'   )
+#' )
+#' }
+#'
+#' @export
+nada_admin_study_patch <- function(
+  type,
+  idno,
+  patches,
+  api_key = NULL,
+  api_base_url = NULL
+){
+  if(is.null(api_key)){
+    api_key = nada_get_api_key()
+  }
+
+  if (missing(type) || is.null(type) || !nzchar(type)){
+    stop("`type` is required", call. = FALSE)
+  }
+
+  if (missing(idno) || is.null(idno) || !nzchar(idno)){
+    stop("`idno` is required", call. = FALSE)
+  }
+
+  if (missing(patches) || is.null(patches) || !is.list(patches) || length(patches) == 0){
+    stop("`patches` must be a non-empty list of JSON Patch operations", call. = FALSE)
+  }
+
+  invalid_patch <- vapply(
+    patches,
+    function(operation){
+      !is.list(operation) || is.null(operation$op) || is.null(operation$path)
+    },
+    logical(1)
+  )
+
+  if (any(invalid_patch)){
+    stop("each patch operation must include `op` and `path`", call. = FALSE)
+  }
+
+  options <- list(
+    patches = patches
+  )
+
+  endpoint <- paste0("datasets/patch/", type, "/", idno)
+  if (is.null(api_base_url)){
+    url <- nada_get_api_url(endpoint = endpoint)
+  } else {
+    url <- paste0(api_base_url, "/", endpoint)
+  }
+
+  httpResponse <- POST(
+    url,
+    add_headers("X-API-KEY" = api_key),
+    body = options,
+    content_type_json(),
+    encode = "json",
+    accept_json(),
+    verbose(nada_get_verbose())
+  )
+
+  if(httpResponse$status_code != 200){
+    warning(content(httpResponse, "text"))
+  }
+
+  output <- list(
+    "status_code" = httpResponse$status_code,
+    "response" = nada_http_response_json(httpResponse)
+  )
+
+  return(output)
+}
+
 #' Upload thumbnail for a study
 #'
 #' Upload thumbnail for a study
