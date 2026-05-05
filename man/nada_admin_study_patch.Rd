@@ -29,16 +29,18 @@ Apply RFC 6902 JSON Patch operations to an existing study metadata document.
 }
 \examples{
 \dontrun{
+patches <- list(
+  list(
+    op = "replace",
+    path = "/path/to/the/field",
+    value = "value"
+  )
+)
+
 nada_admin_study_patch(
   type = "survey",
   idno = "survey-idno-test",
-  patches = list(
-    list(
-      op = "replace",
-      path = "/database_description/title_statement/title",
-      value = "A nre title updated using patch"
-    )
-  )
+  patches = patches
 )
 }
 }
