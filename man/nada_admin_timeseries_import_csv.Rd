@@ -40,7 +40,7 @@ to the study (same effect as `nada_admin_timeseries_attach_dsd`) before import.}
 list with `status_code` and `response`.
 }
 \description{
-Wraps POST /api/admin/timeseries/data/import (multipart body includes `idno` and `file`).
+Wraps POST /api/admin/timeseries/data/{idno}/import (multipart: idno, file; URL path uses the same idno).
 }
 \details{
 The study must be linked to a global DSD, either beforehand (see
