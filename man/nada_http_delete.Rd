@@ -6,9 +6,6 @@
 \usage{
 nada_http_delete(url, options = list(), api_key = NULL, api_base_url = NULL)
 }
-\arguments{
-\item{url}{}
-}
 \value{
 http request output
 }

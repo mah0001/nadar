@@ -6,9 +6,6 @@
 \usage{
 nada_is_valid_url(url)
 }
-\arguments{
-\item{url}{}
-}
 \value{
 TRUE or FALSE
 }

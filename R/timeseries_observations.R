@@ -1,6 +1,6 @@
 #' Import observations from a CSV file into MongoDB
 #'
-#' Wraps POST /api/admin/timeseries/data/import (multipart body includes `idno` and `file`).
+#' Wraps POST /api/admin/timeseries/data/{idno}/import (multipart: idno, file; URL path uses the same idno).
 #'
 #' The study must be linked to a global DSD, either beforehand (see
 #' `nada_admin_timeseries_attach_dsd`) or in the same call by passing `dsd_idno`.
@@ -59,7 +59,11 @@ nada_admin_timeseries_import_csv <- function(idno,
   }
   if (is.null(api_key)) api_key <- nada_get_api_key()
 
-  endpoint <- "admin/timeseries/data/import"
+  endpoint <- paste0(
+    "admin/timeseries/data/",
+    utils::URLencode(as.character(idno), reserved = TRUE),
+    "/import"
+  )
   url <- if (is.null(api_base_url)) {
     nada_get_api_url(endpoint)
   } else {
