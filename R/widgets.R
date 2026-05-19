@@ -56,7 +56,7 @@ nada_admin_widget_create <- function(uuid, options=list(), zip_file, api_key=NUL
     stop(paste0("zip_file not found: ",zip_file), call. = FALSE)
   }
 
-  options[["file"]]=upload_file(zip_file)
+  options[["file"]]=httr::upload_file(zip_file)
   options[["uuid"]]=uuid
 
   url=nada_get_api_url(paste0('widgets/',uuid))

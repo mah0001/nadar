@@ -5,9 +5,9 @@
 \title{ImportDDI}
 \usage{
 nada_admin_study_import_ddi(
+  xml_file = NULL,
   api_key = NULL,
   api_base_url = NULL,
-  xml_file = NULL,
   rdf_file = NULL,
   repositoryid = NULL,
   overwrite = "no",
@@ -17,11 +17,11 @@ nada_admin_study_import_ddi(
 )
 }
 \arguments{
+\item{xml_file}{(Required) DDI/XML file path}
+
 \item{api_key}{API key (optional if API key is set using nada_set_api_key)}
 
 \item{api_base_url}{API base endpoint (optional if API base endpoint is set using nada_set_api_url)}
-
-\item{xml_file}{(Required) DDI/XML file path}
 
 \item{rdf_file}{RDF file path}
 

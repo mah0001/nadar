@@ -398,7 +398,7 @@ nada_admin_data_table_upload_csv <- function(
   file_options=list(
     'db_id' = db_id,
     'table_id'=table_id,
-    'file'=upload_file(file)
+    'file'=httr::upload_file(file)
   )
 
   httpResponse <- POST(url, add_headers("X-API-KEY" = api_key),body=file_options, encode="multipart")

@@ -107,9 +107,9 @@ nada_admin_study_list <- function(idno=NULL,
 #' Import a DDI file
 #'
 #' @return NULL
+#' @param xml_file (Required) DDI/XML file path
 #' @param api_key API key (optional if API key is set using nada_set_api_key)
 #' @param api_base_url API base endpoint (optional if API base endpoint is set using nada_set_api_url)
-#' @param xml_file (Required) DDI/XML file path
 #' @param repositoryid Collection ID that owns the study
 #' @param overwrite Overwrite if a study with the same ID already exists? Valid values "yes", "no"
 #' @param access_policy Select the access policy suitable for your data. Valid values - "open" "direct" "public" "licensed" "enclave" "remote" "other"
@@ -118,9 +118,9 @@ nada_admin_study_list <- function(idno=NULL,
 #' @param published Set status for study - 0 = Draft, 1 = Published
 #' @param verbose Show verbose output - True, False
 #' @export
-nada_admin_study_import_ddi <- function(api_key=NULL,
-                       api_base_url=NULL,
-                      xml_file=NULL,
+nada_admin_study_import_ddi <- function(xml_file=NULL,
+                      api_key=NULL,
+                      api_base_url=NULL,
                       rdf_file=NULL,
                       repositoryid=NULL,
                       overwrite='no',
@@ -138,11 +138,11 @@ nada_admin_study_import_ddi <- function(api_key=NULL,
   if(is.null(api_base_url)){
     url=nada_get_api_url(endpoint=endpoint)
   } else {
-    url = paste0(api_base_url,"/",endpoint)
+    url = paste0(sub("/$", "", api_base_url), "/", endpoint)
   }
 
   options=list(
-    "file"=upload_file(xml_file),
+    "file"=httr::upload_file(xml_file),
     "overwrite"=overwrite,
     "published"=published,
     "repositoryid"=repositoryid,
@@ -151,10 +151,16 @@ nada_admin_study_import_ddi <- function(api_key=NULL,
   )
 
   if (!is.null(rdf_file) && file.exists(rdf_file)){
-    options[["rdf"]]=upload_file(rdf_file)
+    options[["rdf"]]=httr::upload_file(rdf_file)
   }
 
-  httpResponse <- POST(url, add_headers("X-API-KEY" = api_key),body=options, accept_json(), verbose(nada_get_verbose()))
+  httpResponse <- httr::POST(
+    url,
+    httr::add_headers("X-API-KEY" = api_key),
+    body = options,
+    encode = "multipart",
+    httr::config(verbose = nada_get_verbose())
+  )
 
   output=NULL
 
@@ -427,7 +433,7 @@ nada_admin_thumbnail_upload <- function(
   }
 
   options=list(
-    file=upload_file(thumbnail)
+    file=httr::upload_file(thumbnail)
   )
 
   # Create url

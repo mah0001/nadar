@@ -42,7 +42,7 @@ nada_admin_collection_create <- function(
 
 
   if (!is.null(thumbnail) && file.exists(thumbnail)){
-    options[["thumbnail"]] = upload_file(thumbnail)
+    options[["thumbnail"]] = httr::upload_file(thumbnail)
   }
 
   httpResponse <- POST(url, add_headers("X-API-KEY" = api_key),
@@ -116,7 +116,7 @@ nada_admin_collection_update <- function(
   }
 
   if (!is.null(thumbnail) && file.exists(thumbnail)){
-    options[["thumbnail"]] = upload_file(thumbnail)
+    options[["thumbnail"]] = httr::upload_file(thumbnail)
   }
 
   httpResponse <- POST(url, add_headers("X-API-KEY" = api_key),

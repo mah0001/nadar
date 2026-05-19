@@ -28,6 +28,7 @@ These functions are accessible to non-admin users and typically provide read-onl
 
 | Function | Description |
 |----------|-------------|
+| `nada_study_list_idno()` | List published study IDNOs (`catalog/list_idno`, optional type e.g. `survey`) |
 | `nada_study_search()` | Search studies in catalog |
 | `nada_study_get_by_id()` | Get study by ID |
 | `nada_study_get_by_idno()` | Get study by IDNO |
@@ -50,8 +51,10 @@ These functions are accessible to non-admin users and typically provide read-onl
 
 | Function | Description |
 |----------|-------------|
-| `nada_resource_list()` | List external resources for a study |
-| `nada_resource_download()` | Download external resource |
+| `nada_resource_list()` | List external resources (public `catalog/resources/{idno}`) |
+| `nada_resource_download()` | Download external resource file (public catalog URLs) |
+| `nada_admin_resource_list()` | List resources (authenticated `datasets/{idno}/resources`) |
+| `nada_admin_resource_download()` | Download resource file (authenticated API) |
 
 #### Widget Functions
 

@@ -2,16 +2,20 @@
 % Please edit documentation in R/external_resources.R
 \name{nada_resource_list}
 \alias{nada_resource_list}
-\title{List External Resources}
+\title{List external resources (public catalog API)}
 \usage{
 nada_resource_list(dataset_idno, api_key = NULL, api_base_url = NULL)
 }
 \arguments{
-\item{dataset_idno}{Study IDNo}
+\item{dataset_idno}{Study IDNO}
+
+\item{api_key}{Optional API key}
+
+\item{api_base_url}{Optional API base URL (e.g. \code{https://host/index.php/api})}
 }
 \value{
-List of external resources
+Parsed JSON list with \code{status}, \code{total}, \code{resources}
 }
 \description{
-List external resources for a study
+Uses \code{GET /api/catalog/resources/{idno}}. No API key required.
 }

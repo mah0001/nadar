@@ -2,7 +2,7 @@
 % Please edit documentation in R/external_resources.R
 \name{nada_admin_resource_import}
 \alias{nada_admin_resource_import}
-\title{import_rdf}
+\title{Import an RDF file}
 \usage{
 nada_admin_resource_import(
   dataset_idno,

@@ -136,7 +136,7 @@ nada_admin_geospatial_import <- function(
   )
 
   if (file.exists(file_uri)){
-    options$file=upload_file(file_uri)
+    options$file=httr::upload_file(file_uri)
   }
   else if(nada_is_valid_url(file_uri)){
     options$file=file_uri

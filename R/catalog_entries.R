@@ -1,3 +1,60 @@
+#' List published study IDNOs
+#'
+#' Return all published studies in the catalog as \code{id}, \code{idno}, and \code{type}.
+#' Uses the public catalog API (\code{GET /api/catalog/list_idno}). No API key required.
+#'
+#' @param type Optional dataset type filter. Use \code{"survey"} for microdata studies
+#'   (DDI/XML available), e.g. \code{nada_study_list_idno(type = "survey")}.
+#' @param api_key Optional API key
+#' @param api_base_url Optional API base URL (e.g. \code{https://host/index.php/api})
+#' @return Parsed JSON list with \code{status}, \code{total}, and \code{records}
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#'   all_studies <- nada_study_list_idno()
+#'   surveys <- nada_study_list_idno(type = "survey")
+#' }
+nada_study_list_idno <- function(type = NULL, api_key = NULL, api_base_url = NULL) {
+  endpoint <- "catalog/list_idno"
+  if (!is.null(type) && nzchar(as.character(type)[1])) {
+    endpoint <- paste0(
+      endpoint,
+      "/",
+      URLencode(as.character(type)[1], reserved = TRUE)
+    )
+  }
+
+  if (is.null(api_base_url)) {
+    url <- nada_get_api_url(endpoint = endpoint)
+  } else {
+    url <- paste0(sub("/$", "", api_base_url), "/", endpoint)
+  }
+
+  if (is.null(api_key)) {
+    api_key <- nada_get_api_key()
+  }
+
+  httpResponse <- GET(
+    url,
+    if (nzchar(api_key)) add_headers("X-API-KEY" = api_key) else add_headers(),
+    accept_json(),
+    verbose(nada_get_verbose())
+  )
+
+  if (httpResponse$status_code != 200) {
+    warning(content(httpResponse, "text"))
+    return(list(
+      status_code = httpResponse$status_code,
+      status = "failed",
+      response = content(httpResponse, "text")
+    ))
+  }
+
+  fromJSON(content(httpResponse, "text"))
+}
+
+
 #' Search catalog
 #'
 #' Search catalog
