@@ -12,9 +12,6 @@ nada_http_put(
   api_base_url = NULL
 )
 }
-\arguments{
-\item{url}{}
-}
 \value{
 http request output
 
