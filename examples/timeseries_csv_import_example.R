@@ -32,52 +32,50 @@ study_res <- nadar::nada_admin_timeseries_add(
 )
 stopifnot(study_res$status_code == 200)
 
-# 2) Create DSD with codelists (full import payload)
+# 2) Create DSD with codelists (import_json body: data_structure + optional overwrite / dry_run)
 cat("2) Creating DSD + codelists:", dsd_idno, "\n")
 dsd_res <- nadar::nada_admin_dsd_import_json(
   payload = list(
-    structure = list(
+    data_structure = list(
       idno    = dsd_idno,
       name    = paste0("DSD_TS_", suffix),
       agency  = "NADA",
       version = "1.0.0",
-      title   = "Timeseries DSD Example"
-    ),
-    components = list(
-      list(
-        name        = "REF_AREA",
-        column_type = "geography",
-        data_type   = "string",
-        sort_order  = 0,
-        codelist = list(
-          idno    = cl_area_idno,
-          name    = paste0("CL_AREA_", suffix),
-          agency  = "NADA",
-          version = "1.0.0",
-          items = list(
-            list(code = "FR", label = "France",  sort_order = 0),
-            list(code = "DE", label = "Germany", sort_order = 1)
+      title   = "Timeseries DSD Example",
+      components = list(
+        list(
+          name        = "REF_AREA",
+          column_type = "geography",
+          data_type   = "string",
+          sort_order  = 0,
+          codelist = list(
+            idno    = cl_area_idno,
+            name    = paste0("CL_AREA_", suffix),
+            agency  = "NADA",
+            version = "1.0.0",
+            items = list(
+              list(code = "FR", label = "France",  sort_order = 0),
+              list(code = "DE", label = "Germany", sort_order = 1)
+            )
           )
+        ),
+        list(
+          name               = "TIME_PERIOD",
+          column_type        = "time_period",
+          data_type          = "string",
+          time_period_format = "YYYY-MM",
+          sort_order         = 1
+        ),
+        list(
+          name        = "OBS_VALUE",
+          column_type = "observation_value",
+          data_type   = "double",
+          sort_order  = 2
         )
-      ),
-      list(
-        name               = "TIME_PERIOD",
-        column_type        = "time_period",
-        data_type          = "string",
-        time_period_format = "YYYY-MM",
-        sort_order         = 1
-      ),
-      list(
-        name        = "OBS_VALUE",
-        column_type = "observation_value",
-        data_type   = "double",
-        sort_order  = 2
       )
     ),
-    import_options = list(
-      overwrite_codelists = FALSE,
-      dry_run = FALSE
-    )
+    overwrite = FALSE,
+    dry_run   = FALSE
   )
 )
 stopifnot(dsd_res$status_code %in% c(200, 201))
