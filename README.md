@@ -23,6 +23,9 @@ These functions are accessible to non-admin users and typically provide read-onl
 | `nada_http_post()` | HTTP POST request |
 | `nada_http_put()` | HTTP PUT request |
 | `nada_http_delete()` | HTTP DELETE request |
+| `nada_get_uploads_api_url()` | Build `/api/uploads/*` URL from API base |
+| `nada_resumable_upload_limits()` | GET server upload limits |
+| `nada_resumable_upload()` | Chunked resumable file upload |
 
 #### Study Functions (Catalog/Datasets)
 
@@ -115,10 +118,11 @@ These functions require admin privileges and allow write/delete operations.
 |----------|-------------|
 | `nada_admin_data_table_create()` | Create data table |
 | `nada_admin_data_table_delete()` | Delete data table |
-| `nada_admin_data_table_upload_csv()` | Upload CSV to table |
+| `nada_admin_data_table_upload_csv()` | Upload CSV/ZIP/TXT to table (direct multipart) |
+| `nada_admin_data_table_upload_csv_resumable()` | Upload CSV/ZIP/TXT via resumable chunks (large files) |
 | `nada_admin_data_table_import_csv()` | Import CSV data |
 | `nada_admin_data_table_batch_import_csv()` | Batch import CSV data |
-| `nada_admin_data_table_publish()` | Publish table (create + upload + import) |
+| `nada_admin_data_table_publish()` | Publish table (create + upload + import; optional `use_resumable`) |
 
 #### Resource Operations (External Resources)
 

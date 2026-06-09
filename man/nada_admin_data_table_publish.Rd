@@ -2,7 +2,7 @@
 % Please edit documentation in R/data.R
 \name{nada_admin_data_table_publish}
 \alias{nada_admin_data_table_publish}
-\title{publishTable}
+\title{Publish a data table (create, upload, import)}
 \usage{
 nada_admin_data_table_publish(
   db_id,
@@ -12,7 +12,10 @@ nada_admin_data_table_publish(
   overwrite = "no",
   api_key = NULL,
   api_base_url = NULL,
-  sleep_seconds = 1
+  sleep_seconds = 1,
+  use_resumable = FALSE,
+  chunk_size = NULL,
+  progress_callback = NULL
 )
 }
 \arguments{
@@ -20,8 +23,32 @@ nada_admin_data_table_publish(
 
 \item{table_id}{(Required) Table name}
 
-\item{metadata}{Table metadata}
+\item{table_metadata}{Table metadata passed to \code{\link{nada_admin_data_table_create}}}
+
+\item{csvfile}{Path to CSV, ZIP, or TXT file}
+
+\item{overwrite}{Unused; kept for backward compatibility}
+
+\item{api_key}{API key (optional if set via \code{nada_set_api_key})}
+
+\item{api_base_url}{API base URL (optional if set via \code{nada_set_api_url})}
+
+\item{sleep_seconds}{Seconds between import batch calls (default 1)}
+
+\item{use_resumable}{When \code{TRUE}, upload via
+\code{\link{nada_admin_data_table_upload_csv_resumable}} (for large files).
+When \code{FALSE} (default), use direct multipart
+\code{\link{nada_admin_data_table_upload_csv}}.}
+
+\item{chunk_size}{Optional chunk size in bytes for resumable upload}
+
+\item{progress_callback}{Optional progress function for resumable upload; see
+\code{\link{nada_resumable_upload}}}
+}
+\value{
+List with \code{table_def}, \code{upload_result}, and \code{csv_import}.
+  If upload fails, \code{csv_import} is \code{NULL} and import is not attempted.
 }
 \description{
-Create a data table with data using CSV
+Creates the table definition, uploads the data file, and runs batch import.
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/data.R
 \name{nada_admin_data_table_upload_csv}
 \alias{nada_admin_data_table_upload_csv}
-\title{Upload CSV or ZIP File}
+\title{Upload CSV, ZIP, or TXT file (direct multipart)}
 \usage{
 nada_admin_data_table_upload_csv(
   db_id,
@@ -17,26 +17,16 @@ nada_admin_data_table_upload_csv(
 
 \item{table_id}{(Required) Table name}
 
-\item{file}{(Required) CSV or ZIP file path}
+\item{file}{(Required) CSV, ZIP, or TXT file path}
 
 \item{api_key}{API key (optional if API key is set using nada_set_api_key)}
 
 \item{api_base_url}{API base endpoint (optional if API base endpoint is set using nada_set_api_url)}
 }
+\value{
+List with \code{status_code} and \code{response}.
+}
 \description{
-nada_admin_data_table_upload_csv
-}
-\details{
-Upload a CSV or ZIP file
-}
-\examples{
-
-nada_admin_data_table_upload_csv (
-  file = "path/to/data.csv"
-)
-
-nada_admin_data_table_upload_csv (
-  file = "path/to/data.zip"
-)
-
+Single-request multipart upload for smaller files. For large or resumable
+uploads, use \code{\link{nada_admin_data_table_upload_csv_resumable}}.
 }
