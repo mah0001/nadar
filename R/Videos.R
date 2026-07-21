@@ -41,7 +41,7 @@
 #')
 #'
 #'
-#'  video_add (
+#'  nada_admin_video_add (
 #'   idno="video-idno",
 #'   published = 1,
 #'   overwrite = "yes",
@@ -53,7 +53,7 @@
 #'
 #'
 #' @export
-video_add <- function(idno,
+nada_admin_video_add <- function(idno,
                       metadata,
                       repositoryid=NULL,
                       access_policy=NULL,
@@ -66,11 +66,11 @@ video_add <- function(idno,
 ){
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
 
-  result = create(type= "video",
+  result = nada_admin_study_create(type= "video",
                   idno= idno,
                   repositoryid= repositoryid,
                   access_policy= access_policy,

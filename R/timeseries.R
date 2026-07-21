@@ -201,7 +201,7 @@
 #'   "additional"= list()
 #' )
 #'
-#' timeseries_add (
+#' nada_admin_timeseries_add (
 #'   idno="document-idno",
 #'   published = 1,
 #'   overwrite = "yes",
@@ -213,7 +213,7 @@
 #'
 #'
 #' @export
-timeseries_add <- function(idno,
+nada_admin_timeseries_add <- function(idno,
                             repositoryid="central",
                             access_policy=NULL,
                             data_remote_url=NULL,
@@ -225,10 +225,10 @@ timeseries_add <- function(idno,
                             api_base_url=NULL){
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
-  result = create(type="timeseries",
+  result = nada_admin_study_create(type="timeseries",
                   idno=idno,
                   repositoryid=repositoryid,
                   access_policy=access_policy,
@@ -239,4 +239,106 @@ timeseries_add <- function(idno,
                   thumbnail=thumbnail)
 
   return (result)
+}
+
+
+#' Attach a timeseries study to a global DSD
+#'
+#' Wraps POST /api/admin/timeseries/data/{idno}/attach-dsd.
+#'
+#' @param idno Study idno.
+#' @param dsd_idno DSD idno (`data_structures.idno`).
+#' @param dsd_id Optional numeric DSD id. When supplied, both id and idno are sent.
+#' @param api_key Optional API key.
+#' @param api_base_url Optional API base URL.
+#'
+#' @return list with `status_code` and `response`.
+#' @export
+nada_admin_timeseries_attach_dsd <- function(idno,
+                                             dsd_idno = NULL,
+                                             dsd_id = NULL,
+                                             api_key = NULL,
+                                             api_base_url = NULL) {
+  if (is.null(idno) || !nzchar(as.character(idno))) {
+    stop("`idno` (study idno) is required.")
+  }
+  if ((is.null(dsd_idno) || !nzchar(as.character(dsd_idno))) && is.null(dsd_id)) {
+    stop("Provide at least one of `dsd_idno` or `dsd_id`.")
+  }
+  if (is.null(api_key)) api_key <- nada_get_api_key()
+
+  endpoint <- paste0(
+    "admin/timeseries/data/",
+    utils::URLencode(idno, reserved = TRUE),
+    "/attach-dsd"
+  )
+  url <- if (is.null(api_base_url)) {
+    nada_get_api_url(endpoint = endpoint)
+  } else {
+    paste0(api_base_url, "/", endpoint)
+  }
+
+  body <- list()
+  if (!is.null(dsd_idno) && nzchar(as.character(dsd_idno))) {
+    body$data_structure_reference <- as.character(dsd_idno)
+  }
+  if (!is.null(dsd_id)) {
+    body$data_structure_id <- as.integer(dsd_id)
+  }
+
+  httpResponse <- POST(url,
+                       add_headers("X-API-KEY" = api_key),
+                       body = body,
+                       content_type_json(),
+                       encode = "json",
+                       accept_json(),
+                       verbose(nada_get_verbose()))
+
+  list(
+    status_code = httpResponse$status_code,
+    response    = nada_http_response_json(httpResponse)
+  )
+}
+
+#' Detach a timeseries study from a global DSD
+#'
+#' Wraps POST /api/admin/timeseries/data/{idno}/attach-dsd with `{detach: true}`.
+#'
+#' @param idno Study idno.
+#' @param api_key Optional API key.
+#' @param api_base_url Optional API base URL.
+#'
+#' @return list with `status_code` and `response`.
+#' @export
+nada_admin_timeseries_detach_dsd <- function(idno,
+                                             api_key = NULL,
+                                             api_base_url = NULL) {
+  if (is.null(idno) || !nzchar(as.character(idno))) {
+    stop("`idno` (study idno) is required.")
+  }
+  if (is.null(api_key)) api_key <- nada_get_api_key()
+
+  endpoint <- paste0(
+    "admin/timeseries/data/",
+    utils::URLencode(idno, reserved = TRUE),
+    "/attach-dsd"
+  )
+  url <- if (is.null(api_base_url)) {
+    nada_get_api_url(endpoint = endpoint)
+  } else {
+    paste0(api_base_url, "/", endpoint)
+  }
+
+  httpResponse <- POST(url,
+                       add_headers("X-API-KEY" = api_key),
+                       body = list(detach = TRUE),
+                       content_type_json(),
+                       encode = "json",
+                       accept_json(),
+                       verbose(nada_get_verbose()))
+
+  list(
+    status_code = httpResponse$status_code,
+    response    = nada_http_response_json(httpResponse)
+  )
 }

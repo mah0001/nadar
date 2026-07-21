@@ -1,29 +1,93 @@
-#' publishTable
+#' Publish a data table (create, upload, import)
 #'
-#' Create a data table with data using CSV
+#' Creates the table definition, uploads the data file, and runs batch import.
 #'
-#' @return NULL
 #' @param db_id (Required) database name
 #' @param table_id (Required) Table name
-#' @param metadata Table metadata
+#' @param table_metadata Table metadata passed to \code{\link{nada_admin_data_table_create}}
+#' @param csvfile Path to CSV, ZIP, or TXT file
+#' @param overwrite Unused; kept for backward compatibility
+#' @param api_key API key (optional if set via \code{nada_set_api_key})
+#' @param api_base_url API base URL (optional if set via \code{nada_set_api_url})
+#' @param sleep_seconds Seconds between import batch calls (default 1)
+#' @param use_resumable When \code{TRUE}, upload via
+#'   \code{\link{nada_admin_data_table_upload_csv_resumable}} (for large files).
+#'   When \code{FALSE} (default), use direct multipart
+#'   \code{\link{nada_admin_data_table_upload_csv}}.
+#' @param chunk_size Optional chunk size in bytes for resumable upload
+#' @param progress_callback Optional progress function for resumable upload; see
+#'   \code{\link{nada_resumable_upload}}
+#' @return List with \code{table_def}, \code{upload_result}, and \code{csv_import}.
+#'   If upload fails, \code{csv_import} is \code{NULL} and import is not attempted.
 #' @export
-data_api_publish_table <- function(db_id, table_id, table_metadata, csvfile,overwrite="no", api_key=NULL, api_base_url=NULL, sleep_seconds=1) {
+nada_admin_data_table_publish <- function(
+  db_id,
+  table_id,
+  table_metadata,
+  csvfile,
+  overwrite = "no",
+  api_key = NULL,
+  api_base_url = NULL,
+  sleep_seconds = 1,
+  use_resumable = FALSE,
+  chunk_size = NULL,
+  progress_callback = NULL) {
 
-  #define table
-  table_def=data_api_create_table(db_id=db_id,table_id=table_id,metadata=table_metadata, api_key=api_key, api_base_url=api_base_url)
+  table_def <- nada_admin_data_table_create(
+    db_id = db_id,
+    table_id = table_id,
+    metadata = table_metadata,
+    api_key = api_key,
+    api_base_url = api_base_url
+  )
 
-  #upload csv file
-  upload_result=data_api_upload_csv(db_id=db_id,table_id=table_id,file=csvfile, api_key=api_key, api_base_url=api_base_url)
-
-  #import csv using new batch import process
-  csv_import=data_api_import_csv(db_id=db_id,table_id=table_id, api_key=api_key, api_base_url=api_base_url, sleep_seconds=sleep_seconds)
-
-  return (
-    list(
-      'table_def'=table_def,
-      'upload_result'=upload_result,
-      'csv_import'=csv_import
+  if (isTRUE(use_resumable)) {
+    upload_result <- nada_admin_data_table_upload_csv_resumable(
+      db_id = db_id,
+      table_id = table_id,
+      file = csvfile,
+      title = if (!is.null(table_metadata$title)) table_metadata$title else NULL,
+      description = if (!is.null(table_metadata$description)) table_metadata$description else NULL,
+      chunk_size = chunk_size,
+      api_key = api_key,
+      api_base_url = api_base_url,
+      progress_callback = progress_callback
     )
+  } else {
+    upload_result <- nada_admin_data_table_upload_csv(
+      db_id = db_id,
+      table_id = table_id,
+      file = csvfile,
+      api_key = api_key,
+      api_base_url = api_base_url
+    )
+  }
+
+  upload_ok <- upload_result$status_code == 200L &&
+    is.list(upload_result$response) &&
+    identical(upload_result$response$status, "success")
+
+  if (!upload_ok) {
+    warning("Table file upload failed; skipping import")
+    return(list(
+      table_def = table_def,
+      upload_result = upload_result,
+      csv_import = NULL
+    ))
+  }
+
+  csv_import <- nada_admin_data_table_import_csv(
+    db_id = db_id,
+    table_id = table_id,
+    api_key = api_key,
+    api_base_url = api_base_url,
+    sleep_seconds = sleep_seconds
+  )
+
+  list(
+    table_def = table_def,
+    upload_result = upload_result,
+    csv_import = csv_import
   )
 }
 
@@ -36,7 +100,7 @@ data_api_publish_table <- function(db_id, table_id, table_metadata, csvfile,over
 #' @param table_id (Required) Table name
 #' @param metadata Table metadata
 #' @export
-data_api_create_table <- function(
+nada_admin_data_table_create <- function(
   db_id,
   table_id,
   metadata,
@@ -46,17 +110,17 @@ data_api_create_table <- function(
   endpoint=paste0('tables/create_table/',db_id,'/',table_id)
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
-  url=get_api_url(endpoint)
+  url <- .nada_api_url(endpoint, api_base_url)
   print(metadata)
   httpResponse <- POST(url, add_headers("X-API-KEY" = api_key),
                        body = metadata,
                        content_type_json(),
                        encode="json",
                        accept_json(),
-                       verbose(get_verbose())
+                       verbose(nada_get_verbose())
   )
 
   output=NULL
@@ -95,12 +159,12 @@ data_api_create_table <- function(
 #' @param table_id (Required) Table name
 #' @param max_rows Number of rows to be processed in a batch
 #' @param delimiter CSV delimiter: comma, tab, semi-colon, colon (default: ",")
-#' @param api_key API key (optional if API key is set using set_api_key)
-#' @param api_base_url API base endpoint (optional if API base endpoint is set using set_api_url)
+#' @param api_key API key (optional if API key is set using nada_set_api_key)
+#' @param api_base_url API base endpoint (optional if API base endpoint is set using nada_set_api_url)
 #' @param max_batches Maximum number of batches to process (safety limit)
 #' @param sleep_seconds Sleep time in seconds between batch calls (default: 1)
 #' @export
-data_api_import_csv <- function(
+nada_admin_data_table_import_csv <- function(
   db_id,
   table_id,
   max_rows=NULL,
@@ -118,7 +182,7 @@ data_api_import_csv <- function(
   max_batches <- max_batches  # Safety limit to prevent infinite loops
   
   # Initial batch import
-  batch_result <- data_api_batch_import_csv(
+  batch_result <- nada_admin_data_table_batch_import_csv(
     db_id = db_id,
     table_id = table_id,
     max_rows = max_rows,
@@ -156,7 +220,7 @@ data_api_import_csv <- function(
       Sys.sleep(sleep_seconds)
     }
     
-    batch_result <- data_api_batch_import_csv(
+    batch_result <- nada_admin_data_table_batch_import_csv(
       db_id = db_id,
       table_id = table_id,
       max_rows = max_rows,
@@ -241,22 +305,22 @@ data_api_import_csv <- function(
 #'
 #' @return NULL
 #' @export
-data_api_list_tables <- function(
+nada_data_table_list <- function(
   api_key=NULL,
   api_base_url=NULL){
 
   endpoint=paste0('tables/list/')
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
-  url=get_api_url(endpoint)
+  url=nada_get_api_url(endpoint)
   httpResponse <- GET(url, add_headers("X-API-KEY" = api_key),
                       content_type_json(),
                       encode="json",
                       accept_json(),
-                      verbose(get_verbose())
+                      verbose(nada_get_verbose())
   )
 
   output=NULL
@@ -299,7 +363,7 @@ data_api_list_tables <- function(
 #' @param db_id (Required) database name
 #' @param table_id (Required) Table name
 #' @export
-data_api_delete_table <- function(
+nada_admin_data_table_delete <- function(
   db_id,
   table_id,
   api_key=NULL,
@@ -308,11 +372,11 @@ data_api_delete_table <- function(
   endpoint=paste0('tables/delete/',db_id,'/',table_id)
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
-  url=get_api_url(endpoint)
-  httpResponse <- POST(url, add_headers("X-API-KEY" = api_key),verbose(get_verbose()))
+  url=nada_get_api_url(endpoint)
+  httpResponse <- POST(url, add_headers("X-API-KEY" = api_key),verbose(nada_get_verbose()))
 
   output=NULL
 
@@ -345,86 +409,178 @@ data_api_delete_table <- function(
 
 
 
-#' Upload CSV or ZIP File
+#' Upload CSV, ZIP, or TXT file (direct multipart)
 #'
-#' data_api_upload_csv
+#' Single-request multipart upload for smaller files. For large or resumable
+#' uploads, use \code{\link{nada_admin_data_table_upload_csv_resumable}}.
 #'
-#' Upload a CSV or ZIP file
-#'
-#' @return NULL
 #' @param db_id (Required) database name
 #' @param table_id (Required) Table name
-#' @param file (Required) CSV or ZIP file path
-#' @param api_key API key (optional if API key is set using set_api_key)
-#' @param api_base_url API base endpoint (optional if API base endpoint is set using set_api_url)
-#'
-#' @examples
-#'
-#' data_api_upload_csv (
-#'   file = "path/to/data.csv"
-#' )
-#'
-#' data_api_upload_csv (
-#'   file = "path/to/data.zip"
-#' )
-#'
+#' @param file (Required) CSV, ZIP, or TXT file path
+#' @param api_key API key (optional if API key is set using nada_set_api_key)
+#' @param api_base_url API base endpoint (optional if API base endpoint is set using nada_set_api_url)
+#' @return List with \code{status_code} and \code{response}.
 #' @export
-data_api_upload_csv <- function(
+nada_admin_data_table_upload_csv <- function(
   db_id,
   table_id,
   file,
-  api_key=NULL,
-  api_base_url=NULL){
+  api_key = NULL,
+  api_base_url = NULL) {
 
-  endpoint=paste0('tables/upload/',db_id,'/',table_id)
+  endpoint <- paste0("tables/upload/", db_id, "/", table_id)
 
-  if(is.null(api_key)){
-    api_key=get_api_key();
+  if (is.null(api_key)) {
+    api_key <- nada_get_api_key()
   }
 
-  # Validate file extension
-  file_ext <- tolower(tools::file_ext(file))
-  if (!file_ext %in% c("csv", "zip")) {
-    stop("File must be a CSV or ZIP file")
+  if (!.nada_table_data_file_ext_ok(file)) {
+    stop("File must be a CSV, ZIP, or TXT file")
   }
 
-  # Check if file exists
   if (!file.exists(file)) {
     stop(paste("File does not exist:", file))
   }
 
-  url=get_api_url(endpoint)
+  url <- .nada_api_url(endpoint, api_base_url)
 
-  file_options=list(
-    'db_id' = db_id,
-    'table_id'=table_id,
-    'file'=upload_file(file)
+  file_options <- list(
+    file = httr::upload_file(file)
   )
 
-  httpResponse <- POST(url, add_headers("X-API-KEY" = api_key),body=file_options, encode="multipart")
-  output=NULL
+  httpResponse <- POST(
+    url,
+    add_headers("X-API-KEY" = api_key),
+    body = file_options,
+    encode = "multipart",
+    verbose(nada_get_verbose())
+  )
 
-  if(httpResponse$status_code!=200){
+  if (httpResponse$status_code != 200) {
     warning(content(httpResponse, "text"))
   }
 
-  result<- tryCatch(
-    {
-      output=list(
-        "status_code"=httpResponse$status_code,
-        "response"=nada_http_response_json(httpResponse)
-      )
-
-      return (output)
-    },
-    error= function(cond) {
+  tryCatch(
+    list(
+      status_code = httpResponse$status_code,
+      response = nada_http_response_json(httpResponse)
+    ),
+    error = function(cond) {
       message(paste0("ERROR processing response:: ", url))
       message(cond)
-      return (content(httpResponse,"text"))
+      list(
+        status_code = httpResponse$status_code,
+        response = content(httpResponse, "text")
+      )
+    }
+  )
+}
+
+
+#' Upload CSV, ZIP, or TXT file via resumable upload
+#'
+#' Uploads the file with \code{\link{nada_resumable_upload}}, then registers it
+#' with \code{POST /tables/upload/{dbId}/{tableId}} using \code{upload_id}.
+#'
+#' @param db_id (Required) database name
+#' @param table_id (Required) Table name
+#' @param file (Required) CSV, ZIP, or TXT file path
+#' @param title Optional table title
+#' @param description Optional table description
+#' @param chunk_size Optional chunk size in bytes (default from server limits)
+#' @param metadata Optional extra metadata for the resumable upload session
+#' @param api_key API key (optional if API key is set using nada_set_api_key)
+#' @param api_base_url API base endpoint (optional if API base endpoint is set using nada_set_api_url)
+#' @param progress_callback Optional progress function; see \code{\link{nada_resumable_upload}}
+#' @return List with \code{status_code}, \code{response}, and \code{upload_id}.
+#' @export
+nada_admin_data_table_upload_csv_resumable <- function(
+  db_id,
+  table_id,
+  file,
+  title = NULL,
+  description = NULL,
+  chunk_size = NULL,
+  metadata = NULL,
+  api_key = NULL,
+  api_base_url = NULL,
+  progress_callback = NULL) {
+
+  endpoint <- paste0("tables/upload/", db_id, "/", table_id)
+
+  if (is.null(api_key)) {
+    api_key <- nada_get_api_key()
+  }
+
+  if (!.nada_table_data_file_ext_ok(file)) {
+    stop("File must be a CSV, ZIP, or TXT file")
+  }
+
+  if (!file.exists(file)) {
+    stop(paste("File does not exist:", file))
+  }
+
+  upload_meta <- list(
+    source = "nadar",
+    allowed_types = "csv,zip,txt",
+    db_id = db_id,
+    table_id = table_id
+  )
+  if (!is.null(metadata) && is.list(metadata)) {
+    upload_meta <- c(upload_meta, metadata)
+  }
+
+  upload_result <- nada_resumable_upload(
+    file = file,
+    metadata = upload_meta,
+    chunk_size = chunk_size,
+    api_key = api_key,
+    api_base_url = api_base_url,
+    progress_callback = progress_callback
+  )
+
+  url <- .nada_api_url(endpoint, api_base_url)
+
+  body <- list(upload_id = upload_result$upload_id)
+  if (!is.null(title) && nzchar(as.character(title))) {
+    body$title <- as.character(title)
+  }
+  if (!is.null(description) && nzchar(as.character(description))) {
+    body$description <- as.character(description)
+  }
+
+  httpResponse <- POST(
+    url,
+    add_headers("X-API-KEY" = api_key),
+    body = body,
+    encode = "json",
+    content_type_json(),
+    accept_json(),
+    verbose(nada_get_verbose())
+  )
+
+  if (httpResponse$status_code != 200) {
+    warning(content(httpResponse, "text"))
+  }
+
+  result <- tryCatch(
+    list(
+      status_code = httpResponse$status_code,
+      response = nada_http_response_json(httpResponse),
+      upload_id = upload_result$upload_id
+    ),
+    error = function(cond) {
+      message(paste0("ERROR processing response:: ", url))
+      message(cond)
+      list(
+        status_code = httpResponse$status_code,
+        response = content(httpResponse, "text"),
+        upload_id = upload_result$upload_id
+      )
     }
   )
 
-  return (result)
+  result
 }
 
 
@@ -437,17 +593,17 @@ data_api_upload_csv <- function(
 #' @param table_id (Required) Table name
 #' @param max_rows Number of rows to be processed in a batch
 #' @param delimiter CSV delimiter: comma, tab, semi-colon, colon (default: "comma")
-#' @param api_key API key (optional if API key is set using set_api_key)
-#' @param api_base_url API base endpoint (optional if API base endpoint is set using set_api_url)
+#' @param api_key API key (optional if API key is set using nada_set_api_key)
+#' @param api_base_url API base endpoint (optional if API base endpoint is set using nada_set_api_url)
 #'
 #' @examples
 #'
-#' data_api_batch_import_csv (
+#' nada_admin_data_table_batch_import_csv (
 #'   db_id = "example",
 #'   table_id = "prices"
 #' )
 #'
-#' data_api_batch_import_csv (
+#' nada_admin_data_table_batch_import_csv (
 #'   db_id = "example",
 #'   table_id = "prices",
 #'   max_rows = 5000,
@@ -455,7 +611,7 @@ data_api_upload_csv <- function(
 #' )
 #'
 #' @export
-data_api_batch_import_csv <- function(
+nada_admin_data_table_batch_import_csv <- function(
   db_id,
   table_id,
   max_rows=NULL,
@@ -466,10 +622,10 @@ data_api_batch_import_csv <- function(
   endpoint='tables/import'
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
-  url=get_api_url(endpoint)
+  url <- .nada_api_url(endpoint, api_base_url)
 
   import_options=list(
     'db_id' = db_id,
@@ -490,7 +646,7 @@ data_api_batch_import_csv <- function(
                        content_type_json(),
                        encode="json",
                        accept_json(),
-                       verbose(get_verbose())
+                       verbose(nada_get_verbose())
   )
 
   output=NULL
@@ -559,12 +715,12 @@ data_api_batch_import_csv <- function(
 #' @param table_id (required) Table ID
 #' @param idno (required) Study unique identifier
 #' @param dataset_title (required) Dataset title
-#' @param api_key API key (optional if API key is set using set_api_key)
-#' @param api_base_url API base endpoint (optional if API base endpoint is set using set_api_url)
+#' @param api_key API key (optional if API key is set using nada_set_api_key)
+#' @param api_base_url API base endpoint (optional if API base endpoint is set using nada_set_api_url)
 #'
 #' @examples
 #'
-#' attach_to_study (
+#' nada_admin_study_attach (
 #'   db_id="example",
 #'   table_id="prices",
 #'   idno="survey-idno-test",
@@ -572,7 +728,7 @@ data_api_batch_import_csv <- function(
 #' )
 #'
 #' @export
-attach_to_study <- function(
+nada_admin_study_attach <- function(
 					db_id,
 					table_id,
           idno,
@@ -581,7 +737,7 @@ attach_to_study <- function(
 					api_base_url=NULL){
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
   options=list(
@@ -594,7 +750,7 @@ attach_to_study <- function(
   # Create url
   endpoint <- paste0('tables/attach_to_study')
   if(is.null(api_base_url)){
-    url=get_api_url(endpoint=endpoint)
+    url=nada_get_api_url(endpoint=endpoint)
   } else {
     url = paste0(api_base_url,"/",endpoint)
   }
@@ -605,7 +761,7 @@ attach_to_study <- function(
                        content_type_json(),
                        encode="json",
                        accept_json(),
-                       verbose(get_verbose()))
+                       verbose(nada_get_verbose()))
 
   output=NULL
 

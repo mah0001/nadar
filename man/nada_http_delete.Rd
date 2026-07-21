@@ -6,8 +6,17 @@
 \usage{
 nada_http_delete(url, options = list(), api_key = NULL, api_base_url = NULL)
 }
+\arguments{
+\item{url}{API endpoint path (appended to the configured API base URL).}
+
+\item{options}{Optional list passed as the request body.}
+
+\item{api_key}{Optional API key; defaults to \code{nada_get_api_key()}.}
+
+\item{api_base_url}{Unused; kept for API consistency with other helpers.}
+}
 \value{
-http request output
+httr response object.
 }
 \description{
 Make an http DELETE request

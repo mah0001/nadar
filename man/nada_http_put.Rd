@@ -12,11 +12,19 @@ nada_http_put(
   api_base_url = NULL
 )
 }
+\arguments{
+\item{url}{API endpoint path (appended to the configured API base URL).}
+
+\item{options}{Optional list passed as the request body.}
+
+\item{request_encode}{Body encoding: \code{"multipart"}, \code{"form"}, \code{"json"}, or \code{"raw"}.}
+
+\item{api_key}{Optional API key; defaults to \code{nada_get_api_key()}.}
+
+\item{api_base_url}{Unused; kept for API consistency with other helpers.}
+}
 \value{
-http request output
-
-
-request_encode = c("multipart", "form", "json", "raw")
+httr response object.
 }
 \description{
 Make an http PUT request

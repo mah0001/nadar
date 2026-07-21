@@ -1,3 +1,60 @@
+#' List published study IDNOs
+#'
+#' Return all published studies in the catalog as \code{id}, \code{idno}, and \code{type}.
+#' Uses the public catalog API (\code{GET /api/catalog/list_idno}). No API key required.
+#'
+#' @param type Optional dataset type filter. Use \code{"survey"} for microdata studies
+#'   (DDI/XML available), e.g. \code{nada_study_list_idno(type = "survey")}.
+#' @param api_key Optional API key
+#' @param api_base_url Optional API base URL (e.g. \code{https://host/index.php/api})
+#' @return Parsed JSON list with \code{status}, \code{total}, and \code{records}
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#'   all_studies <- nada_study_list_idno()
+#'   surveys <- nada_study_list_idno(type = "survey")
+#' }
+nada_study_list_idno <- function(type = NULL, api_key = NULL, api_base_url = NULL) {
+  endpoint <- "catalog/list_idno"
+  if (!is.null(type) && nzchar(as.character(type)[1])) {
+    endpoint <- paste0(
+      endpoint,
+      "/",
+      URLencode(as.character(type)[1], reserved = TRUE)
+    )
+  }
+
+  if (is.null(api_base_url)) {
+    url <- nada_get_api_url(endpoint = endpoint)
+  } else {
+    url <- paste0(sub("/$", "", api_base_url), "/", endpoint)
+  }
+
+  if (is.null(api_key)) {
+    api_key <- nada_get_api_key()
+  }
+
+  httpResponse <- GET(
+    url,
+    if (nzchar(api_key)) add_headers("X-API-KEY" = api_key) else add_headers(),
+    accept_json(),
+    verbose(nada_get_verbose())
+  )
+
+  if (httpResponse$status_code != 200) {
+    warning(content(httpResponse, "text"))
+    return(list(
+      status_code = httpResponse$status_code,
+      status = "failed",
+      response = content(httpResponse, "text")
+    ))
+  }
+
+  fromJSON(content(httpResponse, "text"))
+}
+
+
 #' Search catalog
 #'
 #' Search catalog
@@ -8,7 +65,7 @@
 #'   \item from - Year from
 #'   \item to | Year to
 #'   \item country | Country names or codes. To search for multiple countries, use pipe (|) to separate them e.g. Albania|Turkey
-#'   \item collection - Filter by one or more collections. e.g. `collection1, collection2`
+#'   \item collection - Filter by one or more nada_collection_list. e.g. `collection1, collection2`
 #'   \item created - Filter by date of creation. Use date format YYYY-MM-DD. For example, `2020/04/01` returns rows created on and after the date. To specify a date range, use 2020/04/01-2020/04/15
 #'   \item dtype - Data access types (`open`, `direct`, `public`, `licensed`, `remote`). For multiple values, use comma e.g. `open,direct`
 #' }
@@ -21,7 +78,7 @@
 #'
 #' #example - keywords search
 #'
-#' catalog_search (
+#' nada_study_search (
 #'   options=list(
 #'     sk="health survey"
 #'   ),
@@ -30,7 +87,7 @@
 #'
 #' #example - keywords search + filter by country and collection
 #'
-#' catalog_search (
+#' nada_study_search (
 #'   options=list(
 #'     sk="health survey",
 #'     country="albania|afghanistan",
@@ -45,7 +102,7 @@
 #' @return list
 #'
 #' @export
-catalog_search <- function(
+nada_study_search <- function(
                      options = list(
                        sk = NULL,
                        from = NULL,
@@ -74,7 +131,7 @@ catalog_search <- function(
   }
 
   if (is.null(api_key)) {
-    api_key <- get_api_key()
+    api_key <- nada_get_api_key()
   }
 
   params <- c()
@@ -108,12 +165,12 @@ catalog_search <- function(
   }
 
   if (is.null(api_base_url)) {
-    url <- get_api_url(endpoint = endpoint)
+    url <- nada_get_api_url(endpoint = endpoint)
   } else {
     url <- paste0(api_base_url, "/", endpoint)
   }
 
-  httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json(), verbose(get_verbose()))
+  httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json(), verbose(nada_get_verbose()))
   handle_api_error(httpResponse, "Initial API call failed:")
 
   output <- fromJSON(content(httpResponse, "text"))
@@ -139,12 +196,12 @@ catalog_search <- function(
       endpoint <- paste0("catalog", "?page=", current_page, "&ps=", MAX_SINGLE_REQUEST, '&', params)
 
       if (is.null(api_base_url)) {
-        url <- get_api_url(endpoint = endpoint)
+        url <- nada_get_api_url(endpoint = endpoint)
       } else {
         url <- paste0(api_base_url, "/", endpoint)
       }
 
-      httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json(), verbose(get_verbose()))
+      httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json(), verbose(nada_get_verbose()))
       handle_api_error(httpResponse, paste("Pagination API call failed (page", current_page, "):"))
 
       page_output <- fromJSON(content(httpResponse, "text"))
@@ -194,10 +251,10 @@ catalog_search <- function(
 #' @param api_base_url Base URL for the API
 #' @return DDI XML content as character string (if no output_file) or file path (if output_file provided)
 #' @export
-catalog_download_ddi <- function(idno, output_file = NULL, ddi_url = NULL, api_key = NULL, api_base_url = NULL) {
+nada_study_download_ddi <- function(idno, output_file = NULL, ddi_url = NULL, api_key = NULL, api_base_url = NULL) {
 
   if (is.null(api_key)) {
-    api_key <- get_api_key()
+    api_key <- nada_get_api_key()
   }
 
   if (!is.null(ddi_url)) {
@@ -206,7 +263,7 @@ catalog_download_ddi <- function(idno, output_file = NULL, ddi_url = NULL, api_k
     endpoint <- paste0("catalog/ddi/", idno)
 
     if (is.null(api_base_url)) {
-      url <- get_api_url(endpoint = endpoint)
+      url <- nada_get_api_url(endpoint = endpoint)
     } else {
       url <- paste0(api_base_url, "/", endpoint)
     }
@@ -217,11 +274,67 @@ catalog_download_ddi <- function(idno, output_file = NULL, ddi_url = NULL, api_k
   }
 
   headers <- if (!is.null(api_key)) c("X-API-KEY" = api_key) else NULL
-  
+
   download.file(url, output_file,
                 method = "curl",
                 headers = headers,
-                quiet = !get_verbose())
+                quiet = !nada_get_verbose())
+
+  result <- list(
+    file_path = output_file,
+    api_url = url,
+    status_code = 200,
+    idno = if (!is.null(ddi_url)) NULL else idno
+  )
+
+  structure(result, class = "nada_ddi_download")
+}
+
+
+#' Download DDI-JSON metadata
+#'
+#' Download DDI/JSON by Study IDNO or Direct URL
+#'
+#' @param idno Study IDNo (ignored if ddi_url is provided)
+#' @param output_file Optional output file path to save DDI content
+#' @param ddi_url Optional direct URL to download DDI from
+#' @param api_key API key
+#' @param api_base_url Base URL for the API
+#' @return DDI JSON content as character string (if no output_file) or file path (if output_file provided)
+#' @export
+nada_study_download_ddi_json <- function(idno,
+                                         output_file = NULL,
+                                         ddi_url = NULL,
+                                         api_key = NULL,
+                                         api_base_url = NULL) {
+
+  if (is.null(api_key)) {
+    api_key <- nada_get_api_key()
+  }
+
+  if (!is.null(ddi_url)) {
+    url <- ddi_url
+  } else {
+
+    endpoint <- paste0("catalog/json/", idno)
+
+    if (is.null(api_base_url)) {
+      url <- nada_get_api_url(endpoint = endpoint)
+    } else {
+      url <- paste0(api_base_url, "/", endpoint)
+    }
+  }
+
+  if (is.null(output_file)) {
+    output_file <- tempfile(fileext = ".json")
+  }
+
+  headers <- if (!is.null(api_key)) c("X-API-KEY" = api_key) else NULL
+
+  download.file(url, output_file,
+                method = "curl",
+                headers = headers,
+                quiet = !nada_get_verbose())
 
   result <- list(
     file_path = output_file,
@@ -243,10 +356,10 @@ catalog_download_ddi <- function(idno, output_file = NULL, ddi_url = NULL, api_k
 #' @param api_base_url Base URL for the API
 #' @return RDF XML content as character string (if no output_file) or file path (if output_file provided)
 #' @export
-catalog_download_rdf <- function(idno, output_file = NULL, rdf_url = NULL, api_key = NULL, api_base_url = NULL) {
+nada_study_download_rdf <- function(idno, output_file = NULL, rdf_url = NULL, api_key = NULL, api_base_url = NULL) {
 
   if (is.null(api_key)) {
-    api_key <- get_api_key()
+    api_key <- nada_get_api_key()
   }
 
   if (!is.null(rdf_url)) {
@@ -255,7 +368,7 @@ catalog_download_rdf <- function(idno, output_file = NULL, rdf_url = NULL, api_k
     endpoint <- paste0("catalog/rdf/", idno)
 
     if (is.null(api_base_url)) {
-      url <- get_api_url(endpoint = endpoint)
+      url <- nada_get_api_url(endpoint = endpoint)
     } else {
       url <- paste0(api_base_url, "/", endpoint)
     }
@@ -266,11 +379,11 @@ catalog_download_rdf <- function(idno, output_file = NULL, rdf_url = NULL, api_k
   }
 
   headers <- if (!is.null(api_key)) c("X-API-KEY" = api_key) else NULL
-  
+
   download.file(url, output_file,
                 method = "curl",
                 headers = headers,
-                quiet = !get_verbose())
+                quiet = !nada_get_verbose())
 
   result <- list(
     file_path = output_file,
@@ -283,9 +396,6 @@ catalog_download_rdf <- function(idno, output_file = NULL, rdf_url = NULL, api_k
 }
 
 
-
-
-
 #' Find a study by IDNO
 #'
 #' Find study by IDNO
@@ -293,12 +403,18 @@ catalog_download_rdf <- function(idno, output_file = NULL, rdf_url = NULL, api_k
 #' @return list
 #'
 #' @export
-catalog_find_by_idno <- function(idno){
+nada_study_get_by_idno <- function(idno){
   return ("TODO")
 }
 
+#' Find a study by ID
+#'
+#' Find study by ID
+#'
+#' @return list
+#'
 #' @export
-catalog_find_by_id <- function(id){
+nada_study_get_by_id <- function(id){
   return ("TODO")
 }
 
@@ -310,10 +426,10 @@ catalog_find_by_id <- function(id){
 #' @return list
 #'
 #' @export
-replace_idno <- function(old_idno,new_idno,api_key=NULL,api_base_url=NULL){
+nada_admin_study_replace_idno <- function(old_idno,new_idno,api_key=NULL,api_base_url=NULL){
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
   options=list(
@@ -321,13 +437,13 @@ replace_idno <- function(old_idno,new_idno,api_key=NULL,api_base_url=NULL){
     new_idno=new_idno
   )
 
-  url=get_api_url('datasets/replace_idno')
+  url=nada_get_api_url('datasets/replace_idno')
   httpResponse <- POST(url,
                        add_headers("X-API-KEY" = api_key),
                        body=options,
                        content_type_json(),
                        encode="json",
-                       verbose(get_verbose()))
+                       verbose(nada_get_verbose()))
 
   output=NULL
 
@@ -343,6 +459,64 @@ replace_idno <- function(old_idno,new_idno,api_key=NULL,api_base_url=NULL){
   return (output)
 }
 
+#' Get study information excluding data dictionary
+#'
+#' Fetches detail metadata of a study without the excluding
+#'
+#' @param idno Character. Study unique ID number
+#' @param api_key API key
+#' @param api_base_url Base URL for the API
+#'
+#' @return A parsed JSON
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#'   study <- nada_study_information(idno = "AFG_2015_DHS_v01_M")
+#'   print(study)
+#' }
+nada_study_information <- function(
+    idno = NULL,
+    api_key = NULL,
+    api_base_url = NULL
+) {
+
+  # survey id
+  if (is.null(idno)) {
+    cli::cli_abort("Study ID is not provided")
+  }
+
+  # Construct API endpoint
+  endpoint <- paste0("catalog/", idno)
+
+  if (is.null(api_base_url)) {
+    url <- nada_get_api_url(endpoint = endpoint)
+  } else {
+    url <- paste0(api_base_url, endpoint)
+  }
+
+  # Send GET request
+  httpResponse <- GET(url,
+                      accept_json(),
+                      verbose(nada_get_verbose())
+  )
+
+  # Check for HTTP errors
+  if (httr::http_error(httpResponse)) {
+
+    cli::cli_abort(c(
+      "x" = "HTTP error {.code {httr::status_code(httpResponse)}}",
+      "!" = httr::content(httpResponse, "text")
+    ))
+
+  }
+
+  # Parse content
+  parsed <- httr::content(httpResponse, "parsed", type = "application/json")
+
+  return(parsed$dataset$metadata)
+
+}
 
 #' Get study metadata as JSON
 #'
@@ -352,10 +526,10 @@ replace_idno <- function(old_idno,new_idno,api_key=NULL,api_base_url=NULL){
 #' @param idno Dataset IDNo
 #' @param is_legacy TRUE | FALSE - if using NADA < 5.3, use legacy as TRUE
 #' @export
-study_json <- function(idno,is_legacy=FALSE, api_key=NULL,api_base_url=NULL){
+nada_admin_study_get_json <- function(idno,is_legacy=FALSE, api_key=NULL,api_base_url=NULL){
 
     if(is.null(api_key)){
-      api_key=get_api_key();
+      api_key=nada_get_api_key();
     }
 
 
@@ -437,7 +611,80 @@ study_json <- function(idno,is_legacy=FALSE, api_key=NULL,api_base_url=NULL){
 #' @param output_file Path to the output file
 #' @param is_legacy TRUE | FALSE - if using NADA < 5.3, use legacy as TRUE
 #' @export
-write_study_json<-function(idno,output_file,is_legacy=FALSE,api_key=NULL, api_base_url=NULL){
-  json_metadata=study_json(idno,api_key=api_key, is_legacy=is_legacy, api_base_url=api_base_url)
+nada_admin_study_write_json<-function(idno,output_file,is_legacy=FALSE,api_key=NULL, api_base_url=NULL){
+  json_metadata=nada_admin_study_get_json(idno,api_key=api_key, is_legacy=is_legacy, api_base_url=api_base_url)
   write(jsonlite::toJSON(json_metadata,auto_unbox=TRUE), output_file)
+}
+
+
+#' Get Latest catalog entries from World Bank Microdata Library
+#'
+#' Fetches the latest catalog entries from the World Bank Microdata Library API.
+#'
+#' @param api_key API key (optional if API key is set using nada_set_api_key)
+#' @param api_base_url API base endpoint (optional if API base endpoint is set using nada_set_api_url)
+#' @param as_data_table Logical. If `TRUE` and format is JSON, converts the result to a `data.table`. Defaults to `TRUE`.
+#'
+#' @return A `data.table` if `as_data_table = TRUE`, otherwise a list (parsed JSON) or raw text for other formats.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#'   dt <- nada_latest_entries()
+#'   print(dt)
+#' }
+nada_latest_entries <- function(
+    api_key = NULL,
+    api_base_url = NULL,
+    as_data_table = TRUE
+) {
+
+  # Construct API endpoint
+  endpoint <- paste0("catalog/latest")
+
+  if (is.null(api_base_url)) {
+    url <- nada_get_api_url(endpoint = endpoint)
+  } else {
+    url <- paste0(api_base_url, endpoint)
+  }
+
+  # Send GET request
+  httpResponse <- GET(url,
+                      accept_json(),
+                      add_headers("X-API-KEY" = api_key),
+                      verbose(nada_get_verbose())
+  )
+
+  # Check for HTTP errors
+  if (httr::http_error(httpResponse)) {
+
+    cli::cli_abort(c(
+      "x" = "HTTP error {.code {httr::status_code(httpResponse)}}",
+      "!" = httr::content(httpResponse, "text")
+    ))
+
+  }
+
+  # Parse content
+  parsed <- httr::content(httpResponse, "parsed", type = "application/json")
+  if (as_data_table) {
+
+    dt <- data.table::rbindlist(
+      lapply(parsed$result, function(x) {
+        data.table::data.table(
+          idno = x$idno,
+          title = x$title,
+          nation = x$nation,
+          created = x$created,
+          changed = x$changed
+        )
+      }),
+      fill = TRUE
+    )
+    return(dt)
+
+  } else {
+    return(parsed)
+  }
+
 }

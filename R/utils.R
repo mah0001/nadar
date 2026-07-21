@@ -8,7 +8,7 @@
 #' @param file_dir_jpg \strong{(optional)} file directory to store jpg. If empty, file will be stored in same folder as pdf
 #' @param dpi set image resolution in dpi, default is 72 dpi
 #' @export
-capture_pdf_cover <- function(file_path, file_name_jpg = NULL,
+nada_capture_pdf_cover <- function(file_path, file_name_jpg = NULL,
                               file_dir_jpg = NULL, dpi = 72) {
 
   if (!file.exists(file_path)){
@@ -58,12 +58,12 @@ capture_pdf_cover <- function(file_path, file_name_jpg = NULL,
 
 #' Check string is a URL
 #'
-#' @param url
+#' @param url URL string to validate.
 #'
 #' @return TRUE or FALSE
 #'
 #' @export
-is_valid_url <- function(url){
+nada_is_valid_url <- function(url){
 
   if(startsWith(url, 'http://')  ||
      startsWith(url, 'https://') ||
@@ -79,9 +79,12 @@ is_valid_url <- function(url){
 
 #' Make an http GET request
 #'
-#' @param url
+#' @param url API endpoint path (appended to the configured API base URL).
+#' @param options Optional list passed as the request body.
+#' @param api_key Optional API key; defaults to \code{nada_get_api_key()}.
+#' @param api_base_url Unused; kept for API consistency with other helpers.
 #'
-#' @return http request output
+#' @return List with \code{status_code} and parsed \code{response}.
 #'
 #' @export
 nada_http_get <- function(
@@ -91,12 +94,12 @@ nada_http_get <- function(
   api_base_url=NULL){
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
-  url=get_api_url(paste0(url))
+  url=nada_get_api_url(paste0(url))
   print(url)
-  httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), body=options, verbose(get_verbose()) )
+  httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), body=options, verbose(nada_get_verbose()) )
 
   output=NULL
 
@@ -115,9 +118,12 @@ nada_http_get <- function(
 
 #' Make an http POST request
 #'
-#' @param url
+#' @param url API endpoint path (appended to the configured API base URL).
+#' @param options Optional list passed as the request body.
+#' @param api_key Optional API key; defaults to \code{nada_get_api_key()}.
+#' @param api_base_url Unused; kept for API consistency with other helpers.
 #'
-#' @return http request output
+#' @return httr response object.
 #'
 #' @export
 nada_http_post <- function(
@@ -127,10 +133,10 @@ nada_http_post <- function(
   api_base_url=NULL){
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
-  url=get_api_url(paste0(url))
+  url=nada_get_api_url(paste0(url))
   httpResponse <- POST(url, add_headers("X-API-KEY" = api_key), body=options)
 
   if(httpResponse$status_code!=200){
@@ -143,12 +149,13 @@ nada_http_post <- function(
 
 #' Make an http PUT request
 #'
-#' @param url
+#' @param url API endpoint path (appended to the configured API base URL).
+#' @param options Optional list passed as the request body.
+#' @param request_encode Body encoding: \code{"multipart"}, \code{"form"}, \code{"json"}, or \code{"raw"}.
+#' @param api_key Optional API key; defaults to \code{nada_get_api_key()}.
+#' @param api_base_url Unused; kept for API consistency with other helpers.
 #'
-#' @return http request output
-#'
-#'
-#' request_encode = c("multipart", "form", "json", "raw")
+#' @return httr response object.
 #'
 #' @export
 nada_http_put <- function(
@@ -159,10 +166,10 @@ nada_http_put <- function(
   api_base_url=NULL){
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
-  url=get_api_url(paste0(url))
+  url=nada_get_api_url(paste0(url))
   httpResponse <- PUT(url, add_headers("X-API-KEY" = api_key), body=options, encode=request_encode)
 
   if(httpResponse$status_code!=200){
@@ -176,9 +183,12 @@ nada_http_put <- function(
 
 #' Make an http DELETE request
 #'
-#' @param url
+#' @param url API endpoint path (appended to the configured API base URL).
+#' @param options Optional list passed as the request body.
+#' @param api_key Optional API key; defaults to \code{nada_get_api_key()}.
+#' @param api_base_url Unused; kept for API consistency with other helpers.
 #'
-#' @return http request output
+#' @return httr response object.
 #'
 #' @export
 nada_http_delete <- function(
@@ -188,10 +198,10 @@ nada_http_delete <- function(
   api_base_url=NULL){
 
   if(is.null(api_key)){
-    api_key=get_api_key();
+    api_key=nada_get_api_key();
   }
 
-  url=get_api_url(paste0(url))
+  url=nada_get_api_url(paste0(url))
   httpResponse <- DELETE(url, add_headers("X-API-KEY" = api_key), body=options)
 
   if(httpResponse$status_code!=200){
