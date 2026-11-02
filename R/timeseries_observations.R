@@ -102,3 +102,62 @@ nada_admin_timeseries_import_csv <- function(idno,
 }
 
 
+#' Delete all observations for a timeseries study
+#'
+#' Wraps POST /api/admin/timeseries/data/{idno}/clear-data.
+#'
+#' Removes the study's observations from MongoDB, its value-count summaries and
+#' its canonical import CSV. The link to the DSD is kept. Use it before
+#' re-running `nada_admin_timeseries_import_csv` for the same study, which
+#' otherwise fails with 409 on duplicate rows.
+#'
+#' HTTP responses:
+#'   - 200 `{ status, result: { cleared } }`.
+#'   - 400 when the study does not exist or has no DSD link.
+#'
+#' @param idno Study idno (`surveys.idno`).
+#' @param api_key Optional API key; defaults to `nada_get_api_key()`.
+#' @param api_base_url Optional API base URL; defaults to `nada_get_api_url()`.
+#'
+#' @return list with `status_code` and `response`.
+#'
+#' @examples
+#' \dontrun{
+#'   nada_admin_timeseries_clear_data(idno = "prices-study")
+#'   nada_admin_timeseries_import_csv(idno = "prices-study", file = "observations.csv")
+#' }
+#'
+#' @export
+nada_admin_timeseries_clear_data <- function(idno,
+                                             api_key = NULL,
+                                             api_base_url = NULL) {
+  if (is.null(idno) || !nzchar(as.character(idno))) {
+    stop("`idno` (study idno) is required.")
+  }
+  if (is.null(api_key)) api_key <- nada_get_api_key()
+
+  endpoint <- paste0(
+    "admin/timeseries/data/",
+    utils::URLencode(as.character(idno), reserved = TRUE),
+    "/clear-data"
+  )
+  url <- if (is.null(api_base_url)) {
+    nada_get_api_url(endpoint)
+  } else {
+    paste0(api_base_url, "/", endpoint)
+  }
+
+  httpResponse <- POST(url,
+                       add_headers("X-API-KEY" = api_key),
+                       accept_json(),
+                       verbose(nada_get_verbose()))
+
+  if (httpResponse$status_code != 200) {
+    warning(content(httpResponse, "text"))
+  }
+
+  list(
+    status_code = httpResponse$status_code,
+    response    = nada_http_response_json(httpResponse)
+  )
+}
