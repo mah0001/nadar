@@ -6,9 +6,13 @@
 \usage{
 nada_admin_timeseries_database_create(
   idno,
+  repositoryid = NULL,
+  access_policy = NULL,
+  data_remote_url = NULL,
   published = 0,
   overwrite = "no",
   metadata = NULL,
+  thumbnail = NULL,
   api_key = NULL,
   api_base_url = NULL
 )
@@ -16,11 +20,23 @@ nada_admin_timeseries_database_create(
 \arguments{
 \item{idno}{(required) Study unique identifier}
 
+\item{repositoryid}{Collection ID that owns the study}
+
+\item{access_policy}{Select the access policy suitable for your data. Valid values - "open" "direct" "public" "licensed" "enclave" "remote" "other"}
+
+\item{data_remote_url}{Link to the website where the data is available. Required if access_policy is set to 'remote'.}
+
 \item{published}{Set status for study - 0 = Draft, 1 = Published}
 
 \item{overwrite}{Overwrite if a study with the same ID already exists? Valid values "yes", "no"}
 
 \item{metadata}{\strong{(required)} Metadata list}
+
+\item{thumbnail}{Path to thumbnail image file (JPG, JPEG, GIF, PNG), or "default" to remove a custom thumbnail}
+
+\item{api_key}{API key (optional if API key is set using nada_set_api_key)}
+
+\item{api_base_url}{API base endpoint (optional if API base endpoint is set using nada_set_api_url)}
 }
 \description{
 Create a new timeseries database
@@ -189,7 +205,8 @@ nada_admin_timeseries_database_create (
   idno="document-idno",
   published = 1,
   overwrite = "yes",
-  metadata = metadata
+  metadata = metadata,
+  thumbnail ="images/thumbnail.jpg"
 )
 
 
