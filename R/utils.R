@@ -214,13 +214,25 @@ nada_http_delete <- function(
 
 nada_http_response_json <- function(httpResponse)
 {
+  body <- content(httpResponse, "text")
+
   result<- tryCatch(
     {
-      return (fromJSON(content(httpResponse,"text")))
+      return (fromJSON(body))
     },
     error= function(cond) {
-      warning(paste0("ERROR processing response:: ", content(httpResponse,"text")))
-      return (content(httpResponse,"text"))
+      # A failed request always returns a list, so callers can read response$message
+      status_code <- httpResponse$status_code
+      if (status_code < 200 || status_code >= 300) {
+        has_body <- !is.na(body) && nzchar(body)
+        return (list(
+          status = "error",
+          message = if (has_body) body else paste0("Empty response from server (HTTP ", status_code, ")")
+        ))
+      }
+
+      warning(paste0("ERROR processing response:: ", body))
+      return (body)
     }
   )
 
