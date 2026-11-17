@@ -6,11 +6,12 @@
 \usage{
 nada_admin_timeseries_import_csv(
   idno,
-  file,
+  file = NULL,
   delimiter = ",",
   mapping = NULL,
   ensure_unique_index = TRUE,
   dsd_idno = NULL,
+  upload_id = NULL,
   api_key = NULL,
   api_base_url = NULL
 )
@@ -18,7 +19,7 @@ nada_admin_timeseries_import_csv(
 \arguments{
 \item{idno}{Study idno (`surveys.idno`).}
 
-\item{file}{Path to the CSV file to upload.}
+\item{file}{Path to the CSV file to upload. Provide exactly one of `file` or `upload_id`.}
 
 \item{delimiter}{CSV field delimiter. Defaults to ",". Use "\\t" for tab.}
 
@@ -32,6 +33,8 @@ is created before insert. Set FALSE to allow duplicates through.}
 \item{dsd_idno}{Optional catalogue DSD idno; when set, the API links this DSD
 to the study (same effect as `nada_admin_timeseries_attach_dsd`) before import.}
 
+\item{upload_id}{ID of a completed resumable upload of the CSV (from `nada_resumable_upload`).}
+
 \item{api_key}{Optional API key; defaults to `nada_get_api_key()`.}
 
 \item{api_base_url}{Optional API base URL; defaults to `nada_get_api_url()`.}
@@ -40,9 +43,14 @@ to the study (same effect as `nada_admin_timeseries_attach_dsd`) before import.}
 list with `status_code` and `response`.
 }
 \description{
-Wraps POST /api/admin/timeseries/data/{idno}/import (multipart: idno, file; URL path uses the same idno).
+Wraps POST /api/admin/timeseries/data/{idno}/import (multipart: idno, file or upload_id; URL path uses the same idno).
 }
 \details{
+Send the CSV either as `file` or as the `upload_id` of a completed resumable
+upload (see `nada_resumable_upload`). Files larger than the web server's
+request body limit must use `upload_id`; `nada_admin_timeseries_import_csv_resumable`
+does both steps.
+
 The study must be linked to a global DSD, either beforehand (see
 `nada_admin_timeseries_attach_dsd`) or in the same call by passing `dsd_idno`.
 The server:
