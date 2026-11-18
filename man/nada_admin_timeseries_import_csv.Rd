@@ -28,7 +28,8 @@ nada_admin_timeseries_import_csv(
 Headers absent from the mapping are used as-is.}
 
 \item{ensure_unique_index}{When TRUE (default), the unique `key_hash` index
-is created before insert. Set FALSE to allow duplicates through.}
+is created before insert, so duplicate rows fail the import. Set FALSE to
+allow duplicates through.}
 
 \item{dsd_idno}{Optional catalogue DSD idno; when set, the API links this DSD
 to the study (same effect as `nada_admin_timeseries_attach_dsd`) before import.}
@@ -40,10 +41,22 @@ to the study (same effect as `nada_admin_timeseries_attach_dsd`) before import.}
 \item{api_base_url}{Optional API base URL; defaults to `nada_get_api_url()`.}
 }
 \value{
-list with `status_code` and `response`.
+list with `status_code` (HTTP status of the last call: 200 when the
+  import completed) and `response` (`{ status, result }`, where `result` has
+  `status` = "completed", `inserted`, `lines_read`, `ignored_columns`,
+  `unparsed_time_periods`, `resource_saved`). On failure `response$message`
+  holds the server's error and a warning is raised.
 }
 \description{
-Wraps POST /api/admin/timeseries/data/{idno}/import (multipart: idno, file or upload_id; URL path uses the same idno).
+Runs the server's chunked import, so files of any size finish without hitting
+web-server request timeouts:
+  1. POST /api/admin/timeseries/data/upload (multipart: idno, file or upload_id)
+     validates the CSV header against the DSD and stages the file. Existing
+     observations are not changed by this step.
+  2. POST /api/admin/timeseries/data/{idno}/import-process is called repeatedly.
+     Each call works for about 30 seconds (replace existing rows,
+     insert CSV rows from the saved position, finalize summaries) until the
+     server reports `has_more = FALSE`.
 }
 \details{
 Send the CSV either as `file` or as the `upload_id` of a completed resumable
@@ -53,17 +66,12 @@ does both steps.
 
 The study must be linked to a global DSD, either beforehand (see
 `nada_admin_timeseries_attach_dsd`) or in the same call by passing `dsd_idno`.
-The server:
-  - Resolves the DSD from `surveys.data_structure_id`.
-  - Ensures Mongo indexes (including unique `key_hash` by default).
-  - Reads the CSV, applies the optional header `mapping`, and rejects any
-    post-mapping header that is not a DSD component.
-  - Builds observation documents and bulk-inserts; empty cells become NULL.
+All existing observations for the study are replaced by the CSV rows.
 
-HTTP responses:
-  - 201 `{ status, result: { inserted, lines_read } }`.
-  - 409 on duplicate `key_hash` for any row.
-  - 400 on validation / unknown mapped field / missing DSD link.
+Process calls answered with 409 (another call is still working on the same
+study), 502/503/504 or a network error are retried after a pause; progress is
+saved on the server after every batch, so retrying is safe. When verbose
+mode is on, progress is printed after each call.
 }
 \examples{
 \dontrun{

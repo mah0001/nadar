@@ -21,9 +21,9 @@ Wraps POST /api/admin/timeseries/data/{idno}/clear-data.
 }
 \details{
 Removes the study's observations from MongoDB, its value-count summaries and
-its canonical import CSV. The link to the DSD is kept. Use it before
-re-running `nada_admin_timeseries_import_csv` for the same study, which
-otherwise fails with 409 on duplicate rows.
+its canonical import CSV. The link to the DSD is kept.
+`nada_admin_timeseries_import_csv` already replaces all rows, so this is not
+needed before a re-import. Refused while an import is running for the study.
 
 HTTP responses:
   - 200 `{ status, result: { cleared } }`.

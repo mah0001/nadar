@@ -29,7 +29,8 @@ nada_admin_timeseries_import_csv_resumable(
 Headers absent from the mapping are used as-is.}
 
 \item{ensure_unique_index}{When TRUE (default), the unique `key_hash` index
-is created before insert. Set FALSE to allow duplicates through.}
+is created before insert, so duplicate rows fail the import. Set FALSE to
+allow duplicates through.}
 
 \item{dsd_idno}{Optional catalogue DSD idno; when set, the API links this DSD
 to the study (same effect as `nada_admin_timeseries_attach_dsd`) before import.}
@@ -46,9 +47,9 @@ to the study (same effect as `nada_admin_timeseries_attach_dsd`) before import.}
 list with `status_code`, `response`, and `upload_id`.
 }
 \description{
-Uploads the CSV in chunks with `nada_resumable_upload`, then imports it with
-`nada_admin_timeseries_import_csv` using the returned `upload_id`. Use this for
-files larger than the web server's request body limit.
+Uploads the CSV in chunks with `nada_resumable_upload`, then runs the chunked
+import with `nada_admin_timeseries_import_csv` using the returned `upload_id`.
+Use this for files larger than the web server's request body limit.
 }
 \examples{
 \dontrun{
