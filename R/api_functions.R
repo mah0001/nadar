@@ -106,3 +106,9 @@ nada_get_verbose <- function()
 {
   return(nada_get_api_verbose())
 }
+
+# httr::verbose(FALSE) still logs headers (its first argument is data_out), so only add
+# verbose() when verbose mode is on.
+nada_http_verbose <- function() {
+  if (isTRUE(nada_get_verbose())) httr::verbose() else httr::config()
+}

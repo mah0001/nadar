@@ -38,7 +38,7 @@ nada_admin_study_list <- function(idno=NULL,
     url <- paste0(api_base_url,"/",endpoint)
   }
 
-  httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json(), verbose(nada_get_verbose()))
+  httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json(), nada_http_verbose())
   output <- NULL
 
   if(httpResponse$status_code!=200){
@@ -68,7 +68,7 @@ nada_admin_study_list <- function(idno=NULL,
       }
 
       # API call
-      httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json(), verbose(nada_get_verbose()))
+      httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json(), nada_http_verbose())
 
       if(httpResponse$status_code!=200){
         warning(content(httpResponse, "text"))
@@ -278,7 +278,7 @@ nada_admin_study_create <- function(
                        content_type_json(),
                        encode="json",
                        accept_json(),
-                       verbose(nada_get_verbose()))
+                       nada_http_verbose())
 
   output=NULL
 
@@ -389,7 +389,7 @@ nada_admin_study_patch <- function(
     content_type_json(),
     encode = "json",
     accept_json(),
-    verbose(nada_get_verbose())
+    nada_http_verbose()
   )
 
   if(httpResponse$status_code != 200){
@@ -444,7 +444,7 @@ nada_admin_thumbnail_upload <- function(
     url = paste0(api_base_url,"/",endpoint)
   }
 
-  httpResponse <- POST(url, add_headers("X-API-KEY" = api_key), body=options, verbose(nada_get_verbose()))
+  httpResponse <- POST(url, add_headers("X-API-KEY" = api_key), body=options, nada_http_verbose())
 
   output=NULL
 
@@ -502,7 +502,7 @@ nada_admin_thumbnail_delete <- function(idno,
                       content_type_json(),
                       encode="json",
                       accept_json(),
-                      verbose(nada_get_verbose()))
+                      nada_http_verbose())
 
   output=NULL
 
@@ -750,7 +750,7 @@ nada_admin_study_attach_related <- function(
                        content_type_json(),
                        encode="json",
                        accept_json(),
-                       verbose(nada_get_verbose()))
+                       nada_http_verbose())
 
   output=NULL
 

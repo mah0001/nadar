@@ -26,7 +26,7 @@ nada_admin_codelist_list <- function(page = NULL, per_page = NULL, search = NULL
                       add_headers("X-API-KEY" = api_key),
                       accept_json(),
                       query = qp,
-                      verbose(nada_get_verbose()))
+                      nada_http_verbose())
 
   list(status_code = httpResponse$status_code, response = nada_http_response_json(httpResponse))
 }
@@ -72,7 +72,7 @@ nada_admin_codelist_get <- function(id = NULL, idno = NULL, name = NULL,
                       add_headers("X-API-KEY" = api_key),
                       accept_json(),
                       query = qp,
-                      verbose(nada_get_verbose()))
+                      nada_http_verbose())
 
   list(status_code = httpResponse$status_code, response = nada_http_response_json(httpResponse))
 }
@@ -108,7 +108,7 @@ nada_admin_codelist_create <- function(name, idno = NULL, agency = "NADA", versi
                        content_type_json(),
                        encode = "json",
                        accept_json(),
-                       verbose(nada_get_verbose()))
+                       nada_http_verbose())
 
   list(status_code = httpResponse$status_code, response = nada_http_response_json(httpResponse))
 }
@@ -135,7 +135,7 @@ nada_admin_codelist_update <- function(id, fields, api_key = NULL, api_base_url 
                       content_type_json(),
                       encode = "json",
                       accept_json(),
-                      verbose(nada_get_verbose()))
+                      nada_http_verbose())
 
   list(status_code = httpResponse$status_code, response = nada_http_response_json(httpResponse))
 }
@@ -157,7 +157,7 @@ nada_admin_codelist_delete <- function(id, api_key = NULL, api_base_url = NULL) 
   httpResponse <- DELETE(url,
                          add_headers("X-API-KEY" = api_key),
                          accept_json(),
-                         verbose(nada_get_verbose()))
+                         nada_http_verbose())
 
   list(status_code = httpResponse$status_code, response = nada_http_response_json(httpResponse))
 }
@@ -198,7 +198,7 @@ nada_admin_codelist_items_list <- function(codelist_id, view = "full",
                       add_headers("X-API-KEY" = api_key),
                       accept_json(),
                       query = qp,
-                      verbose(nada_get_verbose()))
+                      nada_http_verbose())
 
   list(status_code = httpResponse$status_code, response = nada_http_response_json(httpResponse))
 }
@@ -232,7 +232,7 @@ nada_admin_codelist_item_add <- function(codelist_id, code, title = NULL,
                        content_type_json(),
                        encode = "json",
                        accept_json(),
-                       verbose(nada_get_verbose()))
+                       nada_http_verbose())
 
   list(status_code = httpResponse$status_code, response = nada_http_response_json(httpResponse))
 }
@@ -283,7 +283,7 @@ nada_admin_codelist_import_json <- function(payload = NULL, file = NULL,
                        content_type_json(),
                        encode = "json",
                        accept_json(),
-                       verbose(nada_get_verbose()))
+                       nada_http_verbose())
 
   list(status_code = httpResponse$status_code, response = nada_http_response_json(httpResponse))
 }

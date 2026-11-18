@@ -147,7 +147,7 @@ nada_admin_geospatial_import <- function(
                        add_headers("X-API-KEY" = api_key),
                        body=options,
                        accept_json(),
-                       verbose(nada_get_verbose()))
+                       nada_http_verbose())
 
 
   output=NULL

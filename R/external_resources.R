@@ -79,7 +79,7 @@ nada_resource_list <- function(dataset_idno, api_key = NULL, api_base_url = NULL
     url,
     .nada_api_headers(api_key),
     accept_json(),
-    verbose(nada_get_verbose())
+    nada_http_verbose()
   )
 
   if (httpResponse$status_code != 200) {
@@ -127,7 +127,7 @@ nada_admin_resource_list <- function(dataset_idno, api_key = NULL, api_base_url 
     url,
     add_headers("X-API-KEY" = api_key),
     accept_json(),
-    verbose(nada_get_verbose())
+    nada_http_verbose()
   )
 
   if (httpResponse$status_code != 200) {
@@ -255,7 +255,7 @@ nada_admin_resource_download <- function(
     url,
     add_headers("X-API-KEY" = api_key),
     accept_json(),
-    verbose(nada_get_verbose())
+    nada_http_verbose()
   )
 
   if (httpResponse$status_code != 200) {
@@ -364,7 +364,7 @@ nada_admin_resource_upload <- function(
     "file"=httr::upload_file(file)
   )
 
-  httpResponse <- POST(url, add_headers("X-API-KEY" = api_key),body=options, accept_json(), verbose(nada_get_verbose()))
+  httpResponse <- POST(url, add_headers("X-API-KEY" = api_key),body=options, accept_json(), nada_http_verbose())
   output=NULL
 
   if(httpResponse$status_code!=200){
@@ -500,7 +500,7 @@ nada_admin_resource_delete <- function(dataset_idno, resource_id, api_key=NULL, 
   endpoint=paste0('datasets/',dataset_idno,'/resources/',resource_id)
   url=nada_get_api_url(endpoint)
 
-  httpResponse <- DELETE(url, add_headers("X-API-KEY" = api_key), accept_json(), verbose(nada_get_verbose()))
+  httpResponse <- DELETE(url, add_headers("X-API-KEY" = api_key), accept_json(), nada_http_verbose())
   output=NULL
 
   if(httpResponse$status_code!=200){
@@ -533,7 +533,7 @@ nada_admin_resource_delete_all <- function(dataset_idno, api_key=NULL, api_base_
   endpoint=paste0('datasets/',dataset_idno,'/resources/delete_all')
   url=nada_get_api_url(endpoint)
 
-  httpResponse <- DELETE(url, add_headers("X-API-KEY" = api_key), accept_json(), verbose(nada_get_verbose()))
+  httpResponse <- DELETE(url, add_headers("X-API-KEY" = api_key), accept_json(), nada_http_verbose())
   output=NULL
 
   if(httpResponse$status_code!=200){

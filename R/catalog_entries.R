@@ -39,7 +39,7 @@ nada_study_list_idno <- function(type = NULL, api_key = NULL, api_base_url = NUL
     url,
     if (nzchar(api_key)) add_headers("X-API-KEY" = api_key) else add_headers(),
     accept_json(),
-    verbose(nada_get_verbose())
+    nada_http_verbose()
   )
 
   if (httpResponse$status_code != 200) {
@@ -170,7 +170,7 @@ nada_study_search <- function(
     url <- paste0(api_base_url, "/", endpoint)
   }
 
-  httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json(), verbose(nada_get_verbose()))
+  httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json(), nada_http_verbose())
   handle_api_error(httpResponse, "Initial API call failed:")
 
   output <- fromJSON(content(httpResponse, "text"))
@@ -201,7 +201,7 @@ nada_study_search <- function(
         url <- paste0(api_base_url, "/", endpoint)
       }
 
-      httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json(), verbose(nada_get_verbose()))
+      httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json(), nada_http_verbose())
       handle_api_error(httpResponse, paste("Pagination API call failed (page", current_page, "):"))
 
       page_output <- fromJSON(content(httpResponse, "text"))
@@ -443,7 +443,7 @@ nada_admin_study_replace_idno <- function(old_idno,new_idno,api_key=NULL,api_bas
                        body=options,
                        content_type_json(),
                        encode="json",
-                       verbose(nada_get_verbose()))
+                       nada_http_verbose())
 
   output=NULL
 
@@ -498,7 +498,7 @@ nada_study_information <- function(
   # Send GET request
   httpResponse <- GET(url,
                       accept_json(),
-                      verbose(nada_get_verbose())
+                      nada_http_verbose()
   )
 
   # Check for HTTP errors
@@ -652,7 +652,7 @@ nada_latest_entries <- function(
   httpResponse <- GET(url,
                       accept_json(),
                       add_headers("X-API-KEY" = api_key),
-                      verbose(nada_get_verbose())
+                      nada_http_verbose()
   )
 
   # Check for HTTP errors

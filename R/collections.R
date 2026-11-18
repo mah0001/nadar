@@ -47,7 +47,7 @@ nada_admin_collection_create <- function(
 
   httpResponse <- POST(url, add_headers("X-API-KEY" = api_key),
                        body=options,
-                       verbose(nada_get_verbose()))
+                       nada_http_verbose())
 
   output = NULL
 
@@ -121,7 +121,7 @@ nada_admin_collection_update <- function(
 
   httpResponse <- POST(url, add_headers("X-API-KEY" = api_key),
                        body=options,
-                       verbose(nada_get_verbose()))
+                       nada_http_verbose())
 
   output = NULL
 
@@ -175,7 +175,7 @@ nada_collection_list <- function(
   httpResponse <- GET(url,
                       accept_json(),
                       add_headers("X-API-KEY" = api_key),
-                      verbose(nada_get_verbose())
+                      nada_http_verbose()
   )
 
   # Check for HTTP errors
@@ -251,7 +251,7 @@ nada_single_collection <- function(
   httpResponse <- GET(url,
                       accept_json(),
                       add_headers("X-API-KEY" = api_key),
-                      verbose(nada_get_verbose())
+                      nada_http_verbose()
   )
 
   # Check for HTTP errors
@@ -363,7 +363,7 @@ nada_admin_collection_rename <- function(
 
   httpResponse <- POST(url, add_headers("X-API-KEY" = api_key),
                        body=options,
-                       verbose(nada_get_verbose()))
+                       nada_http_verbose())
 
   output = NULL
 
@@ -421,7 +421,7 @@ nada_admin_study_attach_collections <- function(
                        body=options,
                        content_type_json(),
                        encode="json",
-                       verbose(nada_get_verbose()))
+                       nada_http_verbose())
 
   output=NULL
 

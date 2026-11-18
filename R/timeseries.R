@@ -292,7 +292,7 @@ nada_admin_timeseries_attach_dsd <- function(idno,
                        content_type_json(),
                        encode = "json",
                        accept_json(),
-                       verbose(nada_get_verbose()))
+                       nada_http_verbose())
 
   list(
     status_code = httpResponse$status_code,
@@ -335,7 +335,7 @@ nada_admin_timeseries_detach_dsd <- function(idno,
                        content_type_json(),
                        encode = "json",
                        accept_json(),
-                       verbose(nada_get_verbose()))
+                       nada_http_verbose())
 
   list(
     status_code = httpResponse$status_code,

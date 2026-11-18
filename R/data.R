@@ -120,7 +120,7 @@ nada_admin_data_table_create <- function(
                        content_type_json(),
                        encode="json",
                        accept_json(),
-                       verbose(nada_get_verbose())
+                       nada_http_verbose()
   )
 
   output=NULL
@@ -320,7 +320,7 @@ nada_data_table_list <- function(
                       content_type_json(),
                       encode="json",
                       accept_json(),
-                      verbose(nada_get_verbose())
+                      nada_http_verbose()
   )
 
   output=NULL
@@ -376,7 +376,7 @@ nada_admin_data_table_delete <- function(
   }
 
   url=nada_get_api_url(endpoint)
-  httpResponse <- POST(url, add_headers("X-API-KEY" = api_key),verbose(nada_get_verbose()))
+  httpResponse <- POST(url, add_headers("X-API-KEY" = api_key),nada_http_verbose())
 
   output=NULL
 
@@ -453,7 +453,7 @@ nada_admin_data_table_upload_csv <- function(
     add_headers("X-API-KEY" = api_key),
     body = file_options,
     encode = "multipart",
-    verbose(nada_get_verbose())
+    nada_http_verbose()
   )
 
   if (httpResponse$status_code != 200) {
@@ -556,7 +556,7 @@ nada_admin_data_table_upload_csv_resumable <- function(
     encode = "json",
     content_type_json(),
     accept_json(),
-    verbose(nada_get_verbose())
+    nada_http_verbose()
   )
 
   if (httpResponse$status_code != 200) {
@@ -646,7 +646,7 @@ nada_admin_data_table_batch_import_csv <- function(
                        content_type_json(),
                        encode="json",
                        accept_json(),
-                       verbose(nada_get_verbose())
+                       nada_http_verbose()
   )
 
   output=NULL
@@ -761,7 +761,7 @@ nada_admin_study_attach <- function(
                        content_type_json(),
                        encode="json",
                        accept_json(),
-                       verbose(nada_get_verbose()))
+                       nada_http_verbose())
 
   output=NULL
 

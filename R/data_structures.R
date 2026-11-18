@@ -15,7 +15,7 @@ nada_admin_dsd_list <- function(api_key = NULL, api_base_url = NULL) {
   httpResponse <- GET(url,
                       add_headers("X-API-KEY" = api_key),
                       accept_json(),
-                      verbose(nada_get_verbose()))
+                      nada_http_verbose())
 
   list(status_code = httpResponse$status_code, response = nada_http_response_json(httpResponse))
 }
@@ -60,7 +60,7 @@ nada_admin_dsd_create <- function(idno, name, agency = "NADA", version = "1.0",
                        encode = "json",
                        query = list(overwrite = ifelse(isTRUE(overwrite), "1", "0")),
                        accept_json(),
-                       verbose(nada_get_verbose()))
+                       nada_http_verbose())
 
   list(status_code = httpResponse$status_code, response = nada_http_response_json(httpResponse))
 }
@@ -82,7 +82,7 @@ nada_admin_dsd_delete <- function(id_or_idno, api_key = NULL, api_base_url = NUL
   httpResponse <- POST(url,
                        add_headers("X-API-KEY" = api_key),
                        accept_json(),
-                       verbose(nada_get_verbose()))
+                       nada_http_verbose())
 
   list(status_code = httpResponse$status_code, response = nada_http_response_json(httpResponse))
 }
@@ -155,7 +155,7 @@ nada_admin_dsd_import_json <- function(payload = NULL, file = NULL,
                        content_type_json(),
                        encode = "json",
                        accept_json(),
-                       verbose(nada_get_verbose()))
+                       nada_http_verbose())
 
   list(status_code = httpResponse$status_code, response = nada_http_response_json(httpResponse))
 }
@@ -188,7 +188,7 @@ nada_admin_dsd_import_xml <- function(file, overwrite_codelists = FALSE, dsd_id 
                        body = body,
                        encode = "multipart",
                        accept_json(),
-                       verbose(nada_get_verbose()))
+                       nada_http_verbose())
 
   list(status_code = httpResponse$status_code, response = nada_http_response_json(httpResponse))
 }

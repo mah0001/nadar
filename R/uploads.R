@@ -53,7 +53,7 @@ nada_resumable_upload_limits <- function(api_key = NULL, api_base_url = NULL) {
     url,
     add_headers("X-API-KEY" = api_key),
     accept_json(),
-    verbose(nada_get_verbose())
+    nada_http_verbose()
   )
 
   list(
@@ -127,7 +127,7 @@ nada_resumable_upload <- function(
     encode = "json",
     content_type_json(),
     accept_json(),
-    verbose(nada_get_verbose())
+    nada_http_verbose()
   )
 
   if (init_resp$status_code != 200) {
@@ -150,7 +150,7 @@ nada_resumable_upload <- function(
 
   status_url <- nada_get_uploads_api_url(paste0("status/", upload_id), api_base_url)
   status_resp <- tryCatch(
-    GET(status_url, add_headers("X-API-KEY" = api_key), accept_json(), verbose(nada_get_verbose())),
+    GET(status_url, add_headers("X-API-KEY" = api_key), accept_json(), nada_http_verbose()),
     error = function(e) NULL
   )
   if (!is.null(status_resp) && status_resp$status_code == 200) {
@@ -202,7 +202,7 @@ nada_resumable_upload <- function(
         "X-Upload-Chunk-Number" = as.character(chunk_num),
         "X-Upload-Chunk-Size" = as.character(length(chunk_data))
       ),
-      verbose(nada_get_verbose())
+      nada_http_verbose()
     )
 
     if (chunk_resp$status_code != 200) {

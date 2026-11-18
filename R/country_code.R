@@ -37,7 +37,7 @@ nada_country_codes <- function(
   httpResponse <- GET(url,
                       accept_json(),
                       add_headers("X-API-KEY" = api_key),
-                      verbose(nada_get_verbose())
+                      nada_http_verbose()
   )
 
   # Check for HTTP errors

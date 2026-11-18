@@ -25,7 +25,7 @@ nada_admin_solr_index_entries <- function(
   endpoint=paste0('solr/full_import_surveys/',start_row,'/',limit)
   url=nada_get_api_url(endpoint)
 
-  httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json(), verbose(nada_get_verbose()))
+  httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json(), nada_http_verbose())
   output=NULL
 
   if(httpResponse$status_code!=200){
@@ -75,7 +75,7 @@ nada_admin_solr_index_variables <- function(
   endpoint=paste0('solr/full_import_variables/',start_row,'/',limit)
   url=nada_get_api_url(endpoint)
 
-  httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json(), verbose(nada_get_verbose()))
+  httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json(), nada_http_verbose())
   output=NULL
 
   if(httpResponse$status_code!=200){

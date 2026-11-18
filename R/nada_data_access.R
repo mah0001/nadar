@@ -28,7 +28,7 @@ nada_study_access_types <- function(
 
   httpResponse <- GET(url, add_headers("X-API-KEY" = api_key),
                       accept_json(),
-                      verbose(nada_get_verbose())
+                      nada_http_verbose()
                       )
 
   output=NULL

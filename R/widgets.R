@@ -16,7 +16,7 @@ nada_widget_list <- function(api_key=NULL,
   endpoint=paste0('widgets/')
   url=nada_get_api_url(endpoint)
 
-  httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json(), verbose(nada_get_verbose()))
+  httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), accept_json(), nada_http_verbose())
   output=NULL
 
   if(httpResponse$status_code!=200){
@@ -113,7 +113,7 @@ nada_admin_widget_attach <- function(
                        content_type_json(),
                        encode="json",
                        accept_json(),
-                       verbose(nada_get_verbose()))
+                       nada_http_verbose())
 
   output=NULL
 
@@ -162,7 +162,7 @@ nada_admin_widget_detach <- function(
                        content_type_json(),
                        encode="json",
                        accept_json(),
-                       verbose(nada_get_verbose()))
+                       nada_http_verbose())
 
   output=NULL
 
@@ -206,7 +206,7 @@ nada_admin_widget_delete <- function(
                        content_type_json(),
                        encode="json",
                        accept_json(),
-                       verbose(nada_get_verbose()))
+                       nada_http_verbose())
 
   output=NULL
 

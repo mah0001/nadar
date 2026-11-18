@@ -99,7 +99,7 @@ nada_http_get <- function(
 
   url=nada_get_api_url(paste0(url))
   print(url)
-  httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), body=options, verbose(nada_get_verbose()) )
+  httpResponse <- GET(url, add_headers("X-API-KEY" = api_key), body=options, nada_http_verbose() )
 
   output=NULL
 

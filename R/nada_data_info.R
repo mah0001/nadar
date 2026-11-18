@@ -41,7 +41,7 @@ nada_list_datasets <- function(
   httpResponse <- GET(url,
                       add_headers("X-API-KEY" = api_key),
                       accept_json(),
-                      verbose(nada_get_verbose())
+                      nada_http_verbose()
   )
 
   # Check for HTTP errors
@@ -130,7 +130,7 @@ nada_data_file_info <- function(
   httpResponse <- GET(url,
                       add_headers("X-API-KEY" = api_key),
                       accept_json(),
-                      verbose(nada_get_verbose())
+                      nada_http_verbose()
   )
 
   # Check for HTTP errors
@@ -198,7 +198,7 @@ nada_variables_info <- function(
   httpResponse <- GET(url,
                       add_headers("X-API-KEY" = api_key),
                       accept_json(),
-                      verbose(nada_get_verbose())
+                      nada_http_verbose()
   )
 
   # Check for HTTP errors
@@ -269,7 +269,7 @@ nada_list_variables <- function(
   httpResponse <- GET(url,
                       add_headers("X-API-KEY" = api_key),
                       accept_json(),
-                      verbose(nada_get_verbose())
+                      nada_http_verbose()
   )
 
   # Check for HTTP errors
@@ -345,7 +345,7 @@ nada_find_variable <- function(
   httpResponse <- GET(url,
                       add_headers("X-API-KEY" = api_key),
                       accept_json(),
-                      verbose(nada_get_verbose())
+                      nada_http_verbose()
   )
 
   # Check for HTTP errors

@@ -103,7 +103,7 @@ nada_admin_timeseries_import_csv <- function(idno,
                           body = body,
                           encode = "multipart",
                           accept_json(),
-                          verbose(nada_get_verbose()))
+                          nada_http_verbose())
   if (!(upload_response$status_code %in% c(200, 201))) {
     warning(content(upload_response, "text"))
     return(list(
@@ -188,7 +188,7 @@ nada_admin_timeseries_import_status <- function(idno,
   httpResponse <- GET(.nada_timeseries_url(endpoint, api_base_url),
                       add_headers("X-API-KEY" = api_key),
                       accept_json(),
-                      verbose(nada_get_verbose()))
+                      nada_http_verbose())
   if (httpResponse$status_code != 200) {
     warning(content(httpResponse, "text"))
   }
@@ -229,7 +229,7 @@ nada_admin_timeseries_import_status <- function(idno,
            encode = "json",
            accept_json(),
            httr::timeout(max_time + 600),
-           verbose(nada_get_verbose())),
+           nada_http_verbose()),
       error = function(e) e
     )
 
@@ -393,7 +393,7 @@ nada_admin_timeseries_clear_data <- function(idno,
   httpResponse <- POST(url,
                        add_headers("X-API-KEY" = api_key),
                        accept_json(),
-                       verbose(nada_get_verbose()))
+                       nada_http_verbose())
 
   if (httpResponse$status_code != 200) {
     warning(content(httpResponse, "text"))

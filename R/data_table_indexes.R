@@ -76,7 +76,7 @@ nada_admin_data_table_index_list <- function(db_id,
   httpResponse <- GET(nada_data_table_index_url(endpoint, api_base_url),
                       add_headers("X-API-KEY" = api_key),
                       accept_json(),
-                      verbose(nada_get_verbose()))
+                      nada_http_verbose())
 
   nada_data_table_index_result(httpResponse)
 }
@@ -129,7 +129,7 @@ nada_admin_data_table_index_create <- function(db_id,
                        body = body,
                        encode = "json",
                        accept_json(),
-                       verbose(nada_get_verbose()))
+                       nada_http_verbose())
 
   nada_data_table_index_result(httpResponse)
 }
@@ -171,7 +171,7 @@ nada_admin_data_table_text_index_create <- function(db_id,
                        body = body,
                        encode = "json",
                        accept_json(),
-                       verbose(nada_get_verbose()))
+                       nada_http_verbose())
 
   nada_data_table_index_result(httpResponse)
 }
@@ -218,7 +218,7 @@ nada_admin_data_table_index_delete <- function(db_id,
   httpResponse <- DELETE(nada_data_table_index_url(endpoint, api_base_url),
                          add_headers("X-API-KEY" = api_key),
                          accept_json(),
-                         verbose(nada_get_verbose()))
+                         nada_http_verbose())
 
   nada_data_table_index_result(httpResponse)
 }
@@ -256,7 +256,7 @@ nada_admin_data_table_index_delete_all <- function(db_id,
   httpResponse <- POST(nada_data_table_index_url(endpoint, api_base_url),
                        add_headers("X-API-KEY" = api_key),
                        accept_json(),
-                       verbose(nada_get_verbose()))
+                       nada_http_verbose())
 
   nada_data_table_index_result(httpResponse)
 }
@@ -286,7 +286,7 @@ nada_admin_data_table_dictionary_indexes_create <- function(api_key = NULL,
   httpResponse <- POST(nada_data_table_index_url("tables/create_dictionary_indexes", api_base_url),
                        add_headers("X-API-KEY" = api_key),
                        accept_json(),
-                       verbose(nada_get_verbose()))
+                       nada_http_verbose())
 
   nada_data_table_index_result(httpResponse)
 }
